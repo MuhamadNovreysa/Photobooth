@@ -667,6 +667,29 @@
     </div>
 
     <script>
+        // DOM Elements
+        const startBtn = document.getElementById("start-btn");
+        const pages = document.querySelectorAll(".page");
+        const layoutOptions = document.querySelectorAll(".layout-option");
+        const video = document.getElementById("video");
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        const countdownEl = document.getElementById("countdown");
+        const filterSelect = document.getElementById("filter");
+        const timerSelect = document.getElementById("timer");
+        const captureBtn = document.getElementById("capture-btn");
+        const deleteBtn = document.getElementById("delete-btn");
+        const continueBtn = document.getElementById("continue-btn");
+        const photosContainer = document.getElementById("photos-container");
+        const frameColors = document.querySelectorAll(".frame-color");
+        const stickers = document.querySelectorAll(".sticker");
+        const borderOptions = document.querySelectorAll(".border-option");
+        const templateOptions = document.querySelectorAll(".template-option");
+        const finalResult = document.getElementById("final-result");
+        const downloadBtn = document.getElementById("download-btn");
+        const notification = document.getElementById("download-notification");
+        const voiceStatus = document.getElementById("voice-status");
+
         // Variabel Global
         let currentPage = "page-start";
         let selectedLayout = null;
@@ -1536,7 +1559,9 @@
         });
 
         // Event Listeners lainnya
-        startBtn.addEventListener("click", () => showPage("page-layout"));
+        if (startBtn) {
+            startBtn.addEventListener("click", () => showPage("page-layout"));
+        }
 
         layoutOptions.forEach((option) => {
             option.addEventListener("click", () => {
@@ -1549,30 +1574,38 @@
             });
         });
 
-        filterSelect.addEventListener("change", () => {
-            currentFilter = filterSelect.value;
-            video.style.filter = filters[currentFilter];
-        });
+        if (filterSelect) {
+            filterSelect.addEventListener("change", () => {
+                currentFilter = filterSelect.value;
+                video.style.filter = filters[currentFilter];
+            });
+        }
 
-        captureBtn.addEventListener("click", startCountdown);
+        if (captureBtn) {
+            captureBtn.addEventListener("click", startCountdown);
+        }
 
-        deleteBtn.addEventListener("click", () => {
-            if (photos.length > 0) {
-                photos.pop();
-                delete stickerPositions[photos.length];
-                updatePhotoPreview();
-                currentPose = photos.length;
+        if (deleteBtn) {
+            deleteBtn.addEventListener("click", () => {
+                if (photos.length > 0) {
+                    photos.pop();
+                    delete stickerPositions[photos.length];
+                    updatePhotoPreview();
+                    currentPose = photos.length;
 
-                if (photos.length === 0) {
-                    document.getElementById("photo-preview").style.display = "none";
+                    if (photos.length === 0) {
+                        document.getElementById("photo-preview").style.display = "none";
+                    }
                 }
-            }
-        });
+            });
+        }
 
-        continueBtn.addEventListener("click", () => {
-            showPage("page-edit");
-            renderFinalPhotos();
-        });
+        if (continueBtn) {
+            continueBtn.addEventListener("click", () => {
+                showPage("page-edit");
+                renderFinalPhotos();
+            });
+        }
 
         frameColors.forEach((color) => {
             color.addEventListener("click", () => {
@@ -1635,6 +1668,4 @@
         });
     </script>
 </body>
-</html>
-
-                                           
+    </html>
