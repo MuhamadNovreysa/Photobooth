@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Photobooth Bisnis Digital</title>
     <style>
         /* CSS Reset */
@@ -11,7 +11,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Arial', sans-serif;
             background: #f5f5f5;
@@ -28,23 +28,23 @@
             align-items: center;
             justify-content: center;
         }
-        
+
         .page.active {
             display: flex;
         }
-        
+
         /* Halaman 1 - Mulai */
         #page-start {
-            background: linear-gradient(135deg, #001C8E, #205c8b);
+            background: linear-gradient(135deg, #001c8e, #205c8b);
             color: white;
         }
-        
+
         #page-start h1 {
             font-size: 3rem;
             margin-bottom: 30px;
             text-align: center;
         }
-        
+
         .start-btn {
             padding: 15px 30px;
             font-size: 1.2rem;
@@ -56,17 +56,17 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-        
+
         .start-btn:hover {
             background: #205c8b;
             transform: scale(1.05);
         }
-        
+
         /* Halaman 2 - Pilih Layout */
         #page-layout {
             background: white;
         }
-        
+
         .layout-options {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -74,7 +74,7 @@
             margin: 30px 0;
             max-width: 800px;
         }
-        
+
         .layout-option {
             border: 3px solid #ddd;
             border-radius: 10px;
@@ -83,20 +83,12 @@
             transition: all 0.3s;
             text-align: center;
         }
-        
+
         .layout-option:hover {
             border-color: #ff6b6b;
             transform: translateY(-5px);
         }
-        
-        .layout-option img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-        
+
         /* Halaman 3 - Foto */
         .camera-container {
             position: relative;
@@ -104,24 +96,24 @@
             max-width: 600px;
             margin: 20px auto;
         }
-        
+
         #video {
             width: 100%;
             border-radius: 10px;
             border: 3px solid #ff6b6b;
         }
-        
+
         #canvas {
             display: none;
             width: 100%;
             border-radius: 10px;
         }
-        
+
         .countdown {
             position: absolute;
             top: 20px;
             left: 20px;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0, 0, 0, 0.7);
             color: white;
             width: 60px;
             height: 60px;
@@ -133,7 +125,7 @@
             font-weight: bold;
             z-index: 10;
         }
-        
+
         .controls {
             display: flex;
             gap: 10px;
@@ -141,7 +133,7 @@
             flex-wrap: wrap;
             justify-content: center;
         }
-        
+
         .control-btn {
             padding: 10px 20px;
             background: #ff6b6b;
@@ -151,39 +143,40 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-        
+
         .control-btn:hover {
             background: #ff5252;
         }
-        
+
         .control-btn:disabled {
             background: #ccc;
             cursor: not-allowed;
         }
-        
+
         /* Halaman 4 - Editing */
         .edit-section {
             background: white;
             padding: 15px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
             width: 100%;
             max-width: 800px;
         }
-        
+
         .edit-section h3 {
             margin-bottom: 15px;
             color: #ff6b6b;
         }
-        
-        .frame-colors, .stickers {
+
+        .frame-colors,
+        .stickers {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
             justify-content: center;
         }
-        
+
         .frame-color {
             width: 50px;
             height: 50px;
@@ -192,12 +185,12 @@
             transition: all 0.3s;
             border: 2px solid transparent;
         }
-        
+
         .frame-color:hover {
             transform: scale(1.1);
             border-color: #ff6b6b;
         }
-        
+
         .sticker {
             width: 60px;
             height: 60px;
@@ -210,19 +203,19 @@
             background-position: center;
             margin: 5px;
         }
-        
+
         .sticker:hover {
             transform: scale(1.1);
             border-color: #ff6b6b;
         }
-        
+
         .photo-with-sticker {
             position: relative;
             display: inline-block;
             margin: 10px;
             cursor: pointer;
         }
-        
+
         .sticker-preview {
             position: absolute;
             width: 80px;
@@ -232,75 +225,52 @@
             pointer-events: none;
             z-index: 100;
         }
-        
+
         .final-photo {
             border: 10px solid #ddd;
             border-bottom-width: 40px;
             box-sizing: border-box;
             max-width: 100%;
             height: auto;
+            display: block;
         }
-        
+
         .large-frame {
             border-width: 30px !important;
             border-bottom-width: 80px !important;
         }
 
-        /* Template Border Styles */
+        /* Template Text Styles */
+        .template-text {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            z-index: 20;
+        }
+        
+        .large-frame .template-text {
+            bottom: 30px;
+            font-size: 32px;
+        }
+
+        /* Border Icon Styles */
         .border-icon {
             position: absolute;
             pointer-events: none;
             z-index: 15;
             font-size: 20px;
+            animation: float 3s infinite ease-in-out;
         }
 
-        .border-icon.top-left {
-            top: 15px;
-            left: 15px;
-        }
-        .border-icon.top-right {
-            top: 15px;
-            right: 15px;
-        }
-        .border-icon.bottom-left {
-            bottom: 55px;
-            left: 15px;
-        }
-        .border-icon.bottom-right {
-            bottom: 55px;
-            right: 15px;
-        }
-
-        .large-frame .border-icon {
-            font-size: 24px;
-        }
-        .large-frame .border-icon.top-left,
-        .large-frame .border-icon.top-right {
-            top: 25px;
-        }
-        .large-frame .border-icon.bottom-left,
-        .large-frame .border-icon.bottom-right {
-            bottom: 85px;
-        }
-
-        /* Icon Styles */
-        .icon-heart {
-            color: #ff6b6b;
-        }
-        .icon-star {
-            color: #FFC107;
-        }
-        .icon-flower {
-            color: #4CAF50;
-        }
-        .icon-music {
-            color: #9C27B0;
-        }
-        .icon-balloon {
-            color: #E91E63;
-        }
-        .icon-crown {
-            color: #FF9800;
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         .template-options {
@@ -340,13 +310,13 @@
             margin-top: 5px;
             font-size: 12px;
         }
-        
+
         .notification {
             position: fixed;
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.8);
             color: white;
             padding: 15px 25px;
             border-radius: 5px;
@@ -360,7 +330,7 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0, 0, 0, 0.7);
             color: white;
             padding: 10px 15px;
             border-radius: 20px;
@@ -380,29 +350,49 @@
         }
 
         .voice-status.listening .indicator {
-            background-color: #4CAF50;
+            background-color: #4caf50;
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         @keyframes fadeInOut {
-            0% { opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { opacity: 0; }
+            0% {
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
         }
-        
-        #photos-container, #final-result {
+
+        #photos-container,
+        #final-result {
             display: grid;
             gap: 10px;
             margin: 20px 0;
             justify-items: center;
         }
-        
+
         .sticker-active {
             border: 3px solid #ff6b6b !important;
             transform: scale(1.1);
@@ -437,95 +427,118 @@
         }
     </style>
     <!-- Font Awesome untuk icon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
     <!-- Halaman 1 - Mulai -->
     <div id="page-start" class="page active">
         <h1>Photobooth <span> Bisnis Digital </span> </h1>
-        <img src="hima2.png" style="height: 150px; width: 150px; margin-bottom: 15px; margin-right: 10px;" class="hima">
+        <img
+            src="hima2.png"
+            style="height: 150px; width: 150px; margin-bottom: 15px; margin-right: 10px"
+            class="hima"
+            alt="Logo Hima"
+        />
         <button class="start-btn" id="start-btn">Mulai Photobooth</button>
     </div>
-    
+
     <!-- Halaman 2 - Pilih Layout -->
     <div id="page-layout" class="page">
         <h2>Pilih Layout Foto</h2>
         <p>Pilih layout untuk sesi fotomu</p>
-        
+
         <div class="layout-options">
             <div class="layout-option" data-layout="A" data-poses="4">
-                <div class="layout-preview" style="background: #eee; height: 150px; display: grid; grid-template-rows: repeat(4, 1fr); gap: 5px;">
-                    <div style="background: #ff6b6b;"></div>
-                    <div style="background: #667eea;"></div>
-                    <div style="background: #4CAF50;"></div>
-                    <div style="background: #FFC107;"></div>
+                <div
+                    class="layout-preview"
+                    style="background: #eee; height: 150px; display: grid; grid-template-rows: repeat(4, 1fr); gap: 5px"
+                >
+                    <div style="background: #ff6b6b"></div>
+                    <div style="background: #667eea"></div>
+                    <div style="background: #4caf50"></div>
+                    <div style="background: #ffc107"></div>
                 </div>
                 <h3>Layout A</h3>
                 <p>4 Foto (Vertikal)</p>
             </div>
-            
+
             <div class="layout-option" data-layout="B" data-poses="3">
-                <div class="layout-preview" style="background: #eee; height: 150px; display: grid; grid-template-rows: repeat(3, 1fr); gap: 5px;">
-                    <div style="background: #ff6b6b;"></div>
-                    <div style="background: #667eea;"></div>
-                    <div style="background: #4CAF50;"></div>
+                <div
+                    class="layout-preview"
+                    style="background: #eee; height: 150px; display: grid; grid-template-rows: repeat(3, 1fr); gap: 5px"
+                >
+                    <div style="background: #ff6b6b"></div>
+                    <div style="background: #667eea"></div>
+                    <div style="background: #4caf50"></div>
                 </div>
                 <h3>Layout B</h3>
                 <p>3 Foto (Vertikal)</p>
             </div>
-            
+
             <div class="layout-option" data-layout="C" data-poses="2">
-                <div class="layout-preview" style="background: #eee; height: 150px; display: grid; grid-template-rows: repeat(2, 1fr); gap: 5px;">
-                    <div style="background: #ff6b6b;"></div>
-                    <div style="background: #667eea;"></div>
+                <div
+                    class="layout-preview"
+                    style="background: #eee; height: 150px; display: grid; grid-template-rows: repeat(2, 1fr); gap: 5px"
+                >
+                    <div style="background: #ff6b6b"></div>
+                    <div style="background: #667eea"></div>
                 </div>
                 <h3>Layout C</h3>
                 <p>2 Foto (Vertikal)</p>
             </div>
-            
+
             <div class="layout-option" data-layout="D" data-poses="6">
-                <div class="layout-preview" style="background: #eee; height: 150px; display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 1fr); gap: 5px;">
-                    <div style="background: #ff6b6b;"></div>
-                    <div style="background: #667eea;"></div>
-                    <div style="background: #4CAF50;"></div>
-                    <div style="background: #FFC107;"></div>
-                    <div style="background: #9C27B0;"></div>
-                    <div style="background: #607D8B;"></div>
+                <div
+                    class="layout-preview"
+                    style="background: #eee; height: 150px; display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 1fr); gap: 5px"
+                >
+                    <div style="background: #ff6b6b"></div>
+                    <div style="background: #667eea"></div>
+                    <div style="background: #4caf50"></div>
+                    <div style="background: #ffc107"></div>
+                    <div style="background: #9c27b0"></div>
+                    <div style="background: #607d8b"></div>
                 </div>
                 <h3>Layout D</h3>
                 <p>6 Foto (2x3)</p>
             </div>
-            
+
             <div class="layout-option" data-layout="E" data-poses="4">
-                <div class="layout-preview" style="background: #eee; height: 150px; display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: 5px;">
-                    <div style="background: #ff6b6b;"></div>
-                    <div style="background: #667eea;"></div>
-                    <div style="background: #4CAF50;"></div>
-                    <div style="background: #FFC107;"></div>
+                <div
+                    class="layout-preview"
+                    style="background: #eee; height: 150px; display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: 5px"
+                >
+                    <div style="background: #ff6b6b"></div>
+                    <div style="background: #667eea"></div>
+                    <div style="background: #4caf50"></div>
+                    <div style="background: #ffc107"></div>
                 </div>
                 <h3>Layout E</h3>
                 <p>4 Foto (2x2)</p>
             </div>
             <div class="layout-option" data-layout="F" data-poses="1">
-                <div class="layout-preview" style="background: #eee; height: 150px; display: grid; grid-template-rows: repeat(1, 1fr); gap: 5px;">
-                    <div style="background: #ff6b6b;"></div>
+                <div
+                    class="layout-preview"
+                    style="background: #eee; height: 150px; display: grid; grid-template-rows: repeat(1, 1fr); gap: 5px"
+                >
+                    <div style="background: #ff6b6b"></div>
                 </div>
                 <h3>Layout F</h3>
                 <p>1 Foto (Vertikal)</p>
             </div>
         </div>
     </div>
-    
+
     <!-- Halaman 3 - Foto -->
     <div id="page-photo" class="page">
         <h2>Ambil Foto</h2>
-        
+
         <div class="camera-container">
-            <div class="countdown" id="countdown" style="display: none;">3</div>
+            <div class="countdown" id="countdown" style="display: none">3</div>
             <video id="video" autoplay></video>
             <canvas id="canvas"></canvas>
         </div>
-        
+
         <div class="controls">
             <select id="filter">
                 <option value="none">Tanpa Filter</option>
@@ -544,23 +557,23 @@
                 <option value="shadow">Bayangan</option>
                 <option value="focus">Soft Focus</option>
             </select>
-            
+
             <select id="timer">
                 <option value="3">Countdown: 3 detik</option>
                 <option value="5">Countdown: 5 detik</option>
                 <option value="10">Countdown: 10 detik</option>
             </select>
-            
+
             <button class="control-btn" id="capture-btn">Ambil Foto</button>
             <button class="control-btn" id="delete-btn">Hapus Terakhir</button>
         </div>
-        <div id="photo-preview" style="display: none;">
+        <div id="photo-preview" style="display: none">
             <h3>Pratinjau Foto</h3>
             <div id="photos-container" class="final-photos"></div>
             <button class="control-btn" id="continue-btn">Lanjut ke Editing</button>
         </div>
     </div>
-    
+
     <!-- Halaman 4 - Editing -->
     <div id="page-edit" class="page">
         <h2>Edit Foto</h2>
@@ -571,25 +584,25 @@
                 <div class="border-option" data-border-size="large">Photobooth (Besar)</div>
             </div>
         </div>
-        
+
         <div class="edit-section">
             <h3>Warna Bingkai</h3>
             <div class="frame-colors">
-                <div class="frame-color" style="background-color: #ff6b6b;" data-color="#ff6b6b"></div>
-                <div class="frame-color" style="background-color: #667eea;" data-color="#667eea"></div>
-                <div class="frame-color" style="background-color: #4CAF50;" data-color="#4CAF50"></div>
-                <div class="frame-color" style="background-color: #FFC107;" data-color="#FFC107"></div>
-                <div class="frame-color" style="background-color: #9C27B0;" data-color="#9C27B0"></div>
-                <div class="frame-color" style="background-color: #607D8B;" data-color="#607D8B"></div>
-                <div class="frame-color" style="background-color: #E91E63;" data-color="#E91E63"></div>
-                <div class="frame-color" style="background-color: #3F51B5;" data-color="#3F51B5"></div>
-                <div class="frame-color" style="background-color: #00BCD4;" data-color="#00BCD4"></div>
-                <div class="frame-color" style="background-color: #8BC34A;" data-color="#8BC34A"></div>
-                <div class="frame-color" style="background-color: #ffffff;" data-color="#ffffff"></div>
-                <div class="frame-color" style="background-color: #000000;" data-color="#000000"></div>
+                <div class="frame-color" style="background-color: #ff6b6b" data-color="#ff6b6b"></div>
+                <div class="frame-color" style="background-color: #667eea" data-color="#667eea"></div>
+                <div class="frame-color" style="background-color: #4caf50" data-color="#4caf50"></div>
+                <div class="frame-color" style="background-color: #ffc107" data-color="#ffc107"></div>
+                <div class="frame-color" style="background-color: #9c27b0" data-color="#9c27b0"></div>
+                <div class="frame-color" style="background-color: #607d8b" data-color="#607d8b"></div>
+                <div class="frame-color" style="background-color: #e91e63" data-color="#e91e63"></div>
+                <div class="frame-color" style="background-color: #3f51b5" data-color="#3f51b5"></div>
+                <div class="frame-color" style="background-color: #00bcd4" data-color="#00bcd4"></div>
+                <div class="frame-color" style="background-color: #8bc34a" data-color="#8bc34a"></div>
+                <div class="frame-color" style="background-color: #ffffff" data-color="#ffffff"></div>
+                <div class="frame-color" style="background-color: #000000" data-color="#000000"></div>
             </div>
         </div>
-        
+
         <div class="edit-section">
             <h3>Stiker</h3>
             <div class="stickers">
@@ -605,7 +618,7 @@
                 <div class="sticker" data-sticker="fire" style="background-image: url('https://cdn-icons-png.flaticon.com/512/599/599502.png')"></div>
             </div>
         </div>
-        
+
         <div class="edit-section">
             <h3>Template Border</h3>
             <div class="template-options">
@@ -635,7 +648,7 @@
                 </div>
             </div>
         </div>
-                    
+
         <div class="edit-section">
             <h3>Hasil Akhir</h3>
             <div id="final-result" class="final-photos"></div>
@@ -671,215 +684,229 @@
         let selectedBorderSize = "small";
         let currentTemplate = null;
 
-        // Elemen DOM
-        const pages = document.querySelectorAll('.page');
-        const startBtn = document.getElementById('start-btn');
-        const layoutOptions = document.querySelectorAll('.layout-option');
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        const countdownEl = document.getElementById('countdown');
-        const filterSelect = document.getElementById('filter');
-        const timerSelect = document.getElementById('timer');
-        const captureBtn = document.getElementById('capture-btn');
-        const deleteBtn = document.getElementById('delete-btn');
-        const continueBtn = document.getElementById('continue-btn');
-        const photosContainer = document.getElementById('photos-container');
-        const finalResult = document.getElementById('final-result');
-        const downloadBtn = document.getElementById('download-btn');
-        const frameColors = document.querySelectorAll('.frame-color');
-        const stickers = document.querySelectorAll('.sticker');
-        const notification = document.getElementById('download-notification');
-        const voiceStatus = document.getElementById('voice-status');
-        const templateOptions = document.querySelectorAll('.template-option');
-        const borderOptions = document.querySelectorAll('.border-option');
-
         // Filter Effects
         const filters = {
-            none: 'none',
-            grayscale: 'grayscale(100%)',
-            sepia: 'sepia(100%)',
-            invert: 'invert(100%)',
-            vintage: 'sepia(70%) brightness(80%) contrast(120%)',
-            cool: 'brightness(90%) contrast(110%) hue-rotate(180deg)',
-            warm: 'brightness(110%) contrast(110%) hue-rotate(-20deg)',
-            blackwhite: 'grayscale(100%) contrast(120%)',
-            blur: 'blur(2px)',
-            'hue-rotate': 'hue-rotate(90deg)',
-            contrast: 'contrast(200%)',
-            saturate: 'saturate(200%)',
-            neon: 'brightness(120%) contrast(120%) hue-rotate(45deg)',
-            shadow: 'brightness(90%) contrast(120%) drop-shadow(5px 5px 5px #333)',
-            focus: 'blur(1px) brightness(110%)'
+            none: "none",
+            grayscale: "grayscale(100%)",
+            sepia: "sepia(100%)",
+            invert: "invert(100%)",
+            vintage: "sepia(70%) brightness(80%) contrast(120%)",
+            cool: "brightness(90%) contrast(110%) hue-rotate(180deg)",
+            warm: "brightness(110%) contrast(110%) hue-rotate(-20deg)",
+            blackwhite: "grayscale(100%) contrast(120%)",
+            blur: "blur(2px)",
+            "hue-rotate": "hue-rotate(90deg)",
+            contrast: "contrast(200%)",
+            saturate: "saturate(200%)",
+            neon: "brightness(120%) contrast(120%) hue-rotate(45deg)",
+            shadow: "brightness(90%) contrast(120%) drop-shadow(5px 5px 5px #333)",
+            focus: "blur(1px) brightness(110%)",
         };
 
         // Color names for voice commands
         const colorNames = {
-            '#000000':'hitam',
-            '#FFFFFF' : 'putih',
-            '#ff6b6b': 'merah muda',
-            '#667eea': 'biru',
-            '#4CAF50': 'hijau',
-            '#FFC107': 'kuning',
-            '#9C27B0': 'ungu',
-            '#607D8B': 'abu-abu',
-            '#E91E63': 'merah',
-            '#3F51B5': 'biru tua',
-            '#00BCD4': 'biru muda',
-            '#8BC34A': 'hijau muda'
+            "#000000": "hitam",
+            "#FFFFFF": "putih",
+            "#ff6b6b": "merah muda",
+            "#667eea": "biru",
+            "#4caf50": "hijau",
+            "#ffc107": "kuning",
+            "#9c27b0": "ungu",
+            "#607d8b": "abu-abu",
+            "#e91e63": "merah",
+            "#3f51b5": "biru tua",
+            "#00bcd4": "biru muda",
+            "#8bc34a": "hijau muda",
         };
 
         // Sticker names for voice commands
         const stickerNames = {
-            'heart': 'hati',
-            'star': 'bintang',
-            'smile': 'senyum',
-            'crown': 'mahkota',
-            'music': 'musik',
-            'camera': 'kamera',
-            'flower': 'bunga',
-            'balloon': 'balon',
-            'gift': 'hadiah',
-            'fire': 'api'
+            heart: "hati",
+            star: "bintang",
+            smile: "senyum",
+            crown: "mahkota",
+            music: "musik",
+            camera: "kamera",
+            flower: "bunga",
+            balloon: "balon",
+            gift: "hadiah",
+            fire: "api",
         };
 
         // Template configurations
         const templates = {
             null: {
                 apply: function(container) {
-                    const icons = container.querySelectorAll('.border-icon');
+                    // Hanya hapus icon dan text yang ada
+                    const icons = container.querySelectorAll(".border-icon");
                     icons.forEach(icon => icon.remove());
                     
-                    const img = container.querySelector('img');
-                    img.style.border = '10px solid ' + selectedFrameColor;
-                    img.style.borderBottomWidth = '40px';
+                    const texts = container.querySelectorAll(".template-text");
+                    texts.forEach(text => text.remove());
+                    
+                    const img = container.querySelector("img");
+                    img.style.border = "10px solid " + selectedFrameColor;
+                    img.style.borderBottomWidth = "40px";
+                    
                     if (selectedBorderSize === "large") {
-                        img.style.borderWidth = '30px';
-                        img.style.borderBottomWidth = '80px';
+                        img.style.borderWidth = "30px";
+                        img.style.borderBottomWidth = "80px";
                     }
                 }
             },
             hearts: {
                 apply: function(container) {
-                    const img = container.querySelector('img');
-                    img.style.border = 'none';
+                    // Jangan hapus border, hanya tambahkan elemen di atasnya
+                    const img = container.querySelector("img");
                     
-                    addBorderIcon(container, 'top-left', 'heart');
-                    addBorderIcon(container, 'top-right', 'heart');
-                    addBorderIcon(container, 'bottom-left', 'heart');
-                    addBorderIcon(container, 'bottom-right', 'heart');
+                    // Tambahkan icon di berbagai posisi (lebih banyak dan variatif)
+                    addBorderIcon(container, "20%", "10%", "heart");
+                    addBorderIcon(container, "80%", "10%", "heart");
+                    addBorderIcon(container, "15%", "30%", "heart");
+                    addBorderIcon(container, "85%", "30%", "heart");
+                    addBorderIcon(container, "10%", "60%", "heart");
+                    addBorderIcon(container, "90%", "60%", "heart");
+                    addBorderIcon(container, "30%", "80%", "heart");
+                    addBorderIcon(container, "70%", "80%", "heart");
+                    
+                    // Tambahkan text
+                    addTemplateText(container, "Love & Peace");
                 }
             },
             stars: {
                 apply: function(container) {
-                    const img = container.querySelector('img');
-                    img.style.border = 'none';
+                    addBorderIcon(container, "10%", "15%", "star");
+                    addBorderIcon(container, "90%", "15%", "star");
+                    addBorderIcon(container, "50%", "20%", "star");
+                    addBorderIcon(container, "20%", "50%", "star");
+                    addBorderIcon(container, "80%", "50%", "star");
+                    addBorderIcon(container, "10%", "75%", "star");
+                    addBorderIcon(container, "90%", "75%", "star");
+                    addBorderIcon(container, "50%", "85%", "star");
                     
-                    addBorderIcon(container, 'top-left', 'star');
-                    addBorderIcon(container, 'top-right', 'star');
-                    addBorderIcon(container, 'bottom-left', 'star');
-                    addBorderIcon(container, 'bottom-right', 'star');
+                    addTemplateText(container, "Shining Star");
                 }
             },
             flowers: {
                 apply: function(container) {
-                    const img = container.querySelector('img');
-                    img.style.border = 'none';
+                    addBorderIcon(container, "15%", "10%", "leaf");
+                    addBorderIcon(container, "85%", "10%", "leaf");
+                    addBorderIcon(container, "25%", "25%", "leaf");
+                    addBorderIcon(container, "75%", "25%", "leaf");
+                    addBorderIcon(container, "40%", "40%", "leaf");
+                    addBorderIcon(container, "60%", "40%", "leaf");
+                    addBorderIcon(container, "10%", "70%", "leaf");
+                    addBorderIcon(container, "90%", "70%", "leaf");
                     
-                    addBorderIcon(container, 'top-left', 'leaf');
-                    addBorderIcon(container, 'top-right', 'leaf');
-                    addBorderIcon(container, 'bottom-left', 'leaf');
-                    addBorderIcon(container, 'bottom-right', 'leaf');
+                    addTemplateText(container, "Beautiful Day");
                 }
             },
             music: {
                 apply: function(container) {
-                    const img = container.querySelector('img');
-                    img.style.border = 'none';
+                    addBorderIcon(container, "10%", "20%", "music");
+                    addBorderIcon(container, "30%", "15%", "music");
+                    addBorderIcon(container, "70%", "15%", "music");
+                    addBorderIcon(container, "90%", "20%", "music");
+                    addBorderIcon(container, "20%", "60%", "music");
+                    addBorderIcon(container, "40%", "65%", "music");
+                    addBorderIcon(container, "60%", "65%", "music");
+                    addBorderIcon(container, "80%", "60%", "music");
                     
-                    addBorderIcon(container, 'top-left', 'music');
-                    addBorderIcon(container, 'top-right', 'music');
-                    addBorderIcon(container, 'bottom-left', 'music');
-                    addBorderIcon(container, 'bottom-right', 'music');
+                    addTemplateText(container, "Music Festival");
                 }
             },
             balloons: {
                 apply: function(container) {
-                    const img = container.querySelector('img');
-                    img.style.border = 'none';
+                    addBorderIcon(container, "15%", "10%", "birthday-cake");
+                    addBorderIcon(container, "35%", "5%", "birthday-cake");
+                    addBorderIcon(container, "65%", "5%", "birthday-cake");
+                    addBorderIcon(container, "85%", "10%", "birthday-cake");
+                    addBorderIcon(container, "20%", "70%", "birthday-cake");
+                    addBorderIcon(container, "40%", "75%", "birthday-cake");
+                    addBorderIcon(container, "60%", "75%", "birthday-cake");
+                    addBorderIcon(container, "80%", "70%", "birthday-cake");
                     
-                    addBorderIcon(container, 'top-left', 'birthday-cake');
-                    addBorderIcon(container, 'top-right', 'birthday-cake');
-                    addBorderIcon(container, 'bottom-left', 'birthday-cake');
-                    addBorderIcon(container, 'bottom-right', 'birthday-cake');
+                    addTemplateText(container, "Happy Birthday");
                 }
             },
             crowns: {
                 apply: function(container) {
-                    const img = container.querySelector('img');
-                    img.style.border = 'none';
+                    addBorderIcon(container, "10%", "10%", "crown");
+                    addBorderIcon(container, "30%", "5%", "crown");
+                    addBorderIcon(container, "50%", "15%", "crown");
+                    addBorderIcon(container, "70%", "5%", "crown");
+                    addBorderIcon(container, "90%", "10%", "crown");
+                    addBorderIcon(container, "20%", "75%", "crown");
+                    addBorderIcon(container, "50%", "80%", "crown");
+                    addBorderIcon(container, "80%", "75%", "crown");
                     
-                    addBorderIcon(container, 'top-left', 'crown');
-                    addBorderIcon(container, 'top-right', 'crown');
-                    addBorderIcon(container, 'bottom-left', 'crown');
-                    addBorderIcon(container, 'bottom-right', 'crown');
+                    addTemplateText(container, "Royal Party");
                 }
             }
         };
 
-        // Fungsi untuk menambahkan icon di border
-        function addBorderIcon(container, position, iconType) {
-            const oldIcon = container.querySelector(`.border-icon.${position}`);
-            if (oldIcon) oldIcon.remove();
-            
-            const icon = document.createElement('i');
-            icon.className = `border-icon ${position} fas fa-${iconType} icon-${iconType}`;
+        // Fungsi untuk menambahkan icon di border dengan posisi persentase
+        function addBorderIcon(container, left, top, iconType) {
+            const icon = document.createElement("i");
+            icon.className = `border-icon fas fa-${iconType} icon-${iconType}`;
+            icon.style.left = left;
+            icon.style.top = top;
             container.appendChild(icon);
+        }
+
+        // Fungsi untuk menambahkan text decoration
+        function addTemplateText(container, text) {
+            const textEl = document.createElement("div");
+            textEl.className = "template-text";
+            textEl.textContent = text;
+            container.appendChild(textEl);
         }
 
         // Initialize voice recognition
         function initVoiceRecognition() {
             try {
-                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                const SpeechRecognition =
+                    window.SpeechRecognition || window.webkitSpeechRecognition;
                 recognition = new SpeechRecognition();
                 recognition.continuous = true;
                 recognition.interimResults = false;
-                recognition.lang = 'id-ID';
+                recognition.lang = "id-ID";
 
-                recognition.onstart = function() {
+                recognition.onstart = function () {
                     isListening = true;
-                    voiceStatus.classList.add('listening');
-                    voiceStatus.querySelector('span').textContent = 'Voice Command: ON';
+                    voiceStatus.classList.add("listening");
+                    voiceStatus.querySelector("span").textContent = "Voice Command: ON";
                 };
 
-                recognition.onend = function() {
+                recognition.onend = function () {
                     isListening = false;
-                    voiceStatus.classList.remove('listening');
-                    voiceStatus.querySelector('span').textContent = 'Voice Command: OFF';
-                    if (currentPage !== 'page-start') {
+                    voiceStatus.classList.remove("listening");
+                    voiceStatus.querySelector("span").textContent = "Voice Command: OFF";
+                    if (currentPage !== "page-start") {
                         setTimeout(startListening, 500);
                     }
                 };
 
-                recognition.onerror = function(event) {
-                    console.error('Voice recognition error', event.error);
-                    if (event.error === 'not-allowed') {
-                        voiceStatus.querySelector('span').textContent = 'Voice Command: Blocked';
+                recognition.onerror = function (event) {
+                    console.error("Voice recognition error", event.error);
+                    if (event.error === "not-allowed") {
+                        voiceStatus.querySelector("span").textContent =
+                            "Voice Command: Blocked";
                     }
                 };
 
-                recognition.onresult = function(event) {
+                recognition.onresult = function (event) {
                     const last = event.results.length - 1;
                     const command = event.results[last][0].transcript.toLowerCase().trim();
-                    console.log('Voice command:', command);
-                    
+                    console.log("Voice command:", command);
+
                     handleVoiceCommand(command);
                 };
 
                 startListening();
             } catch (e) {
-                console.error('Voice recognition not supported', e);
-                voiceStatus.style.display = 'none';
+                console.error("Voice recognition not supported", e);
+                voiceStatus.style.display = "none";
             }
         }
 
@@ -889,7 +916,7 @@
                 try {
                     recognition.start();
                 } catch (e) {
-                    console.error('Error starting recognition:', e);
+                    console.error("Error starting recognition:", e);
                 }
             }
         }
@@ -904,139 +931,239 @@
         // Handle voice commands based on current page
         function handleVoiceCommand(command) {
             switch (currentPage) {
-                case 'page-start':
-                    if (command.includes('mulai')) {
+                case "page-start":
+                    if (command.includes("mulai")) {
                         startBtn.click();
                     }
                     break;
-                    
-                case 'page-layout':
-                    if (command.includes('empat foto vertikal')) {
-                        document.querySelector('.layout-option[data-layout="A"]').click();
-                    } else if (command.includes('tiga foto vertikal')) {
-                        document.querySelector('.layout-option[data-layout="B"]').click();
-                    } else if (command.includes('dua foto vertikal')) {
-                        document.querySelector('.layout-option[data-layout="C"]').click();
-                    } else if (command.includes('enam foto dua kali tiga')) {
-                        document.querySelector('.layout-option[data-layout="D"]').click();
-                    } else if (command.includes('empat foto 2 kali 2')) {
-                        document.querySelector('.layout-option[data-layout="E"]').click();
-                    } else if (command.includes('satu foto vertikal')) {
-                        document.querySelector('.layout-option[data-layout="F"]').click();
+
+                case "page-layout":
+                    if (command.includes("empat foto vertikal")) {
+                        document
+                            .querySelector('.layout-option[data-layout="A"]')
+                            .click();
+                    } else if (command.includes("tiga foto vertikal")) {
+                        document
+                            .querySelector('.layout-option[data-layout="B"]')
+                            .click();
+                    } else if (command.includes("dua foto vertikal")) {
+                        document
+                            .querySelector('.layout-option[data-layout="C"]')
+                            .click();
+                    } else if (command.includes("enam foto dua kali tiga")) {
+                        document
+                            .querySelector('.layout-option[data-layout="D"]')
+                            .click();
+                    } else if (command.includes("empat foto 2 kali 2")) {
+                        document
+                            .querySelector('.layout-option[data-layout="E"]')
+                            .click();
+                                           
+                    } else if (command.includes("satu foto vertikal")) {
+                        document
+                            .querySelector('.layout-option[data-layout="F"]')
+                            .click();
                     }
                     break;
-                    
-                case 'page-photo':
-                    if (command.includes('filter')) {
+
+                case "page-photo":
+                    if (command.includes("filter")) {
                         filterSelect.focus();
-                        if (command.includes('grayscale') || command.includes('abu-abu')) {
-                            filterSelect.value = 'grayscale';
-                            filterSelect.dispatchEvent(new Event('change'));
-                        } else if (command.includes('sepia')) {
-                            filterSelect.value = 'sepia';
-                            filterSelect.dispatchEvent(new Event('change'));
-                        } else if (command.includes('invert')) {
-                            filterSelect.value = 'invert';
-                            filterSelect.dispatchEvent(new Event('change'));
-                        } else if (command.includes('vintage')) {
-                            filterSelect.value = 'vintage';
-                            filterSelect.dispatchEvent(new Event('change'));
-                        } else if (command.includes('cool')) {
-                            filterSelect.value = 'cool';
-                            filterSelect.dispatchEvent(new Event('change'));
-                        } else if (command.includes('warm')) {
-                            filterSelect.value = 'warm';
-                            filterSelect.dispatchEvent(new Event('change'));
-                        } else if (command.includes('hitam putih') || command.includes('blackwhite')) {
-                            filterSelect.value = 'blackwhite';
-                            filterSelect.dispatchEvent(new Event('change'));
-                        } else if (command.includes('blur')) {
-                            filterSelect.value = 'blur';
-                            filterSelect.dispatchEvent(new Event('change'));
-                        } else if (command.includes('pelangi') || command.includes('hue rotate')) {
-                            filterSelect.value = 'hue-rotate';
-                            filterSelect.dispatchEvent(new Event('change'));
-                        } else if (command.includes('kontras') || command.includes('contrast')) {
-                            filterSelect.value = 'contrast';
-                            filterSelect.dispatchEvent(new Event('change'));
-                        } else if (command.includes('saturasi') || command.includes('saturate')) {
-                            filterSelect.value = 'saturate';
-                            filterSelect.dispatchEvent(new Event('change'));
-                        } else if (command.includes('neon')) {
-                            filterSelect.value = 'neon';
-                            filterSelect.dispatchEvent(new Event('change'));
-                        } else if (command.includes('bayangan') || command.includes('shadow')) {
-                            filterSelect.value = 'shadow';
-                            filterSelect.dispatchEvent(new Event('change'));
-                        } else if (command.includes('focus') || command.includes('soft focus')) {
-                            filterSelect.value = 'focus';
-                            filterSelect.dispatchEvent(new Event('change'));
-                        } else if (command.includes('none') || command.includes('tanpa filter')) {
-                            filterSelect.value = 'none';
-                            filterSelect.dispatchEvent(new Event('change'));
+                        if (command.includes("grayscale") || command.includes("abu-abu")) {
+                            filterSelect.value = "grayscale";
+                            filterSelect.dispatchEvent(new Event("change"));
+                        } else if (command.includes("sepia")) {
+                            filterSelect.value = "sepia";
+                            filterSelect.dispatchEvent(new Event("change"));
+                        } else if (command.includes("invert")) {
+                            filterSelect.value = "invert";
+                            filterSelect.dispatchEvent(new Event("change"));
+                        } else if (command.includes("vintage")) {
+                            filterSelect.value = "vintage";
+                            filterSelect.dispatchEvent(new Event("change"));
+                        } else if (command.includes("cool")) {
+                            filterSelect.value = "cool";
+                            filterSelect.dispatchEvent(new Event("change"));
+                        } else if (command.includes("warm")) {
+                            filterSelect.value = "warm";
+                            filterSelect.dispatchEvent(new Event("change"));
+                        } else if (
+                            command.includes("hitam putih") ||
+                            command.includes("blackwhite")
+                        ) {
+                            filterSelect.value = "blackwhite";
+                            filterSelect.dispatchEvent(new Event("change"));
+                        } else if (command.includes("blur")) {
+                            filterSelect.value = "blur";
+                            filterSelect.dispatchEvent(new Event("change"));
+                        } else if (
+                            command.includes("pelangi") ||
+                            command.includes("hue rotate")
+                        ) {
+                            filterSelect.value = "hue-rotate";
+                            filterSelect.dispatchEvent(new Event("change"));
+                        } else if (
+                            command.includes("kontras") ||
+                            command.includes("contrast")
+                        ) {
+                            filterSelect.value = "contrast";
+                            filterSelect.dispatchEvent(new Event("change"));
+                        } else if (
+                            command.includes("saturasi") ||
+                            command.includes("saturate")
+                        ) {
+                            filterSelect.value = "saturate";
+                            filterSelect.dispatchEvent(new Event("change"));
+                        } else if (command.includes("neon")) {
+                            filterSelect.value = "neon";
+                            filterSelect.dispatchEvent(new Event("change"));
+                        } else if (
+                            command.includes("bayangan") ||
+                            command.includes("shadow")
+                        ) {
+                            filterSelect.value = "shadow";
+                            filterSelect.dispatchEvent(new Event("change"));
+                        } else if (
+                            command.includes("focus") ||
+                            command.includes("soft focus")
+                        ) {
+                            filterSelect.value = "focus";
+                            filterSelect.dispatchEvent(new Event("change"));
+                        } else if (
+                            command.includes("none") ||
+                            command.includes("tanpa filter")
+                        ) {
+                            filterSelect.value = "none";
+                            filterSelect.dispatchEvent(new Event("change"));
                         }
-                    } else if (command.includes('hitung mundur') || command.includes('countdown')) {
+                    } else if (
+                        command.includes("hitung mundur") ||
+                        command.includes("countdown")
+                    ) {
                         timerSelect.focus();
-                        if (command.includes('3') || command.includes('3 detik') || command.includes('3s')) {
-                            timerSelect.value = '3';
-                        } else if (command.includes('5') || command.includes('5 detik') || command.includes('5s')) {
-                            timerSelect.value = '5';
-                        } else if (command.includes('10') || command.includes('10 detik') || command.includes('10s')) {
-                            timerSelect.value = '10';
+                        if (
+                            command.includes("3") ||
+                            command.includes("3 detik") ||
+                            command.includes("3s")
+                        ) {
+                            timerSelect.value = "3";
+                        } else if (
+                            command.includes("5") ||
+                            command.includes("5 detik") ||
+                            command.includes("5s")
+                        ) {
+                            timerSelect.value = "5";
+                        } else if (
+                            command.includes("10") ||
+                            command.includes("10 detik") ||
+                            command.includes("10s")
+                        ) {
+                            timerSelect.value = "10";
                         }
-                    } else if (command.includes('cek rek') || command.includes('ambil foto') || command.includes('capture')) {
+                    } else if (
+                        command.includes("cek rek") ||
+                        command.includes("ambil foto") ||
+                        command.includes("capture")
+                    ) {
                         captureBtn.click();
-                    } else if (command.includes('hapus') || command.includes('delete')) {
+                    } else if (command.includes("hapus") || command.includes("delete")) {
                         deleteBtn.click();
-                    } else if (command.includes('lanjut') || command.includes('continue')) {
-                        if (continueBtn.style.display !== 'none') {
+                    } else if (
+                        command.includes("lanjut") ||
+                        command.includes("continue")
+                    ) {
+                        if (continueBtn.style.display !== "none") {
                             continueBtn.click();
                         }
                     }
                     break;
-                    
-                case 'page-edit':
-                    if (command.includes('warna')) {
+
+                case "page-edit":
+                    if (command.includes("warna")) {
                         for (const [colorCode, colorName] of Object.entries(colorNames)) {
                             if (command.includes(colorName)) {
-                                const colorElement = document.querySelector(`.frame-color[data-color="${colorCode}"]`);
+                                const colorElement = document.querySelector(
+                                    `.frame-color[data-color="${colorCode}"]`
+                                );
                                 if (colorElement) {
                                     colorElement.click();
                                 }
                                 break;
                             }
                         }
-                    } else if (command.includes('stiker') || command.includes('sticker') || command.includes('emoji')) {
+                    } else if (
+                        command.includes("stiker") ||
+                        command.includes("sticker") ||
+                        command.includes("emoji")
+                    ) {
                         for (const [stickerId, stickerName] of Object.entries(stickerNames)) {
                             if (command.includes(stickerName)) {
-                                const stickerElement = document.querySelector(`.sticker[data-sticker="${stickerId}"]`);
+                                const stickerElement = document.querySelector(
+                                    `.sticker[data-sticker="${stickerId}"]`
+                                );
                                 if (stickerElement) {
                                     stickerElement.click();
                                 }
                                 break;
                             }
                         }
-                    } else if (command.includes('template') || command.includes('bingkai')) {
-                        if (command.includes('heart') || command.includes('hati')) {
-                            document.querySelector('.template-option[data-template="hearts"]').click();
-                        } else if (command.includes('star') || command.includes('bintang')) {
-                            document.querySelector('.template-option[data-template="stars"]').click();
-                        } else if (command.includes('flower') || command.includes('bunga') || command.includes('leaf')) {
-                            document.querySelector('.template-option[data-template="flowers"]').click();
-                        } else if (command.includes('music') || command.includes('musik')) {
-                            document.querySelector('.template-option[data-template="music"]').click();
-                        } else if (command.includes('balloon') || command.includes('balon')) {
-                            document.querySelector('.template-option[data-template="balloons"]').click();
-                        } else if (command.includes('crown') || command.includes('mahkota')) {
-                            document.querySelector('.template-option[data-template="crowns"]').click();
+                    } else if (
+                        command.includes("template") ||
+                        command.includes("bingkai")
+                    ) {
+                        if (command.includes("heart") || command.includes("hati")) {
+                            document
+                                .querySelector('.template-option[data-template="hearts"]')
+                                .click();
+                        } else if (command.includes("star") || command.includes("bintang")) {
+                            document
+                                .querySelector('.template-option[data-template="stars"]')
+                                .click();
+                        } else if (
+                            command.includes("flower") ||
+                            command.includes("bunga") ||
+                            command.includes("leaf")
+                        ) {
+                            document
+                                .querySelector('.template-option[data-template="flowers"]')
+                                .click();
+                        } else if (command.includes("music") || command.includes("musik")) {
+                            document
+                                .querySelector('.template-option[data-template="music"]')
+                                .click();
+                        } else if (
+                            command.includes("balloon") ||
+                            command.includes("balon")
+                        ) {
+                            document
+                                .querySelector('.template-option[data-template="balloons"]')
+                                .click();
+                        } else if (
+                            command.includes("crown") ||
+                            command.includes("mahkota")
+                        ) {
+                            document
+                                .querySelector('.template-option[data-template="crowns"]')
+                                .click();
                         }
-                    } else if (command.includes('ukuran bingkai') || command.includes('border size')) {
-                        if (command.includes('kecil') || command.includes('small')) {
-                            document.querySelector('.border-option[data-border-size="small"]').click();
-                        } else if (command.includes('besar') || command.includes('large') || command.includes('photobooth')) {
-                            document.querySelector('.border-option[data-border-size="large"]').click();
+                    } else if (
+                        command.includes("ukuran bingkai") ||
+                        command.includes("border size")
+                    ) {
+                        if (command.includes("kecil") || command.includes("small")) {
+                            document
+                                .querySelector('.border-option[data-border-size="small"]')
+                                .click();
+                        } else if (
+                            command.includes("besar") ||
+                            command.includes("large") ||
+                            command.includes("photobooth")
+                        ) {
+                            document
+                                .querySelector('.border-option[data-border-size="large"]')
+                                .click();
                         }
-                    } else if (command.includes('download') || command.includes('unduh')) {
+                    } else if (command.includes("download") || command.includes("unduh")) {
                         downloadBtn.click();
                     }
                     break;
@@ -1045,22 +1172,22 @@
 
         // Fungsi Navigasi Halaman
         function showPage(pageId) {
-            if (currentPage === 'page-photo' && pageId !== 'page-photo') {
+            if (currentPage === "page-photo" && pageId !== "page-photo") {
                 stopCamera();
             }
 
-            pages.forEach(page => {
-                page.classList.remove('active');
+            pages.forEach((page) => {
+                page.classList.remove("active");
             });
-            document.getElementById(pageId).classList.add('active');
+            document.getElementById(pageId).classList.add("active");
             currentPage = pageId;
-            
-            if (pageId === 'page-photo') {
+
+            if (pageId === "page-photo") {
                 initCamera();
                 if (!isListening) {
                     startListening();
                 }
-            } else if (pageId === 'page-start') {
+            } else if (pageId === "page-start") {
                 stopListening();
             } else {
                 startListening();
@@ -1070,14 +1197,14 @@
         // Inisialisasi Kamera
         async function initCamera() {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { 
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
                         width: { ideal: 1280 },
                         height: { ideal: 720 },
-                        facingMode: 'user' 
-                    } 
+                        facingMode: "user",
+                    },
                 });
-                
+
                 mediaStream = stream;
                 video.srcObject = stream;
                 await video.play();
@@ -1090,38 +1217,41 @@
         // Hentikan Kamera
         function stopCamera() {
             if (mediaStream) {
-                mediaStream.getTracks().forEach(track => track.stop());
+                mediaStream.getTracks().forEach((track) => track.stop());
                 video.srcObject = null;
             }
         }
 
         // Mulai Countdown
         function startCountdown() {
+            if (photos.length >= totalPoses) {
+                // Prevent capturing more photos than totalPoses
+                return;
+            }
             let timeLeft = parseInt(timerSelect.value);
             countdownEl.textContent = timeLeft;
-            countdownEl.style.display = 'flex';
-            
+            countdownEl.style.display = "flex";
+
             captureBtn.disabled = true;
             deleteBtn.disabled = true;
-            
+
             countdownInterval = setInterval(() => {
                 timeLeft--;
                 countdownEl.textContent = timeLeft;
-                
+
                 if (timeLeft <= 0) {
                     clearInterval(countdownInterval);
-                    countdownEl.style.display = 'none';
+                    countdownEl.style.display = "none";
                     takePhoto();
-                    
-                    if (currentPose < totalPoses - 1) {
-                        currentPose++;
+
+                    if (photos.length < totalPoses) {
                         setTimeout(() => {
                             startCountdown();
                         }, 1000);
                     } else {
                         captureBtn.disabled = false;
-                        deleteBtn.disabled = false;
-                        document.getElementById('photo-preview').style.display = 'block';
+                        deleteBtn.disabled = photos.length === 0;
+                        document.getElementById("photo-preview").style.display = "block";
                     }
                 }
             }, 1000);
@@ -1131,15 +1261,15 @@
         function takePhoto() {
             const targetWidth = 600;
             const targetHeight = 900;
-            
+
             canvas.width = targetWidth;
             canvas.height = targetHeight;
-            
+
             const videoAspect = video.videoWidth / video.videoHeight;
             const canvasAspect = targetWidth / targetHeight;
-            
+
             let renderWidth, renderHeight, offsetX, offsetY;
-            
+
             if (videoAspect > canvasAspect) {
                 renderHeight = targetHeight;
                 renderWidth = video.videoWidth * (targetHeight / video.videoHeight);
@@ -1151,32 +1281,31 @@
                 offsetX = 0;
                 offsetY = (targetHeight - renderHeight) / 2;
             }
-            
+
             ctx.filter = filters[currentFilter];
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(video, offsetX, offsetY, renderWidth, renderHeight);
-            
+
             video.style.filter = filters[currentFilter];
-            
-            const photoData = canvas.toDataURL('image/png');
+
+            const photoData = canvas.toDataURL("image/png");
             photos.push(photoData);
-            console.log('Photo taken:', photoData); // Debugging
-            console.log('Photos array:', photos); // Debugging
-            
+            currentPose = photos.length; // update currentPose to photos.length
+
             updatePhotoPreview();
         }
 
         // Update Preview Foto
         function updatePhotoPreview() {
-            photosContainer.innerHTML = '';
-            console.log('Updating photo preview with photos:', photos);
+            photosContainer.innerHTML = "";
             photos.forEach((photo, index) => {
-                const container = document.createElement('div');
-                container.className = 'photo-with-sticker';
+                const container = document.createElement("div");
+                container.className = "photo-with-sticker";
                 container.dataset.photoIndex = index;
 
-                const img = document.createElement('img');
+                const img = document.createElement("img");
                 img.src = photo;
-                img.className = 'final-photo';
+                img.className = "final-photo";
                 if (selectedBorderSize === "large") {
                     img.classList.add("large-frame");
                 }
@@ -1189,46 +1318,44 @@
 
         // Render Foto untuk Editing
         function renderFinalPhotos() {
-            finalResult.innerHTML = '';
-            console.log('Rendering final photos:', photos); // Debugging
-            
+            finalResult.innerHTML = "";
+
             if (photos.length === 0) {
-                console.warn('No photos to render in final result');
-                finalResult.innerHTML = '<p>Tidak ada foto untuk ditampilkan. Silakan ambil foto terlebih dahulu.</p>';
+                finalResult.innerHTML =
+                    "<p>Tidak ada foto untuk ditampilkan. Silakan ambil foto terlebih dahulu.</p>";
                 return;
             }
 
             photos.forEach((photo, photoIndex) => {
-                const container = document.createElement('div');
-                container.className = 'photo-with-sticker';
+                const container = document.createElement("div");
+                container.className = "photo-with-sticker";
                 container.dataset.photoIndex = photoIndex;
-                
-                const img = document.createElement('img');
+
+                const img = document.createElement("img");
                 img.src = photo;
-                img.className = 'final-photo';
-                img.style.display = 'block'; // Pastikan gambar terlihat
-                img.style.maxWidth = '100%';
-                img.style.height = 'auto';
-                
-                // Apply template
-                if (currentTemplate && templates[currentTemplate]) {
-                    templates[currentTemplate].apply(container);
-                } else {
-                    templates['null'].apply(container);
-                }
-                
-                // Apply border size
+                img.className = "final-photo";
+                img.style.display = "block";
+                img.style.maxWidth = "100%";
+                img.style.height = "auto";
+
                 if (selectedBorderSize === "large") {
                     img.classList.add("large-frame");
                 }
-                
+
                 container.appendChild(img);
-                
+
+                // Apply template - ensure correct application on container
+                if (currentTemplate && templates[currentTemplate]) {
+                    templates[currentTemplate].apply(container);
+                } else {
+                    templates["null"].apply(container);
+                }
+
                 // Add stickers if any
                 if (stickerPositions[photoIndex]) {
                     stickerPositions[photoIndex].forEach((sticker, idx) => {
-                        const stickerEl = document.createElement('div');
-                        stickerEl.className = 'sticker-preview';
+                        const stickerEl = document.createElement("div");
+                        stickerEl.className = "sticker-preview";
                         stickerEl.style.backgroundImage = sticker.backgroundImage;
                         stickerEl.style.left = `${sticker.x}px`;
                         stickerEl.style.top = `${sticker.y}px`;
@@ -1236,41 +1363,44 @@
                         container.appendChild(stickerEl);
                     });
                 }
-                
+
                 finalResult.appendChild(container);
             });
 
-            // Add click listeners for stickers
-            document.querySelectorAll('.photo-with-sticker').forEach(container => {
-                container.addEventListener('click', (e) => {
-                    if (activeSticker && (e.target === container || e.target === container.querySelector('img'))) {
-                        const img = container.querySelector('img');
+            // Add click listeners for stickers (to add more)
+            document.querySelectorAll(".photo-with-sticker").forEach((container) => {
+                container.addEventListener("click", (e) => {
+                    if (
+                        activeSticker &&
+                        (e.target === container || e.target === container.querySelector("img"))
+                    ) {
+                        const img = container.querySelector("img");
                         const rect = img.getBoundingClientRect();
-                        
+
                         const x = e.clientX - rect.left - 40;
                         const y = e.clientY - rect.top - 40;
-                        
+
                         const boundedX = Math.max(0, Math.min(x, rect.width - 80));
                         const boundedY = Math.max(0, Math.min(y, rect.height - 80));
-                        
+
                         const photoIndex = parseInt(container.dataset.photoIndex);
                         if (!stickerPositions[photoIndex]) {
                             stickerPositions[photoIndex] = [];
                         }
-                        
+
                         stickerPositions[photoIndex].push({
                             backgroundImage: activeSticker.style.backgroundImage,
                             x: boundedX,
-                            y: boundedY
+                            y: boundedY,
                         });
-                        
+
                         renderFinalPhotos();
                     }
                 });
             });
         }
 
-        // Fungsi untuk memuat gambar
+        // Fungsi untuk memuat gambar (dipakai saat download)
         function loadImage(src) {
             return new Promise((resolve, reject) => {
                 const img = new Image();
@@ -1282,24 +1412,24 @@
         }
 
         // Event Listener untuk Download
-        downloadBtn.addEventListener('click', async function() {
+        downloadBtn.addEventListener("click", async function () {
             if (photos.length === 0) {
-                alert('Tidak ada foto yang bisa didownload!');
+                alert("Tidak ada foto yang bisa didownload!");
                 return;
             }
-            
+
             const originalText = downloadBtn.textContent;
             downloadBtn.disabled = true;
-            downloadBtn.textContent = 'Memproses...';
-            
+            downloadBtn.textContent = "Memproses...";
+
             try {
                 const photoCanvases = [];
-                
+
                 for (let i = 0; i < photos.length; i++) {
-                    const photoCanvas = document.createElement('canvas');
-                    const photoCtx = photoCanvas.getContext('2d');
+                    const photoCanvas = document.createElement("canvas");
+                    const photoCtx = photoCanvas.getContext("2d");
                     const img = new Image();
-                    
+
                     await new Promise((resolve) => {
                         img.onload = () => {
                             if (selectedBorderSize === "large") {
@@ -1309,24 +1439,32 @@
                                 photoCanvas.width = img.width + 20;
                                 photoCanvas.height = img.height + 50;
                             }
-                            
+
                             photoCtx.fillStyle = selectedFrameColor;
                             photoCtx.fillRect(0, 0, photoCanvas.width, photoCanvas.height);
-                            
+
                             if (selectedBorderSize === "large") {
                                 photoCtx.drawImage(img, 30, 30, img.width, img.height);
                             } else {
                                 photoCtx.drawImage(img, 10, 10, img.width, img.height);
                             }
-                            
+
                             if (stickerPositions[i]) {
                                 const stickerPromises = stickerPositions[i].map(async (sticker) => {
                                     try {
-                                        const url = sticker.backgroundImage.replace(/^url\(["']?/, '').replace(/["']?\)$/, '');
+                                        const url = sticker.backgroundImage
+                                            .replace(/^url\(["']?/, "")
+                                            .replace(/["']?\)$/, "");
                                         const stickerImg = await loadImage(url);
-                                        photoCtx.drawImage(stickerImg, sticker.x + (selectedBorderSize === "large" ? 30 : 10), sticker.y + (selectedBorderSize === "large" ? 30 : 10), 80, 80);
+                                        photoCtx.drawImage(
+                                            stickerImg,
+                                            sticker.x + (selectedBorderSize === "large" ? 30 : 10),
+                                            sticker.y + (selectedBorderSize === "large" ? 30 : 10),
+                                            80,
+                                            80
+                                        );
                                     } catch (error) {
-                                        console.error('Error loading sticker:', error);
+                                        console.error("Error loading sticker:", error);
                                     }
                                 });
                                 Promise.all(stickerPromises).then(resolve);
@@ -1338,27 +1476,27 @@
                     });
                     photoCanvases.push(photoCanvas);
                 }
-                
-                const finalCanvas = document.createElement('canvas');
-                const finalCtx = finalCanvas.getContext('2d');
-                
-                if (selectedLayout === 'D') {
+
+                const finalCanvas = document.createElement("canvas");
+                const finalCtx = finalCanvas.getContext("2d");
+
+                if (selectedLayout === "D") {
                     const imgWidth = photoCanvases[0].width;
                     const imgHeight = photoCanvases[0].height;
                     finalCanvas.width = imgWidth * 2;
                     finalCanvas.height = imgHeight * 3;
-                    
+
                     photoCanvases.forEach((canvas, index) => {
                         const row = Math.floor(index / 2);
                         const col = index % 2;
                         finalCtx.drawImage(canvas, col * imgWidth, row * imgHeight);
                     });
-                } else if (selectedLayout === 'E') {
+                } else if (selectedLayout === "E") {
                     const imgWidth = photoCanvases[0].width;
                     const imgHeight = photoCanvases[0].height;
                     finalCanvas.width = imgWidth * 2;
                     finalCanvas.height = imgHeight * 2;
-                    
+
                     photoCanvases.forEach((canvas, index) => {
                         const row = Math.floor(index / 2);
                         const col = index % 2;
@@ -1369,132 +1507,134 @@
                     const imgHeight = photoCanvases[0].height;
                     finalCanvas.width = imgWidth;
                     finalCanvas.height = imgHeight * photoCanvases.length;
-                    
+
                     photoCanvases.forEach((canvas, index) => {
                         finalCtx.drawImage(canvas, 0, index * imgHeight);
                     });
                 }
-                
-                finalCanvas.toBlob(blob => {
-                    const link = document.createElement('a');
-                    link.download = 'photobooth-result.png';
+
+                finalCanvas.toBlob((blob) => {
+                    const link = document.createElement("a");
+                    link.download = "photobooth-result.png";
                     link.href = URL.createObjectURL(blob);
                     link.click();
-                    
-                    notification.style.display = 'block';
+
+                    notification.style.display = "block";
                     setTimeout(() => {
-                        notification.style.display = 'none';
+                        notification.style.display = "none";
                     }, 3000);
-                    
+
                     downloadBtn.disabled = false;
                     downloadBtn.textContent = originalText;
-                }, 'image/png');
-                
+                }, "image/png");
             } catch (error) {
-                console.error('Error saat memproses foto:', error);
-                alert('Terjadi kesalahan saat memproses foto. Silakan coba lagi.');
+                console.error("Error saat memproses foto:", error);
+                alert("Terjadi kesalahan saat memproses foto. Silakan coba lagi.");
                 downloadBtn.disabled = false;
                 downloadBtn.textContent = originalText;
             }
         });
 
         // Event Listeners lainnya
-        startBtn.addEventListener('click', () => showPage('page-layout'));
+        startBtn.addEventListener("click", () => showPage("page-layout"));
 
-        layoutOptions.forEach(option => {
-            option.addEventListener('click', () => {
+        layoutOptions.forEach((option) => {
+            option.addEventListener("click", () => {
                 selectedLayout = option.dataset.layout;
                 totalPoses = parseInt(option.dataset.poses);
                 currentPose = 0;
                 photos = [];
                 stickerPositions = {};
-                showPage('page-photo');
+                showPage("page-photo");
             });
         });
 
-        filterSelect.addEventListener('change', () => {
+        filterSelect.addEventListener("change", () => {
             currentFilter = filterSelect.value;
             video.style.filter = filters[currentFilter];
         });
 
-        captureBtn.addEventListener('click', startCountdown);
+        captureBtn.addEventListener("click", startCountdown);
 
-        deleteBtn.addEventListener('click', () => {
+        deleteBtn.addEventListener("click", () => {
             if (photos.length > 0) {
                 photos.pop();
                 delete stickerPositions[photos.length];
                 updatePhotoPreview();
-                currentPose--;
-                
+                currentPose = photos.length;
+
                 if (photos.length === 0) {
-                    document.getElementById('photo-preview').style.display = 'none';
+                    document.getElementById("photo-preview").style.display = "none";
                 }
             }
         });
 
-        continueBtn.addEventListener('click', () => {
-            showPage('page-edit');
+        continueBtn.addEventListener("click", () => {
+            showPage("page-edit");
             renderFinalPhotos();
         });
 
-        frameColors.forEach(color => {
-            color.addEventListener('click', () => {
+        frameColors.forEach((color) => {
+            color.addEventListener("click", () => {
                 selectedFrameColor = color.dataset.color;
                 renderFinalPhotos();
             });
         });
 
-        borderOptions.forEach(option => {
-            option.addEventListener('click', function() {
-                borderOptions.forEach(opt => {
-                    opt.classList.remove('active');
+        borderOptions.forEach((option) => {
+            option.addEventListener("click", function () {
+                borderOptions.forEach((opt) => {
+                    opt.classList.remove("active");
                 });
-                
-                this.classList.add('active');
+
+                this.classList.add("active");
                 selectedBorderSize = this.dataset.borderSize;
                 renderFinalPhotos();
             });
         });
 
-        stickers.forEach(sticker => {
-            sticker.addEventListener('click', (e) => {
-                stickers.forEach(s => s.classList.remove('sticker-active'));
-                e.target.classList.add('sticker-active');
+        stickers.forEach((sticker) => {
+            sticker.addEventListener("click", (e) => {
+                stickers.forEach((s) => s.classList.remove("sticker-active"));
+                e.target.classList.add("sticker-active");
                 activeSticker = e.target;
             });
         });
 
-        templateOptions.forEach(option => {
-            option.addEventListener('click', function() {
-                templateOptions.forEach(opt => {
-                    opt.classList.remove('active');
+        templateOptions.forEach((option) => {
+            option.addEventListener("click", function () {
+                templateOptions.forEach((opt) => {
+                    opt.classList.remove("active");
                 });
-                
-                this.classList.add('active');
+
+                this.classList.add("active");
                 currentTemplate = this.dataset.template;
                 renderFinalPhotos();
             });
         });
 
         // Initialize voice recognition when the page loads
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener("DOMContentLoaded", () => {
             initVoiceRecognition();
-            
+
             setTimeout(() => {
-                if ('speechSynthesis' in window) {
+                if ("speechSynthesis" in window) {
                     const speech = new SpeechSynthesisUtterance();
-                    speech.text = "Selamat datang di Photobooth Bisnis Digital. Anda dapat menggunakan perintah suara. Katakan 'Mulai' untuk memulai.";
-                    speech.lang = 'id-ID';
+                    speech.text =
+                        "Selamat datang di Photobooth Bisnis Digital. Anda dapat menggunakan perintah suara. Katakan 'Mulai' untuk memulai.";
+                    speech.lang = "id-ID";
                     window.speechSynthesis.speak(speech);
                 }
             }, 1000);
         });
 
         // Cleanup
-        window.addEventListener('beforeunload', () => {
+        window.addEventListener("beforeunload", () => {
             stopCamera();
             stopListening();
         });
     </script>
 </body>
 </html>
+
+                                           
