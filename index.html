@@ -1840,9 +1840,38 @@ function loadImage(src) {
     });
 }
 
-      downloadBtn.addEventListener("click", async function () {
+        // Debug Helper Function
+window.debugDownload = async () => {
+  const target = document.querySelector(".photo-with-sticker");
+  if (!target) {
+    alert("Element tidak ditemukan! Cek selector-nya");
+    return;
+  }
+  
+  try {
+    const { default: html2canvas } = await import("https://esm.sh/html2canvas@1.4.1");
+    const canvas = await html2canvas(target, {
+      scale: 1,
+      useCORS: true
+    });
+    
+    canvas.toBlob(blob => {
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "debug-result.png";
+      link.click();
+    });
+  } catch (err) {
+    console.error("Debug Error:", err);
+    alert("Gagal: " + err.message);
+  }
+};
+
+// Nanti bisa panggil via console dengan: debugDownload()
+
+           downloadBtn.addEventListener("click", async function() {
     if (photos.length === 0) {
-        alert("Tidak ada foto yang bisa didownload!");
+        alert("Belum ada foto yang diambil!");
         return;
     }
 
@@ -1851,80 +1880,51 @@ function loadImage(src) {
     downloadBtn.textContent = "Memproses...";
 
     try {
-        // 1. Clone elemen "Hasil Akhir" biar persis sama preview
-        const finalPreview = document.getElementById("final-result").cloneNode(true);
-        const photoContainers = finalPreview.querySelectorAll(".photo-with-sticker");
+        // Clone element
+        const previewClone = document.getElementById("final-result").cloneNode(true);
+        document.body.appendChild(previewClone);
+        previewClone.style.position = "fixed";
+        previewClone.style.top = "-9999px";
 
-        // 2. Convert HTML ke Canvas (pakai html2canvas)
+        // Fix untuk elemen yang belum render
+        await new Promise(resolve => setTimeout(resolve, 500));
+
         const { default: html2canvas } = await import("https://esm.sh/html2canvas@1.4.1");
         
-        const promises = Array.from(photoContainers).map(async (container) => {
-            return await html2canvas(container, {
-                scale: 2, // Kualitas tinggi
-                logging: false,
-                useCORS: true, // Biar sticker external ke-load
-                backgroundColor: null // Background transparan
-            });
+        const canvas = await html2canvas(previewClone, {
+            scale: 1,
+            logging: true,
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: null,
+            scrollX: 0,
+            scrollY: 0
         });
 
-        const photoCanvases = await Promise.all(promises);
+        // Cleanup
+        document.body.removeChild(previewClone);
 
-        // 3. Gabungin foto sesuai layout
-        const finalCanvas = document.createElement("canvas");
-        const finalCtx = finalCanvas.getContext("2d");
-
-        // Layout D (2x3)
-        if (selectedLayout === "D") {
-            finalCanvas.width = photoCanvases[0].width * 2;
-            finalCanvas.height = photoCanvases[0].height * 3;
-            photoCanvases.forEach((canvas, index) => {
-                const row = Math.floor(index / 2);
-                const col = index % 2;
-                finalCtx.drawImage(canvas, col * canvas.width, row * canvas.height);
-            });
-        } 
-        // Layout E (2x2)
-        else if (selectedLayout === "E") {
-            finalCanvas.width = photoCanvases[0].width * 2;
-            finalCanvas.height = photoCanvases[0].height * 2;
-            photoCanvases.forEach((canvas, index) => {
-                const row = Math.floor(index / 2);
-                const col = index % 2;
-                finalCtx.drawImage(canvas, col * canvas.width, row * canvas.height);
-            });
-        } 
-        // Layout lainnya (vertikal)
-        else {
-            finalCanvas.width = photoCanvases[0].width;
-            finalCanvas.height = photoCanvases[0].height * photoCanvases.length;
-            photoCanvases.forEach((canvas, index) => {
-                finalCtx.drawImage(canvas, 0, index * canvas.height);
-            });
-        }
-
-        // 4. Download
-        finalCanvas.toBlob((blob) => {
+        // Download
+        canvas.toBlob(blob => {
             const link = document.createElement("a");
-            link.download = "photobooth-hasil-akhir.png";
+            link.download = `photobooth-${new Date().getTime()}.png`;
             link.href = URL.createObjectURL(blob);
+            document.body.appendChild(link);
             link.click();
+            document.body.removeChild(link);
             
             notification.style.display = "block";
-            setTimeout(() => {
-                notification.style.display = "none";
-            }, 3000);
-            
-            downloadBtn.disabled = false;
-            downloadBtn.textContent = originalText;
-        }, "image/png");
+            setTimeout(() => notification.style.display = "none", 3000);
+        }, "image/png", 1);
 
     } catch (error) {
-        console.error("Gagal download:", error);
-        alert("Error: Coba refresh halaman dan ulangi.");
+        console.error("Download Error:", error);
+        alert("Error: Coba pakai browser Chrome/Firefox terbaru.");
+    } finally {
         downloadBtn.disabled = false;
         downloadBtn.textContent = originalText;
     }
-});     
+});
                         
 
         // Event Listeners lainnya
