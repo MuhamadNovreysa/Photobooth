@@ -698,7 +698,7 @@
         let photos = [];
         let countdownInterval = null;
         let currentFilter = "none";
-        let selectedFrameColor = "#ff6b6b";
+        let selectedFrameColor = "#ff6b6b"; // Warna default
         let activeSticker = null;
         let stickerPositions = {};
         let mediaStream = null;
@@ -768,7 +768,7 @@
                     texts.forEach(text => text.remove());
                     
                     const img = container.querySelector("img");
-                    img.style.border = "10px solid " + selectedFrameColor;
+                    img.style.border = `10px solid ${selectedFrameColor}`;
                     img.style.borderBottomWidth = "40px";
                     
                     if (selectedBorderSize === "large") {
@@ -981,7 +981,6 @@
                         document
                             .querySelector('.layout-option[data-layout="E"]')
                             .click();
-                                           
                     } else if (command.includes("satu foto vertikal")) {
                         document
                             .querySelector('.layout-option[data-layout="F"]')
@@ -1451,52 +1450,46 @@
                 for (let i = 0; i < photos.length; i++) {
                     const photoCanvas = document.createElement("canvas");
                     const photoCtx = photoCanvas.getContext("2d");
-                    const img = new Image();
+                    const img = await loadImage(photos[i]);
 
-                    await new Promise((resolve) => {
-                        img.onload = () => {
-                            if (selectedBorderSize === "large") {
-                                photoCanvas.width = img.width + 60;
-                                photoCanvas.height = img.height + 110;
-                            } else {
-                                photoCanvas.width = img.width + 20;
-                                photoCanvas.height = img.height + 50;
+                    if (selectedBorderSize === "large") {
+                        photoCanvas.width = img.width + 60;
+                        photoCanvas.height = img.height + 110;
+                    } else {
+                        photoCanvas.width = img.width + 20;
+                        photoCanvas.height = img.height + 50;
+                    }
+
+                    // Set warna bingkai sesuai dengan selectedFrameColor (perbaikan)
+                    photoCtx.fillStyle = selectedFrameColor;
+                    photoCtx.fillRect(0, 0, photoCanvas.width, photoCanvas.height);
+
+                    if (selectedBorderSize === "large") {
+                        photoCtx.drawImage(img, 30, 30, img.width, img.height);
+                    } else {
+                        photoCtx.drawImage(img, 10, 10, img.width, img.height);
+                    }
+
+                    if (stickerPositions[i]) {
+                        const stickerPromises = stickerPositions[i].map(async (sticker) => {
+                            try {
+                                const url = sticker.backgroundImage
+                                    .replace(/^url\(["']?/, "")
+                                    .replace(/["']?\)$/, "");
+                                const stickerImg = await loadImage(url);
+                                photoCtx.drawImage(
+                                    stickerImg,
+                                    sticker.x + (selectedBorderSize === "large" ? 30 : 10),
+                                    sticker.y + (selectedBorderSize === "large" ? 30 : 10),
+                                    80,
+                                    80
+                                );
+                            } catch (error) {
+                                console.error("Error loading sticker:", error);
                             }
-
-                            photoCtx.fillStyle = selectedFrameColor;
-                            photoCtx.fillRect(0, 0, photoCanvas.width, photoCanvas.height);
-
-                            if (selectedBorderSize === "large") {
-                                photoCtx.drawImage(img, 30, 30, img.width, img.height);
-                            } else {
-                                photoCtx.drawImage(img, 10, 10, img.width, img.height);
-                            }
-
-                            if (stickerPositions[i]) {
-                                const stickerPromises = stickerPositions[i].map(async (sticker) => {
-                                    try {
-                                        const url = sticker.backgroundImage
-                                            .replace(/^url\(["']?/, "")
-                                            .replace(/["']?\)$/, "");
-                                        const stickerImg = await loadImage(url);
-                                        photoCtx.drawImage(
-                                            stickerImg,
-                                            sticker.x + (selectedBorderSize === "large" ? 30 : 10),
-                                            sticker.y + (selectedBorderSize === "large" ? 30 : 10),
-                                            80,
-                                            80
-                                        );
-                                    } catch (error) {
-                                        console.error("Error loading sticker:", error);
-                                    }
-                                });
-                                Promise.all(stickerPromises).then(resolve);
-                            } else {
-                                resolve();
-                            }
-                        };
-                        img.src = photos[i];
-                    });
+                        });
+                        await Promise.all(stickerPromises);
+                    }
                     photoCanvases.push(photoCanvas);
                 }
 
@@ -1610,6 +1603,7 @@
         frameColors.forEach((color) => {
             color.addEventListener("click", () => {
                 selectedFrameColor = color.dataset.color;
+                console.log("Warna bingkai dipilih:", selectedFrameColor); // Debugging
                 renderFinalPhotos();
             });
         });
@@ -1619,9 +1613,9 @@
                 borderOptions.forEach((opt) => {
                     opt.classList.remove("active");
                 });
-
                 this.classList.add("active");
                 selectedBorderSize = this.dataset.borderSize;
+                console.log("Ukuran bingkai dipilih:", selectedBorderSize); // Debugging
                 renderFinalPhotos();
             });
         });
@@ -1639,7 +1633,6 @@
                 templateOptions.forEach((opt) => {
                     opt.classList.remove("active");
                 });
-
                 this.classList.add("active");
                 currentTemplate = this.dataset.template;
                 renderFinalPhotos();
@@ -1668,4 +1661,4 @@
         });
     </script>
 </body>
-    </html>
+</html>
