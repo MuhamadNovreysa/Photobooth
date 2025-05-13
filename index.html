@@ -609,10 +609,6 @@
         <div class="edit-section">
             <h3>Template Border</h3>
             <div class="template-options">
-                <div class="template-option active" data-template="none">
-                    <i class="fas fa-times"></i>
-                    <p>Tanpa Template</p>
-                </div>
                 <div class="template-option" data-template="hearts">
                     <i class="fas fa-heart icon-heart"></i>
                     <p>Hearts</p>
@@ -673,7 +669,7 @@
         let recognition = null;
         let isListening = false;
         let selectedBorderSize = "small";
-        let currentTemplate = "none";
+        let currentTemplate = null; // Diubah menjadi null, bukan "none" sebagai default
 
         // Elemen DOM
         const pages = document.querySelectorAll('.page');
@@ -749,7 +745,7 @@
 
         // Template configurations
         const templates = {
-            none: {
+            null: {
                 apply: function(container) {
                     // Hapus semua border icon
                     const icons = container.querySelectorAll('.border-icon');
@@ -1037,9 +1033,7 @@
                         }
                     } else if (command.includes('template') || command.includes('bingkai')) {
                         // Handle template selection
-                        if (command.includes('none') || command.includes('tanpa template')) {
-                            document.querySelector('.template-option[data-template="none"]').click();
-                        } else if (command.includes('heart') || command.includes('hati')) {
+                        if (command.includes('heart') || command.includes('hati')) {
                             document.querySelector('.template-option[data-template="hearts"]').click();
                         } else if (command.includes('star') || command.includes('bintang')) {
                             document.querySelector('.template-option[data-template="stars"]').click();
@@ -1221,8 +1215,8 @@
                 img.src = photo;
                 img.className = 'final-photo';
                 
-                // Apply initial style based on current template
-                templates[currentTemplate].apply(container);
+                // Apply initial style based on current template (default to null if none selected)
+                templates[currentTemplate || 'null'].apply(container);
                 
                 // Apply border size
                 if (selectedBorderSize === "large") {
@@ -1490,7 +1484,8 @@
                 
                 // Tambah active class ke option yang diklik
                 this.classList.add('active');
-                applyTemplate(this.dataset.template);
+                currentTemplate = this.dataset.template; // Set template saat diklik
+                renderFinalPhotos();
             });
         });
 
