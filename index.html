@@ -19,6 +19,8 @@
             transition: all 0.3s;
         }
 
+        /* Template Section */
+        
         /* Halaman Utama */
         .page {
             display: none;
@@ -230,13 +232,20 @@
             background-size: contain;
             background-repeat: no-repeat;
             pointer-events: none;
-            z-index: 100;
+            z-index: 100; /* Pastikan di atas foto */
         }
         
         .final-photo {
-            border: 20px solid #ddd;
-            border-bottom-width: 50px !important;
+            border: 10px solid #ddd;
+            border-bottom-width: 40px;
             box-sizing: border-box;
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .large-frame {
+            border-width: 30px !important;
+            border-bottom-width: 80px !important;
         }
         
         .notification {
@@ -251,6 +260,62 @@
             z-index: 100;
             display: none;
             animation: fadeInOut 3s;
+        }
+
+        /* NEW STYLES FOR TEMPLATES */
+        .template-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .template-option {
+            width: 100px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .template-option:hover {
+            transform: scale(1.05);
+        }
+        .template-option img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+            border: 2px solid #ddd;
+        }
+
+        .template-option p {
+            margin-top: 5px;
+            font-size: 12px;
+        }
+        .template-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            pointer-events: none;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .template-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            z-index: 10;
+            pointer-events: none;
         }
 
         /* Style untuk border options */
@@ -280,14 +345,7 @@
             border-color: #ff6b6b;
         }
 
-        /* Style untuk border besar */
-        .large-frame {
-            border-width: 50px 50px 150px 50px !important;
-            border-style: solid !important;
-            box-sizing: border-box;
-        }
-
-        /* Theme Border */
+        /* Style untuk theme border */
         .theme-border {
             position: relative;
             overflow: hidden;
@@ -374,65 +432,14 @@
             50% { transform: scale(1.2); }
             100% { transform: scale(1); }
         }
-
-        /* Template Options */
-        .template-options {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        .template-option {
-            width: 100px;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .template-option:hover {
-            transform: scale(1.05);
-        }
-
-        .template-option img {
-            width: 100%;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 5px;
-            border: 2px solid #ddd;
-        }
-
-        .template-option p {
-            margin-top: 5px;
-            font-size: 12px;
-        }
-
-        .template-option.active {
-            border: 2px solid #ff6b6b;
-            transform: scale(1.05);
-        }
-
-        /* Template Frame Overlay */
-        .template-frame {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            z-index: 10;
-            pointer-events: none;
-        }
     </style>
 </head>
 <body>
     <!-- Halaman 1 - Mulai -->
     <div id="page-start" class="page active">
-        <h1>Photobooth <span> Bisnis Digital </span></h1>
-        <img src="hima2.png" style="height: 150px; width: 150px; margin-bottom: 15px; margin-right: 10px;" class="hima">
+        <h1>Photobooth <span> Bisnis Digital </span> </h1>
+        <img src=" hima2.png"   style="height: 150px; width: 150px; 
+         margin-bottom: 15px; margin-right: 10px;" class="hima" >
         <button class="start-btn" id="start-btn">Mulai Photobooth</button>
     </div>
     
@@ -562,36 +569,6 @@
         </div>
         
         <div class="edit-section">
-            <h3>Pilih Template</h3>
-            <div class="template-options">
-                <div class="template-option active" data-template="none">
-                    <div class="template-preview" style="background: #eee; height: 80px;"></div>
-                    <p>Tanpa Template</p>
-                </div>
-                <div class="template-option" data-template="manga">
-                    <img src="friend.jpg" alt="Manga Frame">
-                    <p>Manga</p>
-                </div>
-                <div class="template-option" data-template="polaroid">
-                    <img src="polaroid-frame.png" alt="Polaroid Frame">
-                    <p>Polaroid</p>
-                </div>
-                <div class="template-option" data-template="cyberpunk">
-                    <img src="cyberpunk-frame.png" alt="Cyberpunk Frame">
-                    <p>Cyberpunk</p>
-                </div>
-                <div class="template-option" data-template="floral">
-                    <img src="floral-frame.png" alt="Floral Frame">
-                    <p>Floral</p>
-                </div>
-                <div class="template-option" data-template="space">
-                    <img src="space-frame.png" alt="Space Frame">
-                    <p>Space</p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="edit-section">
             <h3>Warna Bingkai</h3>
             <div class="frame-colors">
                 <div class="frame-color" style="background-color: #ff6b6b;" data-color="#ff6b6b"></div>
@@ -626,6 +603,28 @@
         </div>
         
         <div class="edit-section">
+            <h3>Template</h3>
+            <div class="template-options">
+                <div class="template-option" data-template="manga">
+                    <img src="manga.png" alt="Manga">
+                    <p>Manga</p>
+                </div>
+                <div class="template-option" data-template="santai">
+                    <img src="santai.png" alt="Santai">
+                    <p>Santai</p>
+                </div>
+                <div class="template-option" data-template="meme">
+                    <img src="meme.png" alt="Meme">
+                    <p>Meme</p>
+                </div>
+                <div class="template-option" data-template="astronot">
+                    <img src="astronot.png" alt="Astronot">
+                    <p>Astronot</p>
+                </div>
+            </div>
+        </div>
+                    
+        <div class="edit-section">
             <h3>Hasil Akhir</h3>
             <div id="final-result" class="final-photos"></div>
             <button class="control-btn" id="download-btn">Download Foto</button>
@@ -657,7 +656,7 @@
         let mediaStream = null;
         let recognition = null;
         let isListening = false;
-        let selectedBorderSize = "small";
+        let selectedBorderSize = "small"; // Default: border kecil
 
         // Elemen DOM
         const pages = document.querySelectorAll('.page');
@@ -679,6 +678,7 @@
         const stickers = document.querySelectorAll('.sticker');
         const notification = document.getElementById('download-notification');
         const voiceStatus = document.getElementById('voice-status');
+        const templateOptions = document.querySelectorAll('.template-option');
 
         // Filter Effects
         const filters = {
@@ -701,8 +701,8 @@
 
         // Color names for voice commands
         const colorNames = {
-            '#000000': 'hitam',
-            '#FFFFFF': 'putih',
+            '#000000':'hitam',
+            '#FFFFFF' : 'putih',
             '#ff6b6b': 'merah muda',
             '#667eea': 'biru',
             '#4CAF50': 'hijau',
@@ -729,30 +729,22 @@
             'fire': 'api'
         };
 
-        // Data template
+        // Template configurations
         const templates = {
-            none: {
-                imgSrc: null,
-                photoPosition: { width: "100%", left: "0%", top: "0%" }
-            },
             manga: {
-                imgSrc: "manga-frame.png",
+                imgSrc: "manga.png",
                 photoPosition: { width: "80%", left: "10%", top: "15%" }
             },
-            polaroid: {
-                imgSrc: "polaroid-frame.png",
-                photoPosition: { width: "85%", left: "7.5%", top: "10%" }
+            santai: {
+                imgSrc: "santai.png", 
+                photoPosition: { width: "75%", left: "12%", top: "20%" }
             },
-            cyberpunk: {
-                imgSrc: "cyberpunk-frame.png",
-                photoPosition: { width: "75%", left: "12.5%", top: "20%" }
+            meme: {
+                imgSrc: "meme.png",
+                photoPosition: { width: "85%", left: "7%", top: "10%" }
             },
-            floral: {
-                imgSrc: "floral-frame.png",
-                photoPosition: { width: "80%", left: "10%", top: "15%" }
-            },
-            space: {
-                imgSrc: "space-frame.png",
+            astronot: {
+                imgSrc: "astronot.png",
                 photoPosition: { width: "70%", left: "15%", top: "25%" }
             }
         };
@@ -777,6 +769,7 @@
                     voiceStatus.classList.remove('listening');
                     voiceStatus.querySelector('span').textContent = 'Voice Command: OFF';
                     if (currentPage !== 'page-start') {
+                        // Restart recognition unless we're on the start page
                         setTimeout(startListening, 500);
                     }
                 };
@@ -796,6 +789,7 @@
                     handleVoiceCommand(command);
                 };
 
+                // Ask for permission when starting the app
                 startListening();
             } catch (e) {
                 console.error('Voice recognition not supported', e);
@@ -848,8 +842,10 @@
                     
                 case 'page-photo':
                     if (command.includes('filter')) {
+                        // Open filter dropdown
                         filterSelect.focus();
                         
+                        // Handle specific filter commands
                         if (command.includes('grayscale') || command.includes('abu-abu')) {
                             filterSelect.value = 'grayscale';
                             filterSelect.dispatchEvent(new Event('change'));
@@ -897,8 +893,10 @@
                             filterSelect.dispatchEvent(new Event('change'));
                         }
                     } else if (command.includes('hitung mundur') || command.includes('countdown')) {
+                        // Open timer dropdown
                         timerSelect.focus();
                         
+                        // Handle timer duration
                         if (command.includes('3') || command.includes('3 detik') || command.includes('3s')) {
                             timerSelect.value = '3';
                         } else if (command.includes('5') || command.includes('5 detik') || command.includes('5s')) {
@@ -919,6 +917,7 @@
                     
                 case 'page-edit':
                     if (command.includes('warna')) {
+                        // Handle frame color selection
                         for (const [colorCode, colorName] of Object.entries(colorNames)) {
                             if (command.includes(colorName)) {
                                 const colorElement = document.querySelector(`.frame-color[data-color="${colorCode}"]`);
@@ -928,7 +927,8 @@
                                 break;
                             }
                         }
-                    } else if (command.includes('stiker') || command.includes('sticker') || command.includes('emoji')) {
+                    } else if (command.includes('stiker') || command.includes('sticker') || command.includes('emoji')) { 
+                        // Handle sticker selection
                         for (const [stickerId, stickerName] of Object.entries(stickerNames)) {
                             if (command.includes(stickerName)) {
                                 const stickerElement = document.querySelector(`.sticker[data-sticker="${stickerId}"]`);
@@ -938,19 +938,23 @@
                                 break;
                             }
                         }
-                    } else if (command.includes('template')) {
+                    } else if (command.includes('template') || command.includes('bingkai')) {
+                        // Handle template selection
                         if (command.includes('manga')) {
                             document.querySelector('.template-option[data-template="manga"]').click();
-                        } else if (command.includes('polaroid')) {
-                            document.querySelector('.template-option[data-template="polaroid"]').click();
-                        } else if (command.includes('cyberpunk')) {
-                            document.querySelector('.template-option[data-template="cyberpunk"]').click();
-                        } else if (command.includes('floral')) {
-                            document.querySelector('.template-option[data-template="floral"]').click();
-                        } else if (command.includes('space')) {
-                            document.querySelector('.template-option[data-template="space"]').click();
-                        } else if (command.includes('tanpa') || command.includes('none')) {
-                            document.querySelector('.template-option[data-template="none"]').click();
+                        } else if (command.includes('santai')) {
+                            document.querySelector('.template-option[data-template="santai"]').click();
+                        } else if (command.includes('meme')) {
+                            document.querySelector('.template-option[data-template="meme"]').click();
+                        } else if (command.includes('astronot')) {
+                            document.querySelector('.template-option[data-template="astronot"]').click();
+                        }
+                    } else if (command.includes('ukuran bingkai') || command.includes('border size')) {
+                        // Handle border size selection
+                        if (command.includes('kecil') || command.includes('small')) {
+                            document.querySelector('.border-option[data-border-size="small"]').click();
+                        } else if (command.includes('besar') || command.includes('large') || command.includes('photobooth')) {
+                            document.querySelector('.border-option[data-border-size="large"]').click();
                         }
                     } else if (command.includes('download') || command.includes('unduh')) {
                         downloadBtn.click();
@@ -961,7 +965,6 @@
 
         // Fungsi Navigasi Halaman
         function showPage(pageId) {
-            console.log('showPage called with:', pageId);
             if (currentPage === 'page-photo' && pageId !== 'page-photo') {
                 stopCamera();
             }
@@ -969,23 +972,20 @@
             pages.forEach(page => {
                 page.classList.remove('active');
             });
-            const targetPage = document.getElementById(pageId);
-            if (targetPage) {
-                targetPage.classList.add('active');
-                currentPage = pageId;
-                console.log('Page switched to:', pageId);
-            } else {
-                console.error('Page not found:', pageId);
-            }
+            document.getElementById(pageId).classList.add('active');
+            currentPage = pageId;
             
             if (pageId === 'page-photo') {
                 initCamera();
+                // Restart voice recognition if it stopped
                 if (!isListening) {
                     startListening();
                 }
             } else if (pageId === 'page-start') {
+                // Stop voice recognition on start page to prevent accidental commands
                 stopListening();
             } else {
+                // Ensure voice recognition is running on other pages
                 startListening();
             }
         }
@@ -1052,11 +1052,35 @@
 
         // Ambil Foto
         function takePhoto() {
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
+            // Set canvas size to a standard photobooth size (4x6 aspect ratio)
+            const targetWidth = 600;
+            const targetHeight = 900;
+            
+            canvas.width = targetWidth;
+            canvas.height = targetHeight;
+            
+            // Calculate scaling to maintain aspect ratio
+            const videoAspect = video.videoWidth / video.videoHeight;
+            const canvasAspect = targetWidth / targetHeight;
+            
+            let renderWidth, renderHeight, offsetX, offsetY;
+            
+            if (videoAspect > canvasAspect) {
+                // Video is wider than canvas (letterbox top and bottom)
+                renderHeight = targetHeight;
+                renderWidth = video.videoWidth * (targetHeight / video.videoHeight);
+                offsetX = (targetWidth - renderWidth) / 2;
+                offsetY = 0;
+            } else {
+                // Video is taller than canvas (pillarbox left and right)
+                renderWidth = targetWidth;
+                renderHeight = video.videoHeight * (targetWidth / video.videoWidth);
+                offsetX = 0;
+                offsetY = (targetHeight - renderHeight) / 2;
+            }
             
             ctx.filter = filters[currentFilter];
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            ctx.drawImage(video, offsetX, offsetY, renderWidth, renderHeight);
             
             video.style.filter = filters[currentFilter];
             
@@ -1081,26 +1105,22 @@
             });
         }
 
-        // Fungsi untuk apply template
+        // Apply template to photos
         function applyTemplate(templateName) {
             const template = templates[templateName];
             
-            document.querySelectorAll('.template-option').forEach(opt => {
-                opt.classList.remove('active');
-            });
-            document.querySelector(`.template-option[data-template="${templateName}"]`).classList.add('active');
-            
             document.querySelectorAll('.photo-with-sticker').forEach(container => {
+                // Remove existing template
                 const existingFrame = container.querySelector('.template-frame');
                 if (existingFrame) container.removeChild(existingFrame);
                 
-                if (template.imgSrc) {
-                    const frame = document.createElement('div');
-                    frame.className = 'template-frame';
-                    frame.style.backgroundImage = `url(${template.imgSrc})`;
-                    container.prepend(frame);
-                }
+                // Create new frame
+                const frame = document.createElement('div');
+                frame.className = 'template-frame';
+                frame.style.backgroundImage = `url(${template.imgSrc})`;
+                container.prepend(frame);
                 
+                // Adjust photo position
                 const photo = container.querySelector('img');
                 Object.assign(photo.style, {
                     position: 'absolute',
@@ -1108,14 +1128,8 @@
                     width: template.photoPosition.width,
                     left: template.photoPosition.left,
                     top: template.photoPosition.top,
-                    border: template.imgSrc ? 'none' : `20px solid ${selectedFrameColor}`
+                    border: 'none'
                 });
-                
-                if (selectedBorderSize === "large" && !template.imgSrc) {
-                    photo.classList.add("large-frame");
-                } else {
-                    photo.classList.remove("large-frame");
-                }
             });
         }
 
@@ -1152,8 +1166,6 @@
                 finalResult.appendChild(container);
             });
 
-            applyTemplate('none');
-            
             document.querySelectorAll('.photo-with-sticker').forEach(container => {
                 container.addEventListener('click', (e) => {
                     if (activeSticker && (e.target === container || e.target === container.querySelector('img'))) {
@@ -1195,11 +1207,12 @@
         }
 
         // Event Listener untuk Download
-        async function downloadPhotos() {
+        downloadBtn.addEventListener('click', async function() {
             if (photos.length === 0) {
                 alert('Tidak ada foto yang bisa didownload!');
                 return;
             }
+            
             const originalText = downloadBtn.textContent;
             downloadBtn.disabled = true;
             downloadBtn.textContent = 'Memproses...';
@@ -1213,56 +1226,49 @@
                     const img = new Image();
                     
                     await new Promise((resolve) => {
-                        img.onload = async () => {
-                            photoCanvas.width = img.width;
-                            photoCanvas.height = img.height;
-                            
-                            const selectedTemplate = document.querySelector('.template-option.active').dataset.template;
-                            const template = templates[selectedTemplate];
-                            
-                            if (template.imgSrc) {
-                                const templateImg = await loadImage(template.imgSrc);
-                                photoCtx.drawImage(img, 
-                                    photoCanvas.width * (parseFloat(template.photoPosition.left) / 100),
-                                    photoCanvas.height * (parseFloat(template.photoPosition.top) / 100),
-                                    photoCanvas.width * (parseFloat(template.photoPosition.width) / 100),
-                                    photoCanvas.height * (parseFloat(template.photoPosition.width) / 100)
-                                );
-                                photoCtx.drawImage(templateImg, 0, 0, photoCanvas.width, photoCanvas.height);
+                        img.onload = () => {
+                            // Set canvas size based on border selection
+                            if (selectedBorderSize === "large") {
+                                photoCanvas.width = img.width + 60; // 30px each side
+                                photoCanvas.height = img.height + 110; // 30px top, 80px bottom
                             } else {
-                                photoCtx.fillStyle = selectedFrameColor;
-                                if (selectedBorderSize === "large") {
-                                    photoCtx.fillRect(0, 0, photoCanvas.width, photoCanvas.height);
-                                    photoCtx.drawImage(img, 50, 50, photoCanvas.width - 100, photoCanvas.height - 200);
-                                } else {
-                                    photoCtx.fillRect(0, 0, photoCanvas.width, photoCanvas.height);
-                                    photoCtx.drawImage(img, 20, 20, photoCanvas.width - 40, photoCanvas.height - 70);
-                                }
+                                photoCanvas.width = img.width + 20; // 10px each side
+                                photoCanvas.height = img.height + 50; // 10px top, 40px bottom
                             }
                             
+                            // Draw border
+                            photoCtx.fillStyle = selectedFrameColor;
+                            photoCtx.fillRect(0, 0, photoCanvas.width, photoCanvas.height);
+                            
+                            // Draw photo
+                            if (selectedBorderSize === "large") {
+                                photoCtx.drawImage(img, 30, 30, img.width, img.height);
+                            } else {
+                                photoCtx.drawImage(img, 10, 10, img.width, img.height);
+                            }
+                            
+                            // Draw stickers
                             if (stickerPositions[i]) {
-                                for (const sticker of stickerPositions[i]) {
+                                const stickerPromises = stickerPositions[i].map(async (sticker) => {
                                     try {
                                         const url = sticker.backgroundImage.replace(/^url\(["']?/, '').replace(/["']?\)$/, '');
                                         const stickerImg = await loadImage(url);
-                                        photoCtx.drawImage(stickerImg, sticker.x, sticker.y, 80, 80);
+                                        photoCtx.drawImage(stickerImg, sticker.x + (selectedBorderSize === "large" ? 30 : 10), sticker.y + (selectedBorderSize === "large" ? 30 : 10), 80, 80);
                                     } catch (error) {
                                         console.error('Error loading sticker:', error);
                                     }
-                                }
+                                });
+                                Promise.all(stickerPromises).then(resolve);
+                            } else {
+                                resolve();
                             }
-                            
-                            photoCanvases.push(photoCanvas);
-                            resolve();
-                        };
-                        img.onerror = (err) => {
-                            console.error('Error loading photo:', err);
-                            resolve(); // Lanjutkan meski error
                         };
                         img.src = photos[i];
                     });
+                    photoCanvases.push(photoCanvas);
                 }
                 
+                // Buat canvas final
                 const finalCanvas = document.createElement('canvas');
                 const finalCtx = finalCanvas.getContext('2d');
                 
@@ -1299,6 +1305,7 @@
                     });
                 }
                 
+                // Download
                 finalCanvas.toBlob(blob => {
                     const link = document.createElement('a');
                     link.download = 'photobooth-result.png';
@@ -1320,91 +1327,89 @@
                 downloadBtn.disabled = false;
                 downloadBtn.textContent = originalText;
             }
-        }
+        });
 
-        // Initialize everything after DOM is loaded
-        window.addEventListener('DOMContentLoaded', () => {
-            console.log('DOM fully loaded');
-            
-            startBtn.addEventListener('click', () => {
-                console.log('Start button clicked');
-                showPage('page-layout');
+        // Event Listeners lainnya
+        startBtn.addEventListener('click', () => showPage('page-layout'));
+
+        layoutOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                selectedLayout = option.dataset.layout;
+                totalPoses = parseInt(option.dataset.poses);
+                currentPose = 0;
+                photos = [];
+                stickerPositions = {};
+                showPage('page-photo');
             });
+        });
 
-            layoutOptions.forEach(option => {
-                option.addEventListener('click', () => {
-                    console.log('Layout selected:', option.dataset.layout);
-                    selectedLayout = option.dataset.layout;
-                    totalPoses = parseInt(option.dataset.poses);
-                    currentPose = 0;
-                    photos = [];
-                    stickerPositions = {};
-                    showPage('page-photo');
-                });
-            });
+        filterSelect.addEventListener('change', () => {
+            currentFilter = filterSelect.value;
+            video.style.filter = filters[currentFilter];
+        });
 
-            filterSelect.addEventListener('change', () => {
-                currentFilter = filterSelect.value;
-                video.style.filter = filters[currentFilter];
-            });
+        captureBtn.addEventListener('click', startCountdown);
 
-            captureBtn.addEventListener('click', startCountdown);
-
-            deleteBtn.addEventListener('click', () => {
-                if (photos.length > 0) {
-                    photos.pop();
-                    delete stickerPositions[photos.length];
-                    updatePhotoPreview();
-                    currentPose--;
-                    
-                    if (photos.length === 0) {
-                        document.getElementById('photo-preview').style.display = 'none';
-                    }
+        deleteBtn.addEventListener('click', () => {
+            if (photos.length > 0) {
+                photos.pop();
+                delete stickerPositions[photos.length];
+                updatePhotoPreview();
+                currentPose--;
+                
+                if (photos.length === 0) {
+                    document.getElementById('photo-preview').style.display = 'none';
                 }
-            });
+            }
+        });
 
-            continueBtn.addEventListener('click', () => {
-                showPage('page-edit');
+        continueBtn.addEventListener('click', () => {
+            showPage('page-edit');
+            renderFinalPhotos();
+        });
+
+        frameColors.forEach(color => {
+            color.addEventListener('click', () => {
+                selectedFrameColor = color.dataset.color;
                 renderFinalPhotos();
             });
+        });
 
-            frameColors.forEach(color => {
-                color.addEventListener('click', () => {
-                    selectedFrameColor = color.dataset.color;
-                    renderFinalPhotos();
+        // Event listener untuk pilihan border size
+        document.querySelectorAll('.border-option').forEach(option => {
+            option.addEventListener('click', function() {
+                // Hapus class active dari semua option
+                document.querySelectorAll('.border-option').forEach(opt => {
+                    opt.classList.remove('active');
                 });
+                
+                // Tambah class active ke option yang diklik
+                this.classList.add('active');
+                selectedBorderSize = this.dataset.borderSize;
+                renderFinalPhotos();
             });
+        });
 
-            document.querySelectorAll('.border-option').forEach(option => {
-                option.addEventListener('click', function() {
-                    document.querySelectorAll('.border-option').forEach(opt => {
-                        opt.classList.remove('active');
-                    });
-                    
-                    this.classList.add('active');
-                    selectedBorderSize = this.dataset.borderSize;
-                    renderFinalPhotos();
-                });
+        stickers.forEach(sticker => {
+            sticker.addEventListener('click', (e) => {
+                stickers.forEach(s => s.classList.remove('sticker-active'));
+                e.target.classList.add('sticker-active');
+                activeSticker = e.target;
             });
+        });
 
-            document.querySelectorAll('.template-option').forEach(option => {
-                option.addEventListener('click', function() {
-                    applyTemplate(this.dataset.template);
-                });
+        // Event listener untuk template
+        templateOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                applyTemplate(this.dataset.template);
             });
+        });
 
-            stickers.forEach(sticker => {
-                sticker.addEventListener('click', (e) => {
-                    stickers.forEach(s => s.classList.remove('sticker-active'));
-                    e.target.classList.add('sticker-active');
-                    activeSticker = e.target;
-                });
-            });
-
-            downloadBtn.addEventListener('click', downloadPhotos);
-
+        // Initialize voice recognition when the page loads
+        window.addEventListener('DOMContentLoaded', () => {
             initVoiceRecognition();
             
+            // Show a welcome message with voice commands
             setTimeout(() => {
                 if ('speechSynthesis' in window) {
                     const speech = new SpeechSynthesisUtterance();
@@ -1422,4 +1427,4 @@
         });
     </script>
 </body>
-    </html>
+</html>
