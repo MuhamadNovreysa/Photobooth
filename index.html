@@ -760,29 +760,23 @@
         const templates = {
             null: {
                 apply: function(container) {
-                    // Hanya hapus icon dan text yang ada
-                    const icons = container.querySelectorAll(".border-icon");
-                    icons.forEach(icon => icon.remove());
-                    
-                    const texts = container.querySelectorAll(".template-text");
-                    texts.forEach(text => text.remove());
-                    
                     const img = container.querySelector("img");
                     img.style.border = `10px solid ${selectedFrameColor}`;
                     img.style.borderBottomWidth = "40px";
-                    
                     if (selectedBorderSize === "large") {
                         img.style.borderWidth = "30px";
                         img.style.borderBottomWidth = "80px";
                     }
+                    const icons = container.querySelectorAll(".border-icon");
+                    icons.forEach(icon => icon.remove());
+                    const texts = container.querySelectorAll(".template-text");
+                    texts.forEach(text => text.remove());
                 }
             },
             hearts: {
                 apply: function(container) {
-                    // Jangan hapus border, hanya tambahkan elemen di atasnya
                     const img = container.querySelector("img");
-                    
-                    // Tambahkan icon di berbagai posisi (lebih banyak dan variatif)
+                    img.style.border = "none"; // Hapus border warna saat template dipilih
                     addBorderIcon(container, "20%", "10%", "heart");
                     addBorderIcon(container, "80%", "10%", "heart");
                     addBorderIcon(container, "15%", "30%", "heart");
@@ -791,13 +785,13 @@
                     addBorderIcon(container, "90%", "60%", "heart");
                     addBorderIcon(container, "30%", "80%", "heart");
                     addBorderIcon(container, "70%", "80%", "heart");
-                    
-                    // Tambahkan text
                     addTemplateText(container, "Love & Peace");
                 }
             },
             stars: {
                 apply: function(container) {
+                    const img = container.querySelector("img");
+                    img.style.border = "none"; // Hapus border warna saat template dipilih
                     addBorderIcon(container, "10%", "15%", "star");
                     addBorderIcon(container, "90%", "15%", "star");
                     addBorderIcon(container, "50%", "20%", "star");
@@ -806,12 +800,13 @@
                     addBorderIcon(container, "10%", "75%", "star");
                     addBorderIcon(container, "90%", "75%", "star");
                     addBorderIcon(container, "50%", "85%", "star");
-                    
                     addTemplateText(container, "Shining Star");
                 }
             },
             flowers: {
                 apply: function(container) {
+                    const img = container.querySelector("img");
+                    img.style.border = "none"; // Hapus border warna saat template dipilih
                     addBorderIcon(container, "15%", "10%", "leaf");
                     addBorderIcon(container, "85%", "10%", "leaf");
                     addBorderIcon(container, "25%", "25%", "leaf");
@@ -820,12 +815,13 @@
                     addBorderIcon(container, "60%", "40%", "leaf");
                     addBorderIcon(container, "10%", "70%", "leaf");
                     addBorderIcon(container, "90%", "70%", "leaf");
-                    
                     addTemplateText(container, "Beautiful Day");
                 }
             },
             music: {
                 apply: function(container) {
+                    const img = container.querySelector("img");
+                    img.style.border = "none"; // Hapus border warna saat template dipilih
                     addBorderIcon(container, "10%", "20%", "music");
                     addBorderIcon(container, "30%", "15%", "music");
                     addBorderIcon(container, "70%", "15%", "music");
@@ -834,12 +830,13 @@
                     addBorderIcon(container, "40%", "65%", "music");
                     addBorderIcon(container, "60%", "65%", "music");
                     addBorderIcon(container, "80%", "60%", "music");
-                    
                     addTemplateText(container, "Music Festival");
                 }
             },
             balloons: {
                 apply: function(container) {
+                    const img = container.querySelector("img");
+                    img.style.border = "none"; // Hapus border warna saat template dipilih
                     addBorderIcon(container, "15%", "10%", "birthday-cake");
                     addBorderIcon(container, "35%", "5%", "birthday-cake");
                     addBorderIcon(container, "65%", "5%", "birthday-cake");
@@ -848,12 +845,13 @@
                     addBorderIcon(container, "40%", "75%", "birthday-cake");
                     addBorderIcon(container, "60%", "75%", "birthday-cake");
                     addBorderIcon(container, "80%", "70%", "birthday-cake");
-                    
                     addTemplateText(container, "Happy Birthday");
                 }
             },
             crowns: {
                 apply: function(container) {
+                    const img = container.querySelector("img");
+                    img.style.border = "none"; // Hapus border warna saat template dipilih
                     addBorderIcon(container, "10%", "10%", "crown");
                     addBorderIcon(container, "30%", "5%", "crown");
                     addBorderIcon(container, "50%", "15%", "crown");
@@ -862,7 +860,6 @@
                     addBorderIcon(container, "20%", "75%", "crown");
                     addBorderIcon(container, "50%", "80%", "crown");
                     addBorderIcon(container, "80%", "75%", "crown");
-                    
                     addTemplateText(container, "Royal Party");
                 }
             }
@@ -1247,7 +1244,6 @@
         // Mulai Countdown
         function startCountdown() {
             if (photos.length >= totalPoses) {
-                // Prevent capturing more photos than totalPoses
                 return;
             }
             let timeLeft = parseInt(timerSelect.value);
@@ -1312,7 +1308,7 @@
 
             const photoData = canvas.toDataURL("image/png");
             photos.push(photoData);
-            currentPose = photos.length; // update currentPose to photos.length
+            currentPose = photos.length;
 
             updatePhotoPreview();
         }
@@ -1366,14 +1362,12 @@
 
                 container.appendChild(img);
 
-                // Apply template - ensure correct application on container
                 if (currentTemplate && templates[currentTemplate]) {
                     templates[currentTemplate].apply(container);
                 } else {
                     templates["null"].apply(container);
                 }
 
-                // Add stickers if any
                 if (stickerPositions[photoIndex]) {
                     stickerPositions[photoIndex].forEach((sticker, idx) => {
                         const stickerEl = document.createElement("div");
@@ -1389,7 +1383,6 @@
                 finalResult.appendChild(container);
             });
 
-            // Add click listeners for stickers (to add more)
             document.querySelectorAll(".photo-with-sticker").forEach((container) => {
                 container.addEventListener("click", (e) => {
                     if (
@@ -1422,7 +1415,7 @@
             });
         }
 
-        // Fungsi untuk memuat gambar (dipakai saat download)
+        // Fungsi untuk memuat gambar
         function loadImage(src) {
             return new Promise((resolve, reject) => {
                 const img = new Image();
@@ -1460,8 +1453,12 @@
                         photoCanvas.height = img.height + 50;
                     }
 
-                    // Set warna bingkai sesuai dengan selectedFrameColor (perbaikan)
-                    photoCtx.fillStyle = selectedFrameColor;
+                    // Hapus border warna jika template dipilih
+                    if (currentTemplate) {
+                        photoCtx.fillStyle = "transparent"; // Tidak ada border warna
+                    } else {
+                        photoCtx.fillStyle = selectedFrameColor; // Gunakan border warna jika tidak ada template
+                    }
                     photoCtx.fillRect(0, 0, photoCanvas.width, photoCanvas.height);
 
                     if (selectedBorderSize === "large") {
@@ -1603,7 +1600,9 @@
         frameColors.forEach((color) => {
             color.addEventListener("click", () => {
                 selectedFrameColor = color.dataset.color;
-                console.log("Warna bingkai dipilih:", selectedFrameColor); // Debugging
+                currentTemplate = null; // Reset template jika warna dipilih
+                templateOptions.forEach((opt) => opt.classList.remove("active"));
+                console.log("Warna bingkai dipilih:", selectedFrameColor);
                 renderFinalPhotos();
             });
         });
@@ -1615,7 +1614,7 @@
                 });
                 this.classList.add("active");
                 selectedBorderSize = this.dataset.borderSize;
-                console.log("Ukuran bingkai dipilih:", selectedBorderSize); // Debugging
+                console.log("Ukuran bingkai dipilih:", selectedBorderSize);
                 renderFinalPhotos();
             });
         });
@@ -1635,6 +1634,9 @@
                 });
                 this.classList.add("active");
                 currentTemplate = this.dataset.template;
+                selectedFrameColor = "#ddd"; // Reset warna ke default saat template dipilih
+                frameColors.forEach((color) => color.style.border = "2px solid transparent"); // Reset visual warna
+                console.log("Template dipilih:", currentTemplate);
                 renderFinalPhotos();
             });
         });
@@ -1661,4 +1663,4 @@
         });
     </script>
 </body>
-</html>
+    </html>
