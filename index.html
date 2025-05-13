@@ -915,17 +915,19 @@
                 apply: function(container) {
                     const img = container.querySelector("img");
                     img.style.borderColor = selectedFrameColor;
-                    addBorderIcon(container, "16%", "10%", "flowers");
-                    addBorderIcon(container, "90%", "15%", "flowers");
-                    addBorderIcon(container, "50%", "20%", "flowers");
-                    addBorderIcon(container, "20%", "50%", "flowers");
-                    addBorderIcon(container, "80%", "50%", "flowers");
-                    addBorderIcon(container, "10%", "75%", "flowers");
-                    addBorderIcon(container, "90%", "75%", "flowers");
-                    addBorderIcon(container, "50%", "85%", "flowers");
-                    
-                    addTemplateText(container, "Bunga-Bunga Kehidupan");
-                },
+                    addBorderIcon(container, "15%", "10%", "leaf");
+        addBorderIcon(container, "85%", "10%", "leaf");
+        addBorderIcon(container, "25%", "25%", "leaf");
+        addBorderIcon(container, "75%", "25%", "leaf");
+        addBorderIcon(container, "40%", "40%", "leaf");
+        addBorderIcon(container, "60%", "40%", "leaf");
+        addBorderIcon(container, "10%", "70%", "leaf");
+        addBorderIcon(container, "90%", "70%", "leaf");
+        
+        // Add template text
+        addTemplateText(container, "Beautiful Day");
+    },
+
                     
 
             applyToCanvas: function(ctx, canvas, photoIndex) {
