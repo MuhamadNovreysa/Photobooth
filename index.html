@@ -669,7 +669,7 @@
         let recognition = null;
         let isListening = false;
         let selectedBorderSize = "small";
-        let currentTemplate = null; // Diubah menjadi null, bukan "none" sebagai default
+        let currentTemplate = null;
 
         // Elemen DOM
         const pages = document.querySelectorAll('.page');
@@ -747,11 +747,9 @@
         const templates = {
             null: {
                 apply: function(container) {
-                    // Hapus semua border icon
                     const icons = container.querySelectorAll('.border-icon');
                     icons.forEach(icon => icon.remove());
                     
-                    // Kembalikan border normal
                     const img = container.querySelector('img');
                     img.style.border = '10px solid ' + selectedFrameColor;
                     img.style.borderBottomWidth = '40px';
@@ -763,11 +761,9 @@
             },
             hearts: {
                 apply: function(container) {
-                    // Hapus border yang ada
                     const img = container.querySelector('img');
                     img.style.border = 'none';
                     
-                    // Tambahkan icon di sudut
                     addBorderIcon(container, 'top-left', 'heart');
                     addBorderIcon(container, 'top-right', 'heart');
                     addBorderIcon(container, 'bottom-left', 'heart');
@@ -833,7 +829,6 @@
 
         // Fungsi untuk menambahkan icon di border
         function addBorderIcon(container, position, iconType) {
-            // Hapus icon lama di posisi yang sama
             const oldIcon = container.querySelector(`.border-icon.${position}`);
             if (oldIcon) oldIcon.remove();
             
@@ -862,7 +857,6 @@
                     voiceStatus.classList.remove('listening');
                     voiceStatus.querySelector('span').textContent = 'Voice Command: OFF';
                     if (currentPage !== 'page-start') {
-                        // Restart recognition unless we're on the start page
                         setTimeout(startListening, 500);
                     }
                 };
@@ -882,7 +876,6 @@
                     handleVoiceCommand(command);
                 };
 
-                // Ask for permission when starting the app
                 startListening();
             } catch (e) {
                 console.error('Voice recognition not supported', e);
@@ -935,10 +928,7 @@
                     
                 case 'page-photo':
                     if (command.includes('filter')) {
-                        // Open filter dropdown
                         filterSelect.focus();
-                        
-                        // Handle specific filter commands
                         if (command.includes('grayscale') || command.includes('abu-abu')) {
                             filterSelect.value = 'grayscale';
                             filterSelect.dispatchEvent(new Event('change'));
@@ -986,10 +976,7 @@
                             filterSelect.dispatchEvent(new Event('change'));
                         }
                     } else if (command.includes('hitung mundur') || command.includes('countdown')) {
-                        // Open timer dropdown
                         timerSelect.focus();
-                        
-                        // Handle timer duration
                         if (command.includes('3') || command.includes('3 detik') || command.includes('3s')) {
                             timerSelect.value = '3';
                         } else if (command.includes('5') || command.includes('5 detik') || command.includes('5s')) {
@@ -1010,7 +997,6 @@
                     
                 case 'page-edit':
                     if (command.includes('warna')) {
-                        // Handle frame color selection
                         for (const [colorCode, colorName] of Object.entries(colorNames)) {
                             if (command.includes(colorName)) {
                                 const colorElement = document.querySelector(`.frame-color[data-color="${colorCode}"]`);
@@ -1021,7 +1007,6 @@
                             }
                         }
                     } else if (command.includes('stiker') || command.includes('sticker') || command.includes('emoji')) {
-                        // Handle sticker selection
                         for (const [stickerId, stickerName] of Object.entries(stickerNames)) {
                             if (command.includes(stickerName)) {
                                 const stickerElement = document.querySelector(`.sticker[data-sticker="${stickerId}"]`);
@@ -1032,7 +1017,6 @@
                             }
                         }
                     } else if (command.includes('template') || command.includes('bingkai')) {
-                        // Handle template selection
                         if (command.includes('heart') || command.includes('hati')) {
                             document.querySelector('.template-option[data-template="hearts"]').click();
                         } else if (command.includes('star') || command.includes('bintang')) {
@@ -1047,7 +1031,6 @@
                             document.querySelector('.template-option[data-template="crowns"]').click();
                         }
                     } else if (command.includes('ukuran bingkai') || command.includes('border size')) {
-                        // Handle border size selection
                         if (command.includes('kecil') || command.includes('small')) {
                             document.querySelector('.border-option[data-border-size="small"]').click();
                         } else if (command.includes('besar') || command.includes('large') || command.includes('photobooth')) {
@@ -1074,15 +1057,12 @@
             
             if (pageId === 'page-photo') {
                 initCamera();
-                // Restart voice recognition if it stopped
                 if (!isListening) {
                     startListening();
                 }
             } else if (pageId === 'page-start') {
-                // Stop voice recognition on start page to prevent accidental commands
                 stopListening();
             } else {
-                // Ensure voice recognition is running on other pages
                 startListening();
             }
         }
@@ -1149,27 +1129,23 @@
 
         // Ambil Foto
         function takePhoto() {
-            // Set canvas size to a standard photobooth size (4x6 aspect ratio)
             const targetWidth = 600;
             const targetHeight = 900;
             
             canvas.width = targetWidth;
             canvas.height = targetHeight;
             
-            // Calculate scaling to maintain aspect ratio
             const videoAspect = video.videoWidth / video.videoHeight;
             const canvasAspect = targetWidth / targetHeight;
             
             let renderWidth, renderHeight, offsetX, offsetY;
             
             if (videoAspect > canvasAspect) {
-                // Video is wider than canvas (letterbox top and bottom)
                 renderHeight = targetHeight;
                 renderWidth = video.videoWidth * (targetHeight / video.videoHeight);
                 offsetX = (targetWidth - renderWidth) / 2;
                 offsetY = 0;
             } else {
-                // Video is taller than canvas (pillarbox left and right)
                 renderWidth = targetWidth;
                 renderHeight = video.videoHeight * (targetWidth / video.videoWidth);
                 offsetX = 0;
@@ -1183,6 +1159,8 @@
             
             const photoData = canvas.toDataURL('image/png');
             photos.push(photoData);
+            console.log('Photo taken:', photoData); // Debugging
+            console.log('Photos array:', photos); // Debugging
             
             updatePhotoPreview();
         }
@@ -1190,7 +1168,12 @@
         // Update Preview Foto
         function updatePhotoPreview() {
             photosContainer.innerHTML = '';
+            console.log('Updating photo preview with photos:', photos);
             photos.forEach((photo, index) => {
+                const container = document.createElement('div');
+                container.className = 'photo-with-sticker';
+                container.dataset.photoIndex = index;
+
                 const img = document.createElement('img');
                 img.src = photo;
                 img.className = 'final-photo';
@@ -1198,14 +1181,23 @@
                     img.classList.add("large-frame");
                 }
                 img.style.borderColor = selectedFrameColor;
-                photosContainer.appendChild(img);
+
+                container.appendChild(img);
+                photosContainer.appendChild(container);
             });
         }
 
         // Render Foto untuk Editing
         function renderFinalPhotos() {
             finalResult.innerHTML = '';
+            console.log('Rendering final photos:', photos); // Debugging
             
+            if (photos.length === 0) {
+                console.warn('No photos to render in final result');
+                finalResult.innerHTML = '<p>Tidak ada foto untuk ditampilkan. Silakan ambil foto terlebih dahulu.</p>';
+                return;
+            }
+
             photos.forEach((photo, photoIndex) => {
                 const container = document.createElement('div');
                 container.className = 'photo-with-sticker';
@@ -1214,9 +1206,16 @@
                 const img = document.createElement('img');
                 img.src = photo;
                 img.className = 'final-photo';
+                img.style.display = 'block'; // Pastikan gambar terlihat
+                img.style.maxWidth = '100%';
+                img.style.height = 'auto';
                 
-                // Apply initial style based on current template (default to null if none selected)
-                templates[currentTemplate || 'null'].apply(container);
+                // Apply template
+                if (currentTemplate && templates[currentTemplate]) {
+                    templates[currentTemplate].apply(container);
+                } else {
+                    templates['null'].apply(container);
+                }
                 
                 // Apply border size
                 if (selectedBorderSize === "large") {
@@ -1303,27 +1302,23 @@
                     
                     await new Promise((resolve) => {
                         img.onload = () => {
-                            // Set canvas size based on border selection
                             if (selectedBorderSize === "large") {
-                                photoCanvas.width = img.width + 60; // 30px each side
-                                photoCanvas.height = img.height + 110; // 30px top, 80px bottom
+                                photoCanvas.width = img.width + 60;
+                                photoCanvas.height = img.height + 110;
                             } else {
-                                photoCanvas.width = img.width + 20; // 10px each side
-                                photoCanvas.height = img.height + 50; // 10px top, 40px bottom
+                                photoCanvas.width = img.width + 20;
+                                photoCanvas.height = img.height + 50;
                             }
                             
-                            // Draw border
                             photoCtx.fillStyle = selectedFrameColor;
                             photoCtx.fillRect(0, 0, photoCanvas.width, photoCanvas.height);
                             
-                            // Draw photo
                             if (selectedBorderSize === "large") {
                                 photoCtx.drawImage(img, 30, 30, img.width, img.height);
                             } else {
                                 photoCtx.drawImage(img, 10, 10, img.width, img.height);
                             }
                             
-                            // Draw stickers
                             if (stickerPositions[i]) {
                                 const stickerPromises = stickerPositions[i].map(async (sticker) => {
                                     try {
@@ -1344,7 +1339,6 @@
                     photoCanvases.push(photoCanvas);
                 }
                 
-                // Buat canvas final
                 const finalCanvas = document.createElement('canvas');
                 const finalCtx = finalCanvas.getContext('2d');
                 
@@ -1381,7 +1375,6 @@
                     });
                 }
                 
-                // Download
                 finalCanvas.toBlob(blob => {
                     const link = document.createElement('a');
                     link.download = 'photobooth-result.png';
@@ -1451,15 +1444,12 @@
             });
         });
 
-        // Event listener untuk pilihan border size
         borderOptions.forEach(option => {
             option.addEventListener('click', function() {
-                // Hapus class active dari semua option
                 borderOptions.forEach(opt => {
                     opt.classList.remove('active');
                 });
                 
-                // Tambah class active ke option yang diklik
                 this.classList.add('active');
                 selectedBorderSize = this.dataset.borderSize;
                 renderFinalPhotos();
@@ -1474,17 +1464,14 @@
             });
         });
 
-        // Event listener untuk template
         templateOptions.forEach(option => {
             option.addEventListener('click', function() {
-                // Hapus active class dari semua template option
                 templateOptions.forEach(opt => {
                     opt.classList.remove('active');
                 });
                 
-                // Tambah active class ke option yang diklik
                 this.classList.add('active');
-                currentTemplate = this.dataset.template; // Set template saat diklik
+                currentTemplate = this.dataset.template;
                 renderFinalPhotos();
             });
         });
@@ -1493,7 +1480,6 @@
         window.addEventListener('DOMContentLoaded', () => {
             initVoiceRecognition();
             
-            // Show a welcome message with voice commands
             setTimeout(() => {
                 if ('speechSynthesis' in window) {
                     const speech = new SpeechSynthesisUtterance();
