@@ -19,8 +19,6 @@
             transition: all 0.3s;
         }
 
-        /* Template Section */
-        
         /* Halaman Utama */
         .page {
             display: none;
@@ -232,7 +230,7 @@
             background-size: contain;
             background-repeat: no-repeat;
             pointer-events: none;
-            z-index: 100; /* Pastikan di atas foto */
+            z-index: 100;
         }
         
         .final-photo {
@@ -284,7 +282,7 @@
 
         /* Style untuk border besar */
         .large-frame {
-            border-width: 50px 50px 150px 50px !important; /* Atas 50px, Kanan 50px, Bawah 150px, Kiri 50px */
+            border-width: 50px 50px 150px 50px !important;
             border-style: solid !important;
             box-sizing: border-box;
         }
@@ -293,7 +291,7 @@
         .theme-border {
             position: relative;
             overflow: hidden;
-            border: none !important; /* Nonaktifkan border polos */
+            border: none !important;
         }
 
         /* Theme: Pantai */
@@ -433,7 +431,7 @@
 <body>
     <!-- Halaman 1 - Mulai -->
     <div id="page-start" class="page active">
-        <h1>Photobooth <span> Bisnis Digital </span> </h1>
+        <h1>Photobooth <span> Bisnis Digital </span></h1>
         <img src="hima2.png" style="height: 150px; width: 150px; margin-bottom: 15px; margin-right: 10px;" class="hima">
         <button class="start-btn" id="start-btn">Mulai Photobooth</button>
     </div>
@@ -524,7 +522,7 @@
                 <option value="sepia">Sepia</option>
                 <option value="invert">Invert</option>
                 <option value="vintage">Vintage</option>
-                <option value="şt">Cool</option>
+                <option value="cool">Cool</option>
                 <option value="warm">Warm</option>
                 <option value="blackwhite">Hitam Putih</option>
                 <option value="blur">Blur</option>
@@ -659,7 +657,7 @@
         let mediaStream = null;
         let recognition = null;
         let isListening = false;
-        let selectedBorderSize = "small"; // Default: border kecil
+        let selectedBorderSize = "small";
 
         // Elemen DOM
         const pages = document.querySelectorAll('.page');
@@ -762,7 +760,7 @@
         // Initialize voice recognition
         function initVoiceRecognition() {
             try {
-                const SpeechRecognition = window.SpeechRecognition || window.webkitspeechRecognition;
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
                 recognition = new SpeechRecognition();
                 recognition.continuous = true;
                 recognition.interimResults = false;
@@ -963,6 +961,7 @@
 
         // Fungsi Navigasi Halaman
         function showPage(pageId) {
+            console.log('showPage called with:', pageId);
             if (currentPage === 'page-photo' && pageId !== 'page-photo') {
                 stopCamera();
             }
@@ -970,8 +969,14 @@
             pages.forEach(page => {
                 page.classList.remove('active');
             });
-            document.getElementById(pageId).classList.add('active');
-            currentPage = pageId;
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                currentPage = pageId;
+                console.log('Page switched to:', pageId);
+            } else {
+                console.error('Page not found:', pageId);
+            }
             
             if (pageId === 'page-photo') {
                 initCamera();
@@ -1080,19 +1085,15 @@
         function applyTemplate(templateName) {
             const template = templates[templateName];
             
-            // Update UI
             document.querySelectorAll('.template-option').forEach(opt => {
                 opt.classList.remove('active');
             });
             document.querySelector(`.template-option[data-template="${templateName}"]`).classList.add('active');
             
-            // Update foto
             document.querySelectorAll('.photo-with-sticker').forEach(container => {
-                // Hapus template lama
                 const existingFrame = container.querySelector('.template-frame');
                 if (existingFrame) container.removeChild(existingFrame);
                 
-                // Tambah template baru
                 if (template.imgSrc) {
                     const frame = document.createElement('div');
                     frame.className = 'template-frame';
@@ -1100,7 +1101,6 @@
                     container.prepend(frame);
                 }
                 
-                // Atur posisi foto
                 const photo = container.querySelector('img');
                 Object.assign(photo.style, {
                     position: 'absolute',
@@ -1111,7 +1111,6 @@
                     border: template.imgSrc ? 'none' : `20px solid ${selectedFrameColor}`
                 });
                 
-                // Update border size
                 if (selectedBorderSize === "large" && !template.imgSrc) {
                     photo.classList.add("large-frame");
                 } else {
@@ -1153,7 +1152,6 @@
                 finalResult.appendChild(container);
             });
 
-            // Apply template default (none)
             applyTemplate('none');
             
             document.querySelectorAll('.photo-with-sticker').forEach(container => {
@@ -1197,7 +1195,7 @@
         }
 
         // Event Listener untuk Download
-        downloadBtn.addEventListener('click', async function() {
+        async function downloadPhotos() {
             if (photos.length === 0) {
                 alert('Tidak ada foto yang bisa didownload!');
                 return;
@@ -1219,22 +1217,19 @@
                             photoCanvas.width = img.width;
                             photoCanvas.height = img.height;
                             
-                            // SET WARNA BORDER atau TEMPLATE
                             const selectedTemplate = document.querySelector('.template-option.active').dataset.template;
                             const template = templates[selectedTemplate];
                             
                             if (template.imgSrc) {
-                                // Gunakan template
                                 const templateImg = await loadImage(template.imgSrc);
                                 photoCtx.drawImage(img, 
                                     photoCanvas.width * (parseFloat(template.photoPosition.left) / 100),
                                     photoCanvas.height * (parseFloat(template.photoPosition.top) / 100),
                                     photoCanvas.width * (parseFloat(template.photoPosition.width) / 100),
                                     photoCanvas.height * (parseFloat(template.photoPosition.width) / 100)
-weekdays: true
-                                    photoCtx.drawImage(templateImg, 0, 0, photoCanvas.width, photoCanvas.height);
+                                );
+                                photoCtx.drawImage(templateImg, 0, 0, photoCanvas.width, photoCanvas.height);
                             } else {
-                                // Gunakan border warna
                                 photoCtx.fillStyle = selectedFrameColor;
                                 if (selectedBorderSize === "large") {
                                     photoCtx.fillRect(0, 0, photoCanvas.width, photoCanvas.height);
@@ -1245,9 +1240,8 @@ weekdays: true
                                 }
                             }
                             
-                            // PROSES STICKER
                             if (stickerPositions[i]) {
-                                const stickerPromises = stickerPositions[i].map(async (sticker) => {
+                                for (const sticker of stickerPositions[i]) {
                                     try {
                                         const url = sticker.backgroundImage.replace(/^url\(["']?/, '').replace(/["']?\)$/, '');
                                         const stickerImg = await loadImage(url);
@@ -1255,18 +1249,20 @@ weekdays: true
                                     } catch (error) {
                                         console.error('Error loading sticker:', error);
                                     }
-                                });
-                                await Promise.all(stickerPromises);
+                                }
                             }
                             
+                            photoCanvases.push(photoCanvas);
                             resolve();
+                        };
+                        img.onerror = (err) => {
+                            console.error('Error loading photo:', err);
+                            resolve(); // Lanjutkan meski error
                         };
                         img.src = photos[i];
                     });
-                    photoCanvases.push(photoCanvas);
                 }
                 
-                // Buat canvas final
                 const finalCanvas = document.createElement('canvas');
                 const finalCtx = finalCanvas.getContext('2d');
                 
@@ -1303,7 +1299,6 @@ weekdays: true
                     });
                 }
                 
-                // Download
                 finalCanvas.toBlob(blob => {
                     const link = document.createElement('a');
                     link.download = 'photobooth-result.png';
@@ -1325,84 +1320,89 @@ weekdays: true
                 downloadBtn.disabled = false;
                 downloadBtn.textContent = originalText;
             }
-        });
+        }
 
-        // Event Listeners lainnya
-        startBtn.addEventListener('click', () => showPage('page-layout'));
-
-        layoutOptions.forEach(option => {
-            option.addEventListener('click', () => {
-                selectedLayout = option.dataset.layout;
-                totalPoses = parseInt(option.dataset.poses);
-                currentPose = 0;
-                photos = [];
-                stickerPositions = {};
-                showPage('page-photo');
-            });
-        });
-
-        filterSelect.addEventListener('change', () => {
-            currentFilter = filterSelect.value;
-            video.style.filter = filters[currentFilter];
-        });
-
-        captureBtn.addEventListener('click', startCountdown);
-
-        deleteBtn.addEventListener('click', () => {
-            if (photos.length > 0) {
-                photos.pop();
-                delete stickerPositions[photos.length];
-                updatePhotoPreview();
-                currentPose--;
-                
-                if (photos.length === 0) {
-                    document.getElementById('photo-preview').style.display = 'none';
-                }
-            }
-        });
-
-        continueBtn.addEventListener('click', () => {
-            showPage('page-edit');
-            renderFinalPhotos();
-        });
-
-        frameColors.forEach(color => {
-            color.addEventListener('click', () => {
-                selectedFrameColor = color.dataset.color;
-                renderFinalPhotos();
-            });
-        });
-
-        // Event listener untuk pilihan border size
-        document.querySelectorAll('.border-option').forEach(option => {
-            option.addEventListener('click', function() {
-                document.querySelectorAll('.border-option').forEach(opt => {
-                    opt.classList.remove('active');
-                });
-                
-                this.classList.add('active');
-                selectedBorderSize = this.dataset.borderSize;
-                renderFinalPhotos();
-            });
-        });
-
-        // Event listener untuk template
-        document.querySelectorAll('.template-option').forEach(option => {
-            option.addEventListener('click', function() {
-                applyTemplate(this.dataset.template);
-            });
-        });
-
-        stickers.forEach(sticker => {
-            sticker.addEventListener('click', (e) => {
-                stickers.forEach(s => s.classList.remove('sticker-active'));
-                e.target.classList.add('sticker-active');
-                activeSticker = e.target;
-            });
-        });
-
-        // Initialize voice recognition when the page loads
+        // Initialize everything after DOM is loaded
         window.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM fully loaded');
+            
+            startBtn.addEventListener('click', () => {
+                console.log('Start button clicked');
+                showPage('page-layout');
+            });
+
+            layoutOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    console.log('Layout selected:', option.dataset.layout);
+                    selectedLayout = option.dataset.layout;
+                    totalPoses = parseInt(option.dataset.poses);
+                    currentPose = 0;
+                    photos = [];
+                    stickerPositions = {};
+                    showPage('page-photo');
+                });
+            });
+
+            filterSelect.addEventListener('change', () => {
+                currentFilter = filterSelect.value;
+                video.style.filter = filters[currentFilter];
+            });
+
+            captureBtn.addEventListener('click', startCountdown);
+
+            deleteBtn.addEventListener('click', () => {
+                if (photos.length > 0) {
+                    photos.pop();
+                    delete stickerPositions[photos.length];
+                    updatePhotoPreview();
+                    currentPose--;
+                    
+                    if (photos.length === 0) {
+                        document.getElementById('photo-preview').style.display = 'none';
+                    }
+                }
+            });
+
+            continueBtn.addEventListener('click', () => {
+                showPage('page-edit');
+                renderFinalPhotos();
+            });
+
+            frameColors.forEach(color => {
+                color.addEventListener('click', () => {
+                    selectedFrameColor = color.dataset.color;
+                    renderFinalPhotos();
+                });
+            });
+
+            document.querySelectorAll('.border-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.border-option').forEach(opt => {
+                        opt.classList.remove('active');
+                    });
+                    
+                    this.classList.add('active');
+                    selectedBorderSize = this.dataset.borderSize;
+                    renderFinalPhotos();
+                });
+            });
+
+            document.querySelectorAll('.template-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    applyTemplate(this.dataset.template);
+                });
+            });
+
+            stickers.forEach(sticker => {
+                sticker.addEventListener('click', (e) => {
+                    stickers.forEach(s => s.classList.remove('sticker-active'));
+                    e.target.classList.add('sticker-active');
+                    activeSticker = e.target;
+                });
+            });
+
+            downloadBtn.addEventListener('click', downloadPhotos);
+
             initVoiceRecognition();
             
             setTimeout(() => {
