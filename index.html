@@ -428,6 +428,7 @@
     </style>
     <!-- Font Awesome untuk icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://esm.sh/html2canvas@1.4.1"></script>
 </head>
 <body>
     <!-- Halaman 1 - Mulai -->
@@ -1839,8 +1840,7 @@ function loadImage(src) {
     });
 }
 
-// Event Listener untuk Download
-downloadBtn.addEventListener("click", async function () {
+      downloadBtn.addEventListener("click", async function () {
     if (photos.length === 0) {
         alert("Tidak ada foto yang bisa didownload!");
         return;
@@ -1851,121 +1851,81 @@ downloadBtn.addEventListener("click", async function () {
     downloadBtn.textContent = "Memproses...";
 
     try {
-        const photoCanvases = [];
+        // 1. Clone elemen "Hasil Akhir" biar persis sama preview
+        const finalPreview = document.getElementById("final-result").cloneNode(true);
+        const photoContainers = finalPreview.querySelectorAll(".photo-with-sticker");
 
-        // First load all photos as Image objects
-        const photoImages = await Promise.all(photos.map(photo => loadImage(photo)));
+        // 2. Convert HTML ke Canvas (pakai html2canvas)
+        const { default: html2canvas } = await import("https://esm.sh/html2canvas@1.4.1");
+        
+        const promises = Array.from(photoContainers).map(async (container) => {
+            return await html2canvas(container, {
+                scale: 2, // Kualitas tinggi
+                logging: false,
+                useCORS: true, // Biar sticker external ke-load
+                backgroundColor: null // Background transparan
+            });
+        });
 
-        for (let i = 0; i < photoImages.length; i++) {
-            const photoCanvas = document.createElement("canvas");
-            const photoCtx = photoCanvas.getContext("2d");
-            
-            // Set canvas size based on border size
-            if (selectedBorderSize === "large") {
-                photoCanvas.width = photoImages[i].width + 60;
-                photoCanvas.height = photoImages[i].height + 110;
-            } else {
-                photoCanvas.width = photoImages[i].width + 20;
-                photoCanvas.height = photoImages[i].height + 50;
-            }
+        const photoCanvases = await Promise.all(promises);
 
-            // Apply template to canvas
-            if (currentTemplate && templates[currentTemplate]) {
-                templates[currentTemplate].applyToCanvas(photoCtx, photoCanvas, i);
-            } else {
-                templates["null"].applyToCanvas(photoCtx, photoCanvas, i);
-            }
+        // 3. Gabungin foto sesuai layout
+        const finalCanvas = document.createElement("canvas");
+        const finalCtx = finalCanvas.getContext("2d");
 
-            // Add stickers if any
-            if (stickerPositions[i]) {
-                const stickerPromises = stickerPositions[i].map(async (sticker) => {
-                    try {
-                        const url = sticker.backgroundImage
-                            .replace(/^url\(["']?/, "")
-                            .replace(/["']?\)$/, "");
-                        const stickerImg = await loadImage(url);
-                        
-                        const stickerX = selectedBorderSize === "large" ? 
-                            sticker.x + 30 : sticker.x + 10;
-                        const stickerY = selectedBorderSize === "large" ? 
-                            sticker.y + 30 : sticker.y + 10;
-                        
-                        photoCtx.drawImage(
-                            stickerImg,
-                            stickerX,
-                            stickerY,
-                            80,
-                            80
-                        );
-                    } catch (error) {
-                        console.error("Error loading sticker:", error);
-                    }
-                });
-                await Promise.all(stickerPromises);
-            }
-            
-            photoCanvases.push(photoCanvas);
+        // Layout D (2x3)
+        if (selectedLayout === "D") {
+            finalCanvas.width = photoCanvases[0].width * 2;
+            finalCanvas.height = photoCanvases[0].height * 3;
+            photoCanvases.forEach((canvas, index) => {
+                const row = Math.floor(index / 2);
+                const col = index % 2;
+                finalCtx.drawImage(canvas, col * canvas.width, row * canvas.height);
+            });
+        } 
+        // Layout E (2x2)
+        else if (selectedLayout === "E") {
+            finalCanvas.width = photoCanvases[0].width * 2;
+            finalCanvas.height = photoCanvases[0].height * 2;
+            photoCanvases.forEach((canvas, index) => {
+                const row = Math.floor(index / 2);
+                const col = index % 2;
+                finalCtx.drawImage(canvas, col * canvas.width, row * canvas.height);
+            });
+        } 
+        // Layout lainnya (vertikal)
+        else {
+            finalCanvas.width = photoCanvases[0].width;
+            finalCanvas.height = photoCanvases[0].height * photoCanvases.length;
+            photoCanvases.forEach((canvas, index) => {
+                finalCtx.drawImage(canvas, 0, index * canvas.height);
+            });
         }
 
-        const finalCanvas = document.createElement("canvas");
+        // 4. Download
+        finalCanvas.toBlob((blob) => {
+            const link = document.createElement("a");
+            link.download = "photobooth-hasil-akhir.png";
+            link.href = URL.createObjectURL(blob);
+            link.click();
+            
+            notification.style.display = "block";
+            setTimeout(() => {
+                notification.style.display = "none";
+            }, 3000);
+            
+            downloadBtn.disabled = false;
+            downloadBtn.textContent = originalText;
+        }, "image/png");
 
-
-                    const finalCtx = finalCanvas.getContext("2d");
-
-                if (selectedLayout === "D") {
-                    const imgWidth = photoCanvases[0].width;
-                    const imgHeight = photoCanvases[0].height;
-                    finalCanvas.width = imgWidth * 2;
-                    finalCanvas.height = imgHeight * 3;
-
-                    photoCanvases.forEach((canvas, index) => {
-                        const row = Math.floor(index / 2);
-                        const col = index % 2;
-                        finalCtx.drawImage(canvas, col * imgWidth, row * imgHeight);
-                    });
-                } else if (selectedLayout === "E") {
-                    const imgWidth = photoCanvases[0].width;
-                    const imgHeight = photoCanvases[0].height;
-                    finalCanvas.width = imgWidth * 2;
-                    finalCanvas.height = imgHeight * 2;
-
-                    photoCanvases.forEach((canvas, index) => {
-                        const row = Math.floor(index / 2);
-                        const col = index % 2;
-                        finalCtx.drawImage(canvas, col * imgWidth, row * imgHeight);
-                    });
-                } else {
-                    const imgWidth = photoCanvases[0].width;
-                    const imgHeight = photoCanvases[0].height;
-                    finalCanvas.width = imgWidth;
-                    finalCanvas.height = imgHeight * photoCanvases.length;
-
-                    photoCanvases.forEach((canvas, index) => {
-                        finalCtx.drawImage(canvas, 0, index * imgHeight);
-                    });
-                }
-
-                finalCanvas.toBlob((blob) => {
-                    const link = document.createElement("a");
-                    link.download = "photobooth-result.png";
-                    link.href = URL.createObjectURL(blob);
-                    link.click();
-
-                    notification.style.display = "block";
-                    setTimeout(() => {
-                        notification.style.display = "none";
-                    }, 3000);
-
-                    downloadBtn.disabled = false;
-                    downloadBtn.textContent = originalText;
-                }, "image/png");
-            } catch (error) {
-                console.error("Error saat memproses foto:", error);
-                alert("Terjadi kesalahan saat memproses foto. Silakan coba lagi.");
-                downloadBtn.disabled = false;
-                downloadBtn.textContent = originalText;
-            }
-        });
+    } catch (error) {
+        console.error("Gagal download:", error);
+        alert("Error: Coba refresh halaman dan ulangi.");
+        downloadBtn.disabled = false;
+        downloadBtn.textContent = originalText;
+    }
+});     
+                        
 
         // Event Listeners lainnya
         if (startBtn) {
