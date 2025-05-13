@@ -19,8 +19,6 @@
             transition: all 0.3s;
         }
 
-        /* Template Section */
-        
         /* Halaman Utama */
         .page {
             display: none;
@@ -232,7 +230,7 @@
             background-size: contain;
             background-repeat: no-repeat;
             pointer-events: none;
-            z-index: 100; /* Pastikan di atas foto */
+            z-index: 100;
         }
         
         .final-photo {
@@ -247,6 +245,101 @@
             border-width: 30px !important;
             border-bottom-width: 80px !important;
         }
+
+        /* Template Border Styles */
+        .border-icon {
+            position: absolute;
+            pointer-events: none;
+            z-index: 15;
+            font-size: 20px;
+        }
+
+        .border-icon.top-left {
+            top: 15px;
+            left: 15px;
+        }
+        .border-icon.top-right {
+            top: 15px;
+            right: 15px;
+        }
+        .border-icon.bottom-left {
+            bottom: 55px;
+            left: 15px;
+        }
+        .border-icon.bottom-right {
+            bottom: 55px;
+            right: 15px;
+        }
+
+        .large-frame .border-icon {
+            font-size: 24px;
+        }
+        .large-frame .border-icon.top-left,
+        .large-frame .border-icon.top-right {
+            top: 25px;
+        }
+        .large-frame .border-icon.bottom-left,
+        .large-frame .border-icon.bottom-right {
+            bottom: 85px;
+        }
+
+        /* Icon Styles */
+        .icon-heart {
+            color: #ff6b6b;
+        }
+        .icon-star {
+            color: #FFC107;
+        }
+        .icon-flower {
+            color: #4CAF50;
+        }
+        .icon-music {
+            color: #9C27B0;
+        }
+        .icon-balloon {
+            color: #E91E63;
+        }
+        .icon-crown {
+            color: #FF9800;
+        }
+
+        .template-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .template-option {
+            width: 80px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+            padding: 10px;
+            border-radius: 5px;
+            border: 2px solid #ddd;
+        }
+
+        .template-option:hover {
+            transform: scale(1.05);
+            border-color: #ff6b6b;
+        }
+
+        .template-option.active {
+            border-color: #ff6b6b;
+            background-color: #fff0f0;
+        }
+
+        .template-option i {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .template-option p {
+            margin-top: 5px;
+            font-size: 12px;
+        }
         
         .notification {
             position: fixed;
@@ -260,143 +353,6 @@
             z-index: 100;
             display: none;
             animation: fadeInOut 3s;
-        }
-
-        /* NEW STYLES FOR TEMPLATES */
-        .template-options {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        .template-option {
-            width: 100px;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .template-option:hover {
-            transform: scale(1.05);
-        }
-        .template-option img {
-            width: 100%;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 5px;
-            border: 2px solid #ddd;
-        }
-
-        .template-option p {
-            margin-top: 5px;
-            font-size: 12px;
-        }
-        .template-overlay {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: 10;
-            pointer-events: none;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-        .template-frame {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            z-index: 10;
-            pointer-events: none;
-        }
-
-        /* Style untuk border options */
-        .border-options {
-            display: flex;
-            gap: 10px;
-            margin: 15px 0;
-            justify-content: center;
-        }
-
-        .border-option {
-            padding: 10px 15px;
-            background: #f0f0f0;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid #ddd;
-        }
-
-        .border-option:hover {
-            background: #e0e0e0;
-        }
-
-        .border-option.active {
-            background: #ff6b6b;
-            color: white;
-            border-color: #ff6b6b;
-        }
-
-        /* Style untuk theme border */
-        .theme-border {
-            position: relative;
-            overflow: hidden;
-            border: none !important;
-        }
-
-        /* Theme: Pantai */
-        .border-pantai::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('love.jpg') no-repeat;
-            background-size: 100% 100%;
-            pointer-events: none;
-            z-index: 10;
-        }
-
-        /* Theme: Astronot */
-        .border-astronot::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('astronot.jpg') no-repeat;
-            background-size: 100% 100%;
-            pointer-events: none;
-            z-index: 10;
-        }
-        
-        @keyframes fadeInOut {
-            0% { opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-        
-        #photos-container, #final-result {
-            display: grid;
-            gap: 10px;
-            margin: 20px 0;
-        }
-        
-        .sticker-active {
-            border: 3px solid #ff6b6b !important;
-            transform: scale(1.1);
-            box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
         }
 
         /* Voice Recognition Status */
@@ -432,14 +388,62 @@
             50% { transform: scale(1.2); }
             100% { transform: scale(1); }
         }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        
+        #photos-container, #final-result {
+            display: grid;
+            gap: 10px;
+            margin: 20px 0;
+            justify-items: center;
+        }
+        
+        .sticker-active {
+            border: 3px solid #ff6b6b !important;
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+        }
+
+        /* Border options */
+        .border-options {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            justify-content: center;
+        }
+
+        .border-option {
+            padding: 10px 15px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid #ddd;
+        }
+
+        .border-option:hover {
+            background: #e0e0e0;
+        }
+
+        .border-option.active {
+            background: #ff6b6b;
+            color: white;
+            border-color: #ff6b6b;
+        }
     </style>
+    <!-- Font Awesome untuk icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <!-- Halaman 1 - Mulai -->
     <div id="page-start" class="page active">
         <h1>Photobooth <span> Bisnis Digital </span> </h1>
-        <img src=" hima2.png"   style="height: 150px; width: 150px; 
-         margin-bottom: 15px; margin-right: 10px;" class="hima" >
+        <img src="hima2.png" style="height: 150px; width: 150px; margin-bottom: 15px; margin-right: 10px;" class="hima">
         <button class="start-btn" id="start-btn">Mulai Photobooth</button>
     </div>
     
@@ -603,23 +607,35 @@
         </div>
         
         <div class="edit-section">
-            <h3>Template</h3>
+            <h3>Template Border</h3>
             <div class="template-options">
-                <div class="template-option" data-template="manga">
-                    <img src="manga.jpg" alt="Manga">
-                    <p>Manga</p>
+                <div class="template-option active" data-template="none">
+                    <i class="fas fa-times"></i>
+                    <p>Tanpa Template</p>
                 </div>
-                <div class="template-option" data-template="santai">
-                    <img src="santai.png" alt="Santai">
-                    <p>Santai</p>
+                <div class="template-option" data-template="hearts">
+                    <i class="fas fa-heart icon-heart"></i>
+                    <p>Hearts</p>
                 </div>
-                <div class="template-option" data-template="meme">
-                    <img src="meme.png" alt="Meme">
-                    <p>Meme</p>
+                <div class="template-option" data-template="stars">
+                    <i class="fas fa-star icon-star"></i>
+                    <p>Stars</p>
                 </div>
-                <div class="template-option" data-template="astronot">
-                    <img src="astronot.png" alt="Astronot">
-                    <p>Astronot</p>
+                <div class="template-option" data-template="flowers">
+                    <i class="fas fa-leaf icon-flower"></i>
+                    <p>Flowers</p>
+                </div>
+                <div class="template-option" data-template="music">
+                    <i class="fas fa-music icon-music"></i>
+                    <p>Music</p>
+                </div>
+                <div class="template-option" data-template="balloons">
+                    <i class="fas fa-birthday-cake icon-balloon"></i>
+                    <p>Balloons</p>
+                </div>
+                <div class="template-option" data-template="crowns">
+                    <i class="fas fa-crown icon-crown"></i>
+                    <p>Crowns</p>
                 </div>
             </div>
         </div>
@@ -656,7 +672,8 @@
         let mediaStream = null;
         let recognition = null;
         let isListening = false;
-        let selectedBorderSize = "small"; // Default: border kecil
+        let selectedBorderSize = "small";
+        let currentTemplate = "none";
 
         // Elemen DOM
         const pages = document.querySelectorAll('.page');
@@ -679,6 +696,7 @@
         const notification = document.getElementById('download-notification');
         const voiceStatus = document.getElementById('voice-status');
         const templateOptions = document.querySelectorAll('.template-option');
+        const borderOptions = document.querySelectorAll('.border-option');
 
         // Filter Effects
         const filters = {
@@ -731,23 +749,102 @@
 
         // Template configurations
         const templates = {
-            manga: {
-                imgSrc: "manga.jpg",
-                photoPosition: { width: "80%", left: "10%", top: "15%" }
+            none: {
+                apply: function(container) {
+                    // Hapus semua border icon
+                    const icons = container.querySelectorAll('.border-icon');
+                    icons.forEach(icon => icon.remove());
+                    
+                    // Kembalikan border normal
+                    const img = container.querySelector('img');
+                    img.style.border = '10px solid ' + selectedFrameColor;
+                    img.style.borderBottomWidth = '40px';
+                    if (selectedBorderSize === "large") {
+                        img.style.borderWidth = '30px';
+                        img.style.borderBottomWidth = '80px';
+                    }
+                }
             },
-            santai: {
-                imgSrc: "santai.png", 
-                photoPosition: { width: "75%", left: "12%", top: "20%" }
+            hearts: {
+                apply: function(container) {
+                    // Hapus border yang ada
+                    const img = container.querySelector('img');
+                    img.style.border = 'none';
+                    
+                    // Tambahkan icon di sudut
+                    addBorderIcon(container, 'top-left', 'heart');
+                    addBorderIcon(container, 'top-right', 'heart');
+                    addBorderIcon(container, 'bottom-left', 'heart');
+                    addBorderIcon(container, 'bottom-right', 'heart');
+                }
             },
-            meme: {
-                imgSrc: "meme.png",
-                photoPosition: { width: "85%", left: "7%", top: "10%" }
+            stars: {
+                apply: function(container) {
+                    const img = container.querySelector('img');
+                    img.style.border = 'none';
+                    
+                    addBorderIcon(container, 'top-left', 'star');
+                    addBorderIcon(container, 'top-right', 'star');
+                    addBorderIcon(container, 'bottom-left', 'star');
+                    addBorderIcon(container, 'bottom-right', 'star');
+                }
             },
-            astronot: {
-                imgSrc: "astronot.png",
-                photoPosition: { width: "70%", left: "15%", top: "25%" }
+            flowers: {
+                apply: function(container) {
+                    const img = container.querySelector('img');
+                    img.style.border = 'none';
+                    
+                    addBorderIcon(container, 'top-left', 'leaf');
+                    addBorderIcon(container, 'top-right', 'leaf');
+                    addBorderIcon(container, 'bottom-left', 'leaf');
+                    addBorderIcon(container, 'bottom-right', 'leaf');
+                }
+            },
+            music: {
+                apply: function(container) {
+                    const img = container.querySelector('img');
+                    img.style.border = 'none';
+                    
+                    addBorderIcon(container, 'top-left', 'music');
+                    addBorderIcon(container, 'top-right', 'music');
+                    addBorderIcon(container, 'bottom-left', 'music');
+                    addBorderIcon(container, 'bottom-right', 'music');
+                }
+            },
+            balloons: {
+                apply: function(container) {
+                    const img = container.querySelector('img');
+                    img.style.border = 'none';
+                    
+                    addBorderIcon(container, 'top-left', 'birthday-cake');
+                    addBorderIcon(container, 'top-right', 'birthday-cake');
+                    addBorderIcon(container, 'bottom-left', 'birthday-cake');
+                    addBorderIcon(container, 'bottom-right', 'birthday-cake');
+                }
+            },
+            crowns: {
+                apply: function(container) {
+                    const img = container.querySelector('img');
+                    img.style.border = 'none';
+                    
+                    addBorderIcon(container, 'top-left', 'crown');
+                    addBorderIcon(container, 'top-right', 'crown');
+                    addBorderIcon(container, 'bottom-left', 'crown');
+                    addBorderIcon(container, 'bottom-right', 'crown');
+                }
             }
         };
+
+        // Fungsi untuk menambahkan icon di border
+        function addBorderIcon(container, position, iconType) {
+            // Hapus icon lama di posisi yang sama
+            const oldIcon = container.querySelector(`.border-icon.${position}`);
+            if (oldIcon) oldIcon.remove();
+            
+            const icon = document.createElement('i');
+            icon.className = `border-icon ${position} fas fa-${iconType} icon-${iconType}`;
+            container.appendChild(icon);
+        }
 
         // Initialize voice recognition
         function initVoiceRecognition() {
@@ -927,7 +1024,7 @@
                                 break;
                             }
                         }
-                    } else if (command.includes('stiker') || command.includes('sticker') || command.includes('emoji')) { 
+                    } else if (command.includes('stiker') || command.includes('sticker') || command.includes('emoji')) {
                         // Handle sticker selection
                         for (const [stickerId, stickerName] of Object.entries(stickerNames)) {
                             if (command.includes(stickerName)) {
@@ -940,14 +1037,20 @@
                         }
                     } else if (command.includes('template') || command.includes('bingkai')) {
                         // Handle template selection
-                        if (command.includes('manga')) {
-                            document.querySelector('.template-option[data-template="manga"]').click();
-                        } else if (command.includes('santai')) {
-                            document.querySelector('.template-option[data-template="santai"]').click();
-                        } else if (command.includes('meme')) {
-                            document.querySelector('.template-option[data-template="meme"]').click();
-                        } else if (command.includes('astronot')) {
-                            document.querySelector('.template-option[data-template="astronot"]').click();
+                        if (command.includes('none') || command.includes('tanpa template')) {
+                            document.querySelector('.template-option[data-template="none"]').click();
+                        } else if (command.includes('heart') || command.includes('hati')) {
+                            document.querySelector('.template-option[data-template="hearts"]').click();
+                        } else if (command.includes('star') || command.includes('bintang')) {
+                            document.querySelector('.template-option[data-template="stars"]').click();
+                        } else if (command.includes('flower') || command.includes('bunga') || command.includes('leaf')) {
+                            document.querySelector('.template-option[data-template="flowers"]').click();
+                        } else if (command.includes('music') || command.includes('musik')) {
+                            document.querySelector('.template-option[data-template="music"]').click();
+                        } else if (command.includes('balloon') || command.includes('balon')) {
+                            document.querySelector('.template-option[data-template="balloons"]').click();
+                        } else if (command.includes('crown') || command.includes('mahkota')) {
+                            document.querySelector('.template-option[data-template="crowns"]').click();
                         }
                     } else if (command.includes('ukuran bingkai') || command.includes('border size')) {
                         // Handle border size selection
@@ -1105,34 +1208,6 @@
             });
         }
 
-        // Apply template to photos
-        function applyTemplate(templateName) {
-            const template = templates[templateName];
-            
-            document.querySelectorAll('.photo-with-sticker').forEach(container => {
-                // Remove existing template
-                const existingFrame = container.querySelector('.template-frame');
-                if (existingFrame) container.removeChild(existingFrame);
-                
-                // Create new frame
-                const frame = document.createElement('div');
-                frame.className = 'template-frame';
-                frame.style.backgroundImage = `url(${template.imgSrc})`;
-                container.prepend(frame);
-                
-                // Adjust photo position
-                const photo = container.querySelector('img');
-                Object.assign(photo.style, {
-                    position: 'absolute',
-                    zIndex: '5',
-                    width: template.photoPosition.width,
-                    left: template.photoPosition.left,
-                    top: template.photoPosition.top,
-                    border: 'none'
-                });
-            });
-        }
-
         // Render Foto untuk Editing
         function renderFinalPhotos() {
             finalResult.innerHTML = '';
@@ -1145,12 +1220,18 @@
                 const img = document.createElement('img');
                 img.src = photo;
                 img.className = 'final-photo';
+                
+                // Apply initial style based on current template
+                templates[currentTemplate].apply(container);
+                
+                // Apply border size
                 if (selectedBorderSize === "large") {
                     img.classList.add("large-frame");
                 }
-                img.style.borderColor = selectedFrameColor;
+                
                 container.appendChild(img);
                 
+                // Add stickers if any
                 if (stickerPositions[photoIndex]) {
                     stickerPositions[photoIndex].forEach((sticker, idx) => {
                         const stickerEl = document.createElement('div');
@@ -1166,6 +1247,7 @@
                 finalResult.appendChild(container);
             });
 
+            // Add click listeners for stickers
             document.querySelectorAll('.photo-with-sticker').forEach(container => {
                 container.addEventListener('click', (e) => {
                     if (activeSticker && (e.target === container || e.target === container.querySelector('img'))) {
@@ -1376,10 +1458,10 @@
         });
 
         // Event listener untuk pilihan border size
-        document.querySelectorAll('.border-option').forEach(option => {
+        borderOptions.forEach(option => {
             option.addEventListener('click', function() {
                 // Hapus class active dari semua option
-                document.querySelectorAll('.border-option').forEach(opt => {
+                borderOptions.forEach(opt => {
                     opt.classList.remove('active');
                 });
                 
@@ -1401,6 +1483,13 @@
         // Event listener untuk template
         templateOptions.forEach(option => {
             option.addEventListener('click', function() {
+                // Hapus active class dari semua template option
+                templateOptions.forEach(opt => {
+                    opt.classList.remove('active');
+                });
+                
+                // Tambah active class ke option yang diklik
+                this.classList.add('active');
                 applyTemplate(this.dataset.template);
             });
         });
