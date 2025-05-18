@@ -2,8 +2,8 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Photobooth Resa - Advanced</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Photobooth Resa - Advanced Responsive</title>
 <style>
   /* Reset & base */
   * {
@@ -32,6 +32,7 @@
     padding: 20px 30px;
     position: relative;
     user-select: none;
+    transition: width 0.3s ease, height 0.3s ease;
   }
   h1, h2 {
     text-align: center;
@@ -73,11 +74,12 @@
     color: white;
     cursor: pointer;
     box-shadow: 0 6px 15px #5a67f2aa;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
   }
   button:hover:not(:disabled) {
     box-shadow: 0 10px 25px #9f90ffcc;
     transform: scale(1.07);
+    opacity: 1;
   }
   button:active {
     transform: scale(0.98);
@@ -87,6 +89,7 @@
     background: #444964;
     cursor: default;
     box-shadow: none;
+    opacity: 0.6;
   }
   /* Layout selection */
   #layoutSelection {
@@ -104,8 +107,8 @@
     border: 2px solid transparent;
     border-radius: 12px;
     padding: 8px;
-    width: 100px;
-    height: 140px;
+    width: 115px;
+    height: 150px;
     cursor: pointer;
     user-select: none;
     display: flex;
@@ -132,17 +135,18 @@
     font-size: 14px;
     margin-top: 8px;
     user-select: none;
+    text-align: center;
   }
   /* Layout preview grids inside buttons */
   .layout-preview {
-    width: 80px;
-    height: 120px;
+    width: 90px;
+    height: 130px;
     background: #101222;
     border-radius: 10px;
     box-shadow: inset 0 0 8px #333a62;
     display: grid;
     gap: 5px;
-    padding: 5px;
+    padding: 6px;
     box-sizing: border-box;
   }
   .slot {
@@ -168,7 +172,7 @@
     grid-template-rows: repeat(3, 1fr);
   }
   .layout5 .layout-preview {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: 1fr;
     grid-template-rows: repeat(4, 1fr);
   }
   .layout6 .layout-preview {
@@ -178,7 +182,9 @@
   /* Camera page */
   #video {
     width: 320px;
-    height: 240px;
+    max-width: 100%;
+    height: auto;
+    max-height: 240px;
     background: #000;
     border-radius: 14px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8);
@@ -194,6 +200,7 @@
   #photo-container {
     position: relative;
     width: 320px;
+    max-width: 100%;
     height: 430px;
     margin-bottom: 20px;
     border-radius: 18px;
@@ -233,22 +240,14 @@
     border-color: #ff317b;
     box-shadow: 0 10px 30px #ff317bcc;
   }
-  .template-btn canvas,
-  .template-btn img {
-    width: 100%;
-    height: 100%;
-    border-radius: 14px;
-    display: block;
-  }
-  /* Template preview backgrounds (abstract shapes) */
-  .tmpl1 {
+  .template-btn.tmpl1 {
     background:
       linear-gradient(135deg, #ff317b 0%, #ff86b0 100%);
     box-shadow:
       inset 0 0 20px #ff317b,
       0 0 24px #ff317bbb;
   }
-  .tmpl2 {
+  .template-btn.tmpl2 {
     background:
       radial-gradient(circle at top left, #a17fe0 25%, transparent), 
       radial-gradient(circle at bottom right, #764ba2 50%, transparent);
@@ -256,7 +255,7 @@
       inset 0 0 18px #a17fe0,
       0 0 25px #764ba2bb;
   }
-  .tmpl3 {
+  .template-btn.tmpl3 {
     background:
       repeating-conic-gradient(#ff6ea5 0deg 30deg, #764ba2 30deg 60deg);
     box-shadow:
@@ -274,7 +273,6 @@
     mix-blend-mode: screen;
     opacity: 0.4;
   }
-  /* Template 1 style */
   #photo-template.tmpl1 {
     background:
       linear-gradient(135deg, #ff317b 0%, #ff86b0 100%);
@@ -282,7 +280,6 @@
       inset 0 0 40px #ff317b,
       0 0 60px #ff317bee;
   }
-  /* Template 2 style */
   #photo-template.tmpl2 {
     background:
       radial-gradient(circle at top left, #a17fe0 40%, transparent 75%), 
@@ -291,7 +288,6 @@
       inset 0 0 30px #a17fe0,
       0 0 40px #764ba2cc;
   }
-  /* Template 3 style */
   #photo-template.tmpl3 {
     background:
       repeating-conic-gradient(#ff6ea5 0deg 30deg, #764ba2 30deg 60deg);
@@ -313,21 +309,84 @@
     cursor: default;
     box-shadow: none;
   }
-  /* Responsive tweaks */
-  @media (max-width: 400px) {
+  #restartButton {
+    margin-top: 12px;
+    background: #444964;
+  }
+  /* Responsive tweaks for mobile */
+  @media (max-width: 480px) {
     #app {
-      width: 95vw;
-      height: auto;
-      padding: 15px 20px;
+      width: 100vw;
+      height: 100vh;
+      border-radius: 0;
+      padding: 16px 12px 12px 12px;
+      box-shadow: none;
     }
-    #video, #photo-container {
-      width: 95vw;
-      height: auto;
-      aspect-ratio: 4 / 3;
+    .page {
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+    }
+    h1, h2 {
+      font-size: 1.5rem;
     }
     .layout-btn {
-      width: 95px;
+      width: 48%;
       height: 140px;
+      padding: 6px 4px 10px 4px;
+    }
+    .layout-preview {
+      width: 100%;
+      height: 110px;
+      padding: 4px;
+      gap: 4px;
+    }
+    button {
+      font-size: 16px;
+      padding: 12px 24px;
+      width: 100%;
+      max-width: none;
+      box-sizing: border-box;
+    }
+    #video {
+      width: 100%;
+      height: auto;
+      max-height: 50vw;
+      border-radius: 12px;
+    }
+    #photo-container {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 3 / 4;
+      border-radius: 12px;
+      margin-bottom: 18px;
+    }
+    #templateSelector {
+      gap: 12px;
+    }
+    .template-btn {
+      width: 28vw;
+      height: 36vw;
+      border-radius: 12px;
+    }
+    #downloadButton, #restartButton {
+      width: 100%;
+      padding: 14px 0;
+    }
+  }
+
+  @media (max-width: 320px) {
+    .layout-btn {
+      width: 100%;
+      height: 130px;
+    }
+    .layout-preview {
+      height: 90px;
+    }
+    .template-btn {
+      width: 100%;
+      height: 170px;
     }
   }
 </style>
@@ -622,18 +681,13 @@
     // Clear previous photos except template overlay
     photoContainer.innerHTML = '';
     // Set grid style according to layout
-    // grid-template-rows / columns switch the axes from CSS above for better fitting
     if(selectedLayout && layoutGridStyles[selectedLayout]) {
       const style = layoutGridStyles[selectedLayout];
-      // style in form "rows / cols", need to convert to CSS grid format: grid-template-columns then rows or vice versa
-      // splitting:
       let [rows, cols] = style.split(' / ');
-      // CSS expects "grid-template-columns: cols; grid-template-rows: rows"
       photoContainer.style.display = 'grid';
       photoContainer.style.gridTemplateColumns = cols;
       photoContainer.style.gridTemplateRows = rows;
     }
-    // Insert image elements based on number of photos
     for(let i=0; i<photos.length; i++){
       const img = document.createElement('img');
       img.src = photos[i];
@@ -641,9 +695,7 @@
       img.alt = `Foto ke-${i+1} dari layout`;
       photoContainer.appendChild(img);
     }
-    // Append template overlay div last
     photoContainer.appendChild(photoTemplate);
-    // Apply selected template class on overlay
     photoTemplate.className = '';
     photoTemplate.classList.add(selectedTemplate);
   }
@@ -651,20 +703,14 @@
   // Download assembled photo as one image
   downloadButton.addEventListener('click', async () => {
     if(photos.length === 0) return;
-    // Create offscreen canvas for the full layout sized photo assembly
-    // We'll define a fixed width and height for export for quality (e.g. same as container 1280x1720 or so)
     const exportWidth = 1280;
     const exportHeight = 1720;
     const exportCanvas = document.createElement('canvas');
     exportCanvas.width = exportWidth;
     exportCanvas.height = exportHeight;
     const ctx = exportCanvas.getContext('2d');
-
-    // Clear background black
     ctx.fillStyle = '#181a29';
     ctx.fillRect(0, 0, exportWidth, exportHeight);
-
-    // Calculate grid dimensions similarly to the photoContainer grid
     let rows, cols;
     switch(selectedLayout){
       case 'layout1': rows=2; cols=1; break;
@@ -675,21 +721,15 @@
       case 'layout6': rows=2; cols=4; break;
       default: rows=1; cols=1;
     }
-
-    // Calculate size per slot
     const slotWidth = exportWidth / cols;
     const slotHeight = exportHeight / rows;
-
-    // Draw each photo scaled to slot
     await Promise.all(photos.map((photoSrc, idx) => {
       return new Promise((resolve) => {
         const img = new Image();
         img.onload = () => {
-          // Aspect fit fill the slot box centered
           let sx=0, sy=0, sw=img.width, sh=img.height;
           const imgRatio = img.width / img.height;
           const slotRatio = slotWidth / slotHeight;
-          // Crop image if needed (cover)
           if(imgRatio > slotRatio){
             sw = img.height * slotRatio;
             sx = (img.width - sw) / 2;
@@ -705,18 +745,14 @@
         img.src = photoSrc;
       });
     }));
-
-    // Draw template overlay shapes on export canvas with subtle transparent patterns
     switch(selectedTemplate){
       case 'tmpl1':
         {
-          // pink radial glow filter
           const grad = ctx.createRadialGradient(exportWidth/2, exportHeight/2, exportWidth/8, exportWidth/2, exportHeight/2, exportWidth/1.2);
           grad.addColorStop(0, '#ff317bcc');
           grad.addColorStop(1, 'transparent');
           ctx.fillStyle = grad;
           ctx.fillRect(0, 0, exportWidth, exportHeight);
-
           ctx.strokeStyle = '#ff317b88';
           ctx.lineWidth = 40;
           ctx.shadowColor = '#ff317b99';
@@ -726,7 +762,6 @@
         break;
       case 'tmpl2':
         {
-          // purple wave pattern simplified
           ctx.fillStyle = 'rgba(161,127,224,0.15)';
           for(let y=0; y<exportHeight; y+=60) {
             ctx.beginPath();
@@ -748,7 +783,6 @@
         break;
       case 'tmpl3':
         {
-          // pink-purple conic stripes simplified with stripes
           ctx.fillStyle = 'rgba(255,110,165,0.15)';
           const stripeWidth = 40;
           for(let x=-exportHeight; x<exportWidth; x+=stripeWidth){
@@ -766,8 +800,6 @@
         }
         break;
     }
-
-    // Create a temp link to download the image
     exportCanvas.toBlob(blob => {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
