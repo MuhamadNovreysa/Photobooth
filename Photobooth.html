@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Photobooth Resa</title>
+<style>
+  /* Reset & base */
+  * {
+    box-sizing: border-box;
+  }
+  body, html {
+    margin: 0; padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #app {
+    width: 320px;
+    max-width: 95vw;
+    height: 540px;
+    background: #181a29;
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 30px;
+    position: relative;
+    user-select: none;
+  }
+  h1, h2 {
+    text-align: center;
+    margin: 0 0 20px 0;
+    font-weight: 700;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+  }
+
+  /* Page container */
+  .page {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    right: 30px;
+    bottom: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease;
+  }
+  .page.active {
+    opacity: 1;
+    pointer-events: auto;
+    position: relative;
+  }
+
+  /* Buttons */
+  button {
+    margin-top: 10px;
+    background: #5a67f2;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 28px;
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 6px 15px #5a67f2aa;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  button:hover {
+    box-shadow: 0 10px 25px #9f90ffcc;
+    transform: scale(1.07);
+  }
+  button:active {
+    transform: scale(0.98);
+  }
+
+  /* Layout choices */
+  #layoutSelection {
+    gap: 15px;
+  }
+  .layout-buttons {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 30px;
+  }
+  .layout-btn {
+    flex: 1;
+    background: #2d2f45;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    padding: 20px 10px;
+    font-weight: 700;
+    font-size: 16px;
+    color: #bbb;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.25));
+    transition: background 0.3s, border 0.3s, color 0.3s;
+  }
+  .layout-btn.selected {
+    background: #5a67f2;
+    color: #fff;
+    border-color: #a0a5ff;
+    filter: drop-shadow(0 4px 6px rgba(90, 103, 242, 0.7));
+  }
+
+  /* Camera page */
+  #video {
+    width: 280px;
+    height: 210px;
+    background: #000;
+    border-radius: 14px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8);
+    object-fit: cover;
+  }
+
+  /* Canvas hidden */
+  #canvas {
+    display: none;
+  }
+
+  /* Editing photo */
+  #editingPage {
+    flex-direction: column;
+  }
+  #photo-container {
+    position: relative;
+    width: 280px;
+    height: 380px;
+    margin-bottom: 30px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+    background: #222536;
+  }
+  #photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  /* Photobooth template overlay */
+  #photo-template {
+    pointer-events: none;
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    mix-blend-mode: screen;
+    background:
+      linear-gradient(135deg, #ff0099 0%, #493240 100%);
+    opacity: 0.3;
+    border-radius: 16px;
+    box-shadow:
+      inset 0 0 30px 2px #ff0099aa,
+      0 0 40px 8px #ff0099aa;
+  }
+
+  /* Download button styling */
+  #downloadButton {
+    background: #ff317b;
+    box-shadow: 0 6px 20px #ff317bcc;
+  }
+  #downloadButton:hover {
+    box-shadow: 0 10px 35px #ff57a4cc;
+  }
+
+  /* Responsive tweaks - optional */
+  @media (max-width: 400px) {
+    #app {
+      width: 95vw;
+      height: auto;
+      padding: 15px 20px;
+    }
+    #video, #photo-container {
+      width: 95vw;
+      height: auto;
+      aspect-ratio: 4 / 3;
+    }
+  }
+</style>
+</head>
+<body>
+  <div id="app">
+    <!-- Page 1: Welcome -->
+    <section id="welcome" class="page active" aria-label="Halaman Selamat Datang">
+      <h1>Selamat Datang Di Photobooth Resa</h1>
+      <button id="startButton" aria-label="Mulai photobooth">Mulai</button>
+    </section>
+
+    <!-- Page 2: Layout selection -->
+    <section id="layoutSelection" class="page" aria-label="Halaman Pemilihan Layout">
+      <h2>Pilih Layout</h2>
+      <div class="layout-buttons" role="list" aria-live="polite" aria-label="Pilihan layout photobooth">
+        <button class="layout-btn" data-layout="layout1" role="listitem" aria-pressed="false">Layout 1</button>
+        <button class="layout-btn" data-layout="layout2" role="listitem" aria-pressed="false">Layout 2</button>
+        <button class="layout-btn" data-layout="layout3" role="listitem" aria-pressed="false">Layout 3</button>
+      </div>
+      <button id="nextButton" aria-label="Lanjut ke kamera" disabled>Selanjutnya</button>
+    </section>
+
+    <!-- Page 3: Camera page -->
+    <section id="cameraPage" class="page" aria-label="Halaman Kamera">
+      <h2>Ambil Gambar</h2>
+      <video id="video" autoplay playsinline></video>
+      <button id="captureButton" aria-label="Ambil gambar dari kamera" disabled>Ambil Gambar</button>
+      <button id="nextCameraButton" aria-label="Lanjut ke halaman editing" disabled>Selanjutnya</button>
+      <canvas id="canvas"></canvas>
+    </section>
+
+    <!-- Page 4: Editing page -->
+    <section id="editingPage" class="page" aria-label="Halaman Editing Foto">
+      <h2>Editing Photo</h2>
+      <div id="photo-container" aria-live="polite" aria-label="Foto yang diambil dengan template photobooth">
+        <img id="photo" alt="Foto hasil jepretan photobooth" />
+        <div id="photo-template"></div>
+      </div>
+      <button id="downloadButton" aria-label="Download foto">Download Foto</button>
+    </section>
+  </div>
+
+<script>
+(() => {
+  const pages = {
+    welcome: document.getElementById('welcome'),
+    layoutSelection: document.getElementById('layoutSelection'),
+    cameraPage: document.getElementById('cameraPage'),
+    editingPage: document.getElementById('editingPage')
+  };
+
+  const startButton = document.getElementById('startButton');
+  const nextButton = document.getElementById('nextButton');
+  const nextCameraButton = document.getElementById('nextCameraButton');
+  const captureButton = document.getElementById('captureButton');
+  const downloadButton = document.getElementById('downloadButton');
+
+  const layoutButtons = [...document.querySelectorAll('.layout-btn')];
+  let selectedLayout = null;
+
+  let videoStream = null;
+  const video = document.getElementById('video');
+  const canvas = document.getElementById('canvas');
+  const photo = document.getElementById('photo');
+
+  // Helper: show/hide pages
+  function showPage(name) {
+    Object.values(pages).forEach(p => p.classList.remove('active'));
+    pages[name].classList.add('active');
+  }
+
+  // Start button click -> go to layout selection
+  startButton.addEventListener('click', () => {
+    showPage('layoutSelection');
+  });
+
+  // Layout selection buttons behavior
+  function selectLayout(btn) {
+    layoutButtons.forEach(b => {
+      b.classList.remove('selected');
+      b.setAttribute('aria-pressed', 'false');
+    });
+    btn.classList.add('selected');
+    btn.setAttribute('aria-pressed', 'true');
+    selectedLayout = btn.getAttribute('data-layout');
+    nextButton.disabled = false;
+  }
+  layoutButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectLayout(btn);
+    });
+  });
+
+  // Next button after layout selected -> go to camera
+  nextButton.addEventListener('click', () => {
+    showPage('cameraPage');
+    startCamera();
+  });
+
+  // Start camera function (no mirror)
+  async function startCamera() {
+    try {
+      videoStream = await navigator.mediaDevices.getUserMedia({video: {facingMode: 'user'}});
+      video.srcObject = videoStream;
+      captureButton.disabled = false;
+      nextCameraButton.disabled = true;
+    } catch(e) {
+      alert('Gagal mengakses kamera: ' + e.message);
+    }
+  }
+
+  // Capture button - take photo
+  captureButton.addEventListener('click', () => {
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
+    // Draw video frame as is, no mirror flips
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    // Set photo src to the canvas image data
+    photo.src = canvas.toDataURL('image/png');
+    nextCameraButton.disabled = false;
+    captureButton.disabled = true;
+  });
+
+  // Next button from camera page to editing page
+  nextCameraButton.addEventListener('click', () => {
+    showPage('editingPage');
+    stopCamera();
+  });
+
+  // Stop camera function
+  function stopCamera() {
+    if(videoStream) {
+      videoStream.getTracks().forEach(track => track.stop());
+      videoStream = null;
+    }
+  }
+
+  // Download button click
+  downloadButton.addEventListener('click', () => {
+    if(!photo.src) return;
+    const link = document.createElement('a');
+    link.href = photo.src;
+    link.download = `photobooth_${Date.now()}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+
+  // Accessibility focus management on page transitions
+  function focusFirstButtonInPage(page) {
+    const btn = page.querySelector('button:not(:disabled)');
+    if(btn) btn.focus();
+  }
+
+  // Initial focus
+  focusFirstButtonInPage(pages.welcome);
+
+  // After showing page, focus first button
+  const observer = new MutationObserver(() => {
+    const activePage = document.querySelector('.page.active');
+    if(activePage) focusFirstButtonInPage(activePage);
+  });
+  observer.observe(document.getElementById('app'), {attributes: true, subtree: true, attributeFilter: ['class']});
+
+})();
+</script>
+</body>
+</html>
+
