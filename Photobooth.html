@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Photobooth Resa - Template Real</title>
+  <title>Photobooth Resa - Fixed Version</title>
   <style>
     /* Reset & Base Styles */
     * { box-sizing: border-box; }
@@ -111,6 +111,10 @@
       border: 2px solid white;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
+    #uploadTemplateBtn {
+      background: #ff317b;
+      margin-bottom: 15px;
+    }
   </style>
 </head>
 <body>
@@ -132,7 +136,6 @@
           </div>
           <span>2x3 Grid</span>
         </button>
-        <!-- Tambahkan layout lain jika perlu -->
       </div>
       <button id="nextButton" disabled>Selanjutnya</button>
     </div>
@@ -149,9 +152,10 @@
     <!-- Page 4: Editing -->
     <div id="editingPage" class="page">
       <h2>Hasil Photobooth</h2>
+      <button id="uploadTemplateBtn">Upload Template</button>
+      <input type="file" id="templateUpload" accept="image/*" style="display: none;">
       <div id="photo-container">
         <img id="photo-template-image" src="" alt="Template">
-        <!-- Foto user akan dimasukkan di sini oleh JavaScript -->
       </div>
       <button id="downloadButton">Download</button>
       <button id="restartButton">Mulai Ulang</button>
@@ -173,6 +177,8 @@
       const downloadButton = document.getElementById('downloadButton');
       const restartButton = document.getElementById('restartButton');
       const captureStatus = document.getElementById('capture-status');
+      const uploadTemplateBtn = document.getElementById('uploadTemplateBtn');
+      const templateUpload = document.getElementById('templateUpload');
 
       // State
       let currentPage = 'welcome';
@@ -180,18 +186,21 @@
       let photos = [];
       let currentPhotoIndex = 0;
       let videoStream = null;
+      let canvas = document.createElement('canvas');
+      let ctx = canvas.getContext('2d');
 
-      // Template (Contoh: Birthday Party)
+      // Template Default (Contoh: Birthday Party)
       const templates = {
         birthday: {
-          image: 'https://drive.google.com/file/d/1f5QDNhyMzwoyF0W9HnZS3PSwwWBuTVJx/view?usp=drivesdk', // Ganti dengan URL template-mu
+          // Contoh template kosong (ganti dengan URL/Base64 milikmu)
+          image: 'https://drive.google.com/file/d/1f5QDNhyMzwoyF0W9HnZS3PSwwWBuTVJx/view?usp=drivesdk',
           slots: [
             { x: '10%', y: '15%', width: '25%', height: '25%' }, // Slot foto 1
-            { x: '40%', y: '15%', width: '25%', height: '25%' }, // Slot foto 2
-            { x: '70%', y: '15%', width: '25%', height: '25%' }, // Slot foto 3
-            { x: '10%', y: '45%', width: '25%', height: '25%' }, // Slot foto 4
-            { x: '40%', y: '45%', width: '25%', height: '25%' }, // Slot foto 5
-            { x: '70%', y: '45%', width: '25%', height: '25%' }  // Slot foto 6
+            { x: '40%', y: '15%', width: '25%', height: '25%' },  // Slot foto 2
+            { x: '70%', y: '15%', width: '25%', height: '25%' },  // Slot foto 3
+            { x: '10%', y: '45%', width: '25%', height: '25%' },  // Slot foto 4
+            { x: '40%', y: '45%', width: '25%', height: '25%' },  // Slot foto 5
+            { x: '70%', y: '45%', width: '25%', height: '25%' }   // Slot foto 6
           ]
         }
       };
@@ -223,29 +232,30 @@
         updateCaptureStatus();
       });
 
-      captureButton.addEventListener('click', capturePhoto);
-      nextCameraButton.addEventListener('click', () => showPage('editingPage'));
-      downloadButton.addEventListener('click', downloadPhoto);
-      restartButton.addEventListener('click', restart);
+      // Upload Template
+      uploadTemplateBtn.addEventListener('click', () => {
+        templateUpload.click();
+      });
 
-      // Fungsi untuk memulai kamera
-      async function startCamera() {
-        try {
-          videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
-          video.srcObject = videoStream;
-          captureButton.disabled = false;
-        } catch (err) {
-          console.error("Error accessing camera:", err);
-          alert("Tidak dapat mengakses kamera!");
+      templateUpload.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            templates.birthday.image = event.target.result;
+            photoTemplateImage.src = event.target.result;
+            alert("Template berhasil diupload!");
+          };
+          reader.readAsDataURL(file);
         }
-      }
+      });
 
-      // Fungsi untuk mengambil foto
-      function capturePhoto() {
-        const canvas = document.createElement('canvas');
+      // Ambil Foto
+      captureButton.addEventListener('click', () => {
+        if (!videoStream) return;
+        
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
-        const ctx = canvas.getContext('2d');
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
         
         photos.push(canvas.toDataURL('image/jpeg'));
@@ -253,27 +263,40 @@
         
         updateCaptureStatus();
         
-        if (currentPhotoIndex >= 6) { // Untuk layout 2x3
+        if (currentPhotoIndex >= 6) {
           captureButton.disabled = true;
           nextCameraButton.disabled = false;
+          captureStatus.textContent = "Semua foto telah diambil!";
         }
-      }
+      });
 
-      // Fungsi untuk menampilkan foto di template
+      // Lanjut ke Editing
+      nextCameraButton.addEventListener('click', () => {
+        showPage('editingPage');
+        stopCamera();
+        displayPhotos();
+      });
+
+      // Tampilkan Foto di Template
       function displayPhotos() {
         photoContainer.innerHTML = '';
+        
+        if (!templates.birthday.image) {
+          alert("Upload template dulu!");
+          return;
+        }
         
         // Load template
         photoTemplateImage.src = templates.birthday.image;
         photoContainer.appendChild(photoTemplateImage);
         
-        // Tempatkan foto user di slot yang sesuai
+        // Tempatkan foto user
         photos.forEach((photo, index) => {
           if (index < templates.birthday.slots.length) {
             const slot = templates.birthday.slots[index];
             const img = document.createElement('img');
             img.src = photo;
-            img.className = 'user-photo';
+            img.classList.add('user-photo');
             img.style.left = slot.x;
             img.style.top = slot.y;
             img.style.width = slot.width;
@@ -283,18 +306,22 @@
         });
       }
 
-      // Fungsi untuk download hasil
-      function downloadPhoto() {
-        const canvas = document.createElement('canvas');
-        canvas.width = 800;
-        canvas.height = 1200;
-        const ctx = canvas.getContext('2d');
+      // Download Hasil
+      downloadButton.addEventListener('click', () => {
+        if (photos.length === 0 || !templates.birthday.image) {
+          alert("Ambil foto dan upload template dulu!");
+          return;
+        }
         
-        // Gambar template (background)
+        const exportCanvas = document.createElement('canvas');
+        exportCanvas.width = 800;
+        exportCanvas.height = 1200;
+        const exportCtx = exportCanvas.getContext('2d');
+        
+        // Gambar template
         const templateImg = new Image();
-        templateImg.src = templates.birthday.image;
         templateImg.onload = () => {
-          ctx.drawImage(templateImg, 0, 0, canvas.width, canvas.height);
+          exportCtx.drawImage(templateImg, 0, 0, exportCanvas.width, exportCanvas.height);
           
           // Gambar semua foto user
           let loadedPhotos = 0;
@@ -303,18 +330,18 @@
               const slot = templates.birthday.slots[index];
               const img = new Image();
               img.onload = () => {
-                const x = parseInt(slot.x) / 100 * canvas.width;
-                const y = parseInt(slot.y) / 100 * canvas.height;
-                const width = parseInt(slot.width) / 100 * canvas.width;
-                const height = parseInt(slot.height) / 100 * canvas.height;
-                ctx.drawImage(img, x, y, width, height);
+                const x = parseInt(slot.x) / 100 * exportCanvas.width;
+                const y = parseInt(slot.y) / 100 * exportCanvas.height;
+                const width = parseInt(slot.width) / 100 * exportCanvas.width;
+                const height = parseInt(slot.height) / 100 * exportCanvas.height;
+                exportCtx.drawImage(img, x, y, width, height);
                 
                 loadedPhotos++;
-                if (loadedPhotos === Math.min(photos.length, templates.birthday.slots.length)) {
-                  // Ketika semua foto selesai dimuat, download
+                if (loadedPhotos === Math.min(photos.length, 6)) {
+                  // Download
                   const link = document.createElement('a');
                   link.download = 'photobooth-resa.png';
-                  link.href = canvas.toDataURL('image/png');
+                  link.href = exportCanvas.toDataURL('image/png');
                   link.click();
                 }
               };
@@ -322,27 +349,42 @@
             }
           });
         };
+        templateImg.src = templates.birthday.image;
+      });
+
+      // Mulai Kamera
+      async function startCamera() {
+        try {
+          videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
+          video.srcObject = videoStream;
+          captureButton.disabled = false;
+        } catch (err) {
+          alert("Error: " + err.message);
+        }
       }
 
-      // Fungsi untuk update status pengambilan foto
+      // Stop Kamera
+      function stopCamera() {
+        if (videoStream) {
+          videoStream.getTracks().forEach(track => track.stop());
+          videoStream = null;
+        }
+      }
+
+      // Update Status Ambil Foto
       function updateCaptureStatus() {
         captureStatus.textContent = `Foto ${currentPhotoIndex + 1} dari 6`;
       }
 
-      // Fungsi untuk restart photobooth
-      function restart() {
-        if (videoStream) {
-          videoStream.getTracks().forEach(track => track.stop());
-        }
+      // Restart
+      restartButton.addEventListener('click', () => {
         photos = [];
         currentPhotoIndex = 0;
+        stopCamera();
         showPage('welcome');
-        nextButton.disabled = true;
-        captureButton.disabled = true;
-        nextCameraButton.disabled = true;
-      }
+      });
 
-      // Inisialisasi
+      // Init
       showPage('welcome');
     });
   </script>
