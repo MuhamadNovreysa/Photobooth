@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photobooth Keren</title>
+    <title>Photobooth Pro - Editor Manual</title>
     <style>
         /* Reset dan Base Styles */
         * {
@@ -70,7 +70,6 @@
             font-weight: 600;
             text-decoration: none;
             display: inline-block;
-            margin: 0.5rem;
         }
 
         .btn:hover {
@@ -206,11 +205,6 @@
             padding: 1.5rem;
         }
 
-        .editing-section h2 {
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
-
         #photo-result {
             max-width: 100%;
             border-radius: 8px;
@@ -223,29 +217,45 @@
             margin-bottom: 1rem;
         }
 
-        #final-result-container {
+        #final-editor {
             position: relative;
             width: 100%;
             height: 400px;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            overflow: hidden;
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
+            margin-bottom: 1rem;
+            overflow: hidden;
         }
 
-        #final-result {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
-
-        #draggable-photo {
+        #editable-photo {
             position: absolute;
             cursor: move;
-            z-index: 2;
+            border: 2px dashed rgba(255, 255, 255, 0.7);
             transform-origin: center center;
+        }
+
+        .resize-handle {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            border: 2px solid #764ba2;
+            z-index: 10;
+        }
+
+        .rotate-handle {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            border: 2px solid #764ba2;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23764ba2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M16 16l-4-4-4 4"></path></svg>'), auto;
         }
 
         .edit-controls {
@@ -336,8 +346,8 @@
     <!-- Halaman 1: Welcome -->
     <div class="container welcome-page" id="welcome-page">
         <div class="welcome-content">
-            <h1>Selamat Datang di Photobooth</h1>
-            <p>Buat momen spesialmu lebih berkesan dengan foto kreatif!</p>
+            <h1>Selamat Datang di Photobooth Pro</h1>
+            <p>Buat momen spesialmu lebih berkesan dengan foto kreatif dan editor manual!</p>
             <button class="btn" id="start-btn">Mulai Sekarang</button>
         </div>
     </div>
@@ -352,15 +362,20 @@
                 <img src="https://via.placeholder.com/300x400/764ba2/ffffff?text=Template+1" alt="Template 1">
             </div>
             <div class="template-item" data-template="template2">
-                <img src="resa.png" alt="Template 2">
+                <img src="https://via.placeholder.com/300x400/667eea/ffffff?text=Template+2" alt="Template 2">
             </div>
             <div class="template-item" data-template="template3">
-                <img src="manga.jpg" alt="Template 3">
+                <img src="https://via.placeholder.com/300x400/5a67d8/ffffff?text=Template+3" alt="Template 3">
             </div>
             <div class="template-item" data-template="template4">
-                <img src="jepang.png" alt="Template 4">
+                <img src="https://via.placeholder.com/300x400/4c51bf/ffffff?text=Template+4" alt="Template 4">
             </div>
-    
+            <div class="template-item" data-template="template5">
+                <img src="https://via.placeholder.com/300x400/434190/ffffff?text=Template+5" alt="Template 5">
+            </div>
+            <div class="template-item" data-template="template6">
+                <img src="https://via.placeholder.com/300x400/3b3663/ffffff?text=Template+6" alt="Template 6">
+            </div>
         </div>
         
         <div class="nav-buttons">
@@ -392,8 +407,8 @@
 
     <!-- Halaman 4: Editing -->
     <div class="container editing-page" id="editing-page">
-        <h1>Edit Hasil Foto</h1>
-        <p>Atur posisi, ukuran, dan rotasi foto Anda pada template</p>
+        <h1>Editor Foto Manual</h1>
+        <p>Atur posisi, ukuran, dan rotasi foto Anda secara manual pada template</p>
         
         <div class="editing-container">
             <div class="editing-section">
@@ -407,12 +422,10 @@
             </div>
             
             <div class="editing-section">
-                <h2>Hasil Akhir</h2>
-                <div id="final-result-container">
-                    <div id="final-result">
-                        <!-- Template akan di-set sebagai background -->
-                        <!-- Foto akan ditambahkan sebagai elemen yang bisa di-edit -->
-                    </div>
+                <h2>Editor Manual</h2>
+                <div id="final-editor">
+                    <!-- Template sebagai background -->
+                    <!-- Foto yang bisa diedit akan dimasukkan di sini -->
                 </div>
                 
                 <div class="edit-controls">
@@ -420,7 +433,7 @@
                     <button class="control-btn" id="zoom-out-btn">Perkecil (-)</button>
                     <button class="control-btn" id="rotate-left-btn">Putar Kiri (↺)</button>
                     <button class="control-btn" id="rotate-right-btn">Putar Kanan (↻)</button>
-                    <button class="control-btn" id="reset-btn">Reset</button>
+                    <button class="control-btn" id="reset-btn">Reset Posisi</button>
                 </div>
                 
                 <button class="btn download-btn" id="download-btn">Download Hasil</button>
@@ -437,11 +450,12 @@
         let selectedTemplate = null;
         let photoDataUrl = null;
         let isDragging = false;
-        let startX, startY, initialX, initialY;
-        let currentX = 0, currentY = 0;
-        let currentScale = 1;
-        let currentRotation = 0;
-        let draggablePhoto = null;
+        let isResizing = false;
+        let isRotating = false;
+        let startX, startY;
+        let initialX, initialY, initialWidth, initialHeight, initialAngle;
+        let currentX = 0, currentY = 0, currentScale = 1, currentRotation = 0;
+        let editablePhoto = null;
 
         // Elemen DOM
         const welcomePage = document.getElementById('welcome-page');
@@ -464,8 +478,7 @@
         const flash = document.getElementById('flash');
         const photoResult = document.getElementById('photo-result');
         const templatePreview = document.getElementById('template-preview');
-        const finalResultContainer = document.getElementById('final-result-container');
-        const finalResult = document.getElementById('final-result');
+        const finalEditor = document.getElementById('final-editor');
         
         // Tombol editing
         const zoomInBtn = document.getElementById('zoom-in-btn');
@@ -521,7 +534,6 @@
                 selectedTemplate = item.getAttribute('data-template');
                 
                 // Untuk demo, kita gunakan placeholder sebagai template
-                // Di implementasi nyata, ganti dengan URL template asli
                 const templateImg = item.querySelector('img').src;
                 sessionStorage.setItem('selectedTemplate', templateImg);
             });
@@ -583,64 +595,94 @@
             templatePreview.src = template;
             
             // Set template as background
-            finalResultContainer.style.backgroundImage = `url(${template})`;
+            finalEditor.style.backgroundImage = `url(${template})`;
             
-            // Create draggable photo
-            finalResult.innerHTML = '';
-            draggablePhoto = document.createElement('img');
-            draggablePhoto.id = 'draggable-photo';
-            draggablePhoto.src = capturedPhoto;
-            draggablePhoto.style.width = '200px'; // Ukuran awal
-            draggablePhoto.style.left = '50%';
-            draggablePhoto.style.top = '50%';
-            draggablePhoto.style.transform = 'translate(-50%, -50%)';
-            finalResult.appendChild(draggablePhoto);
+            // Create draggable photo element
+            finalEditor.innerHTML = '';
+            editablePhoto = document.createElement('div');
+            editablePhoto.id = 'editable-photo';
+            
+            const img = document.createElement('img');
+            img.src = capturedPhoto;
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.draggable = false;
+            
+            editablePhoto.appendChild(img);
+            finalEditor.appendChild(editablePhoto);
+            
+            // Set initial size and position
+            const initialWidth = 200;
+            const initialHeight = (initialWidth * canvas.height) / canvas.width;
+            
+            editablePhoto.style.width = `${initialWidth}px`;
+            editablePhoto.style.height = `${initialHeight}px`;
+            editablePhoto.style.left = '50%';
+            editablePhoto.style.top = '50%';
             
             // Reset transform values
             currentX = 0;
             currentY = 0;
             currentScale = 1;
             currentRotation = 0;
+            updatePhotoTransform();
             
-            // Set up drag events
-            setupDragEvents(draggablePhoto);
+            // Add resize and rotate handles
+            addPhotoHandles();
             
-            // Set up control buttons
+            // Set up event listeners
+            setupPhotoEvents();
             setupControlButtons();
         }
 
-        function setupDragEvents(element) {
-            element.addEventListener('mousedown', startDrag);
-            element.addEventListener('touchstart', startDragTouch);
+        function addPhotoHandles() {
+            // Resize handle (bottom-right)
+            const resizeHandle = document.createElement('div');
+            resizeHandle.className = 'resize-handle';
+            resizeHandle.style.bottom = '-6px';
+            resizeHandle.style.right = '-6px';
+            resizeHandle.style.cursor = 'se-resize';
+            editablePhoto.appendChild(resizeHandle);
             
-            document.addEventListener('mousemove', drag);
-            document.addEventListener('touchmove', dragTouch);
+            // Rotate handle (top-center)
+            const rotateHandle = document.createElement('div');
+            rotateHandle.className = 'rotate-handle';
+            editablePhoto.appendChild(rotateHandle);
+            
+            // Event listeners for handles
+            resizeHandle.addEventListener('mousedown', startResize);
+            rotateHandle.addEventListener('mousedown', startRotate);
+        }
+
+        function setupPhotoEvents() {
+            editablePhoto.addEventListener('mousedown', startDrag);
+            
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging) drag(e);
+                if (isResizing) resize(e);
+                if (isRotating) rotate(e);
+            });
             
             document.addEventListener('mouseup', endDrag);
-            document.addEventListener('touchend', endDrag);
         }
 
         function startDrag(e) {
-            isDragging = true;
-            startX = e.clientX;
-            startY = e.clientY;
-            initialX = currentX;
-            initialY = currentY;
-            e.preventDefault();
-        }
-
-        function startDragTouch(e) {
-            isDragging = true;
-            startX = e.touches[0].clientX;
-            startY = e.touches[0].clientY;
-            initialX = currentX;
-            initialY = currentY;
-            e.preventDefault();
+            if (e.target !== editablePhoto && !e.target.classList.contains('resize-handle') && !e.target.classList.contains('rotate-handle')) {
+                return;
+            }
+            
+            if (e.target === editablePhoto) {
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                
+                const rect = editablePhoto.getBoundingClientRect();
+                initialX = rect.left - finalEditor.getBoundingClientRect().left;
+                initialY = rect.top - finalEditor.getBoundingClientRect().top;
+            }
         }
 
         function drag(e) {
-            if (!isDragging) return;
-            
             const dx = e.clientX - startX;
             const dy = e.clientY - startY;
             
@@ -648,37 +690,69 @@
             currentY = initialY + dy;
             
             updatePhotoTransform();
-            e.preventDefault();
         }
 
-        function dragTouch(e) {
-            if (!isDragging) return;
+        function startResize(e) {
+            isResizing = true;
+            startX = e.clientX;
+            startY = e.clientY;
             
-            const dx = e.touches[0].clientX - startX;
-            const dy = e.touches[0].clientY - startY;
+            const rect = editablePhoto.getBoundingClientRect();
+            initialWidth = rect.width;
+            initialHeight = rect.height;
             
-            currentX = initialX + dx;
-            currentY = initialY + dy;
+            e.stopPropagation();
+        }
+
+        function resize(e) {
+            const dx = e.clientX - startX;
+            const scale = 1 + dx / initialWidth;
             
+            currentScale = Math.max(0.2, Math.min(scale, 3)); // Limit scale between 0.2 and 3
             updatePhotoTransform();
-            e.preventDefault();
+        }
+
+        function startRotate(e) {
+            isRotating = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            
+            e.stopPropagation();
+        }
+
+        function rotate(e) {
+            const rect = editablePhoto.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * 180 / Math.PI + 90;
+            currentRotation = angle;
+            updatePhotoTransform();
         }
 
         function endDrag() {
             isDragging = false;
+            isResizing = false;
+            isRotating = false;
+        }
+
+        function updatePhotoTransform() {
+            editablePhoto.style.transform = `
+                translate(${currentX}px, ${currentY}px)
+                scale(${currentScale})
+                rotate(${currentRotation}deg)
+            `;
         }
 
         function setupControlButtons() {
             zoomInBtn.addEventListener('click', () => {
-                currentScale *= 1.1;
+                currentScale = Math.min(3, currentScale + 0.1);
                 updatePhotoTransform();
             });
             
             zoomOutBtn.addEventListener('click', () => {
-                if (currentScale > 0.2) {
-                    currentScale *= 0.9;
-                    updatePhotoTransform();
-                }
+                currentScale = Math.max(0.2, currentScale - 0.1);
+                updatePhotoTransform();
             });
             
             rotateLeftBtn.addEventListener('click', () => {
@@ -700,19 +774,11 @@
             });
         }
 
-        function updatePhotoTransform() {
-            draggablePhoto.style.transform = `
-                translate(${currentX}px, ${currentY}px)
-                scale(${currentScale})
-                rotate(${currentRotation}deg)
-            `;
-        }
-
         // Download functionality
         function downloadFinalImage() {
             // Create a canvas with the final composition
             const canvas = document.createElement('canvas');
-            const containerRect = finalResultContainer.getBoundingClientRect();
+            const containerRect = finalEditor.getBoundingClientRect();
             canvas.width = containerRect.width;
             canvas.height = containerRect.height;
             const ctx = canvas.getContext('2d');
@@ -736,7 +802,7 @@
                 // Save current transform
                 ctx.save();
                 
-                // Move to the center of the photo
+                // Calculate photo dimensions after scaling
                 const photoWidth = photoImg.width * currentScale;
                 const photoHeight = photoImg.height * currentScale;
                 
