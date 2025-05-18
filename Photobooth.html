@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Photobooth Resa</title>
+<title>Photobooth Resa - Advanced</title>
 <style>
   /* Reset & base */
   * {
@@ -20,9 +20,9 @@
     align-items: center;
   }
   #app {
-    width: 320px;
+    width: 360px;
     max-width: 95vw;
-    height: 540px;
+    height: 600px;
     background: #181a29;
     border-radius: 16px;
     box-shadow: 0 12px 30px rgba(0,0,0,0.5);
@@ -39,7 +39,6 @@
     font-weight: 700;
     text-shadow: 0 2px 6px rgba(0,0,0,0.7);
   }
-
   /* Page container */
   .page {
     flex: 1;
@@ -55,13 +54,13 @@
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.6s ease;
+    background: transparent;
   }
   .page.active {
     opacity: 1;
     pointer-events: auto;
     position: relative;
   }
-
   /* Buttons */
   button {
     margin-top: 10px;
@@ -76,109 +75,245 @@
     box-shadow: 0 6px 15px #5a67f2aa;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
-  button:hover {
+  button:hover:not(:disabled) {
     box-shadow: 0 10px 25px #9f90ffcc;
     transform: scale(1.07);
   }
   button:active {
     transform: scale(0.98);
   }
-
-  /* Layout choices */
+  button:disabled,
+  button[disabled] {
+    background: #444964;
+    cursor: default;
+    box-shadow: none;
+  }
+  /* Layout selection */
   #layoutSelection {
     gap: 15px;
   }
   .layout-buttons {
     display: flex;
-    gap: 12px;
-    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 25px;
   }
   .layout-btn {
-    flex: 1;
     background: #2d2f45;
     border: 2px solid transparent;
     border-radius: 12px;
-    padding: 20px 10px;
-    font-weight: 700;
-    font-size: 16px;
-    color: #bbb;
+    padding: 8px;
+    width: 100px;
+    height: 140px;
     cursor: pointer;
     user-select: none;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.25));
-    transition: background 0.3s, border 0.3s, color 0.3s;
+    gap: 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    transition:
+      background 0.3s,
+      border-color 0.3s,
+      box-shadow 0.3s;
   }
   .layout-btn.selected {
     background: #5a67f2;
-    color: #fff;
     border-color: #a0a5ff;
-    filter: drop-shadow(0 4px 6px rgba(90, 103, 242, 0.7));
+    box-shadow: 0 8px 20px rgba(90,103,242,0.7);
   }
-
+  .layout-btn:hover {
+    background: #3b3d69;
+  }
+  .layout-btn span {
+    color: #bbb;
+    font-weight: 700;
+    font-size: 14px;
+    margin-top: 8px;
+    user-select: none;
+  }
+  /* Layout preview grids inside buttons */
+  .layout-preview {
+    width: 80px;
+    height: 120px;
+    background: #101222;
+    border-radius: 10px;
+    box-shadow: inset 0 0 8px #333a62;
+    display: grid;
+    gap: 5px;
+    padding: 5px;
+    box-sizing: border-box;
+  }
+  .slot {
+    background: #4a4e82;
+    border-radius: 6px;
+    box-shadow: 0 0 6px #2e3175;
+  }
+  /* Different grid templates for layouts */
+  .layout1 .layout-preview {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2, 1fr);
+  }
+  .layout2 .layout-preview {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+  }
+  .layout3 .layout-preview {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+  }
+  .layout4 .layout-preview {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+  }
+  .layout5 .layout-preview {
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+  }
+  .layout6 .layout-preview {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+  }
   /* Camera page */
   #video {
-    width: 280px;
-    height: 210px;
+    width: 320px;
+    height: 240px;
     background: #000;
     border-radius: 14px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8);
     object-fit: cover;
   }
-
-  /* Canvas hidden */
   #canvas {
     display: none;
   }
-
-  /* Editing photo */
+  /* Editing page */
   #editingPage {
     flex-direction: column;
   }
   #photo-container {
     position: relative;
-    width: 280px;
-    height: 380px;
-    margin-bottom: 30px;
-    border-radius: 16px;
+    width: 320px;
+    height: 430px;
+    margin-bottom: 20px;
+    border-radius: 18px;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0,0,0,0.7);
     background: #222536;
+    display: grid;
+    gap: 6px;
+    justify-content: center;
   }
-  #photo {
+  /* We will dynamically set the grid in JS according to layout */
+  #photo-container img.photo-slot {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.7);
+  }
+  /* Template overlays - 3 distinct template styles */
+  #templateSelector {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+  .template-btn {
+    width: 90px;
+    height: 120px;
+    border-radius: 14px;
+    cursor: pointer;
+    border: 3px solid transparent;
+    box-shadow: 0 6px 15px rgba(255,255,255,0.2);
+    position: relative;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .template-btn.selected {
+    border-color: #ff317b;
+    box-shadow: 0 10px 30px #ff317bcc;
+  }
+  .template-btn canvas,
+  .template-btn img {
+    width: 100%;
+    height: 100%;
+    border-radius: 14px;
     display: block;
   }
-  /* Photobooth template overlay */
+  /* Template preview backgrounds (abstract shapes) */
+  .tmpl1 {
+    background:
+      linear-gradient(135deg, #ff317b 0%, #ff86b0 100%);
+    box-shadow:
+      inset 0 0 20px #ff317b,
+      0 0 24px #ff317bbb;
+  }
+  .tmpl2 {
+    background:
+      radial-gradient(circle at top left, #a17fe0 25%, transparent), 
+      radial-gradient(circle at bottom right, #764ba2 50%, transparent);
+    box-shadow:
+      inset 0 0 18px #a17fe0,
+      0 0 25px #764ba2bb;
+  }
+  .tmpl3 {
+    background:
+      repeating-conic-gradient(#ff6ea5 0deg 30deg, #764ba2 30deg 60deg);
+    box-shadow:
+      inset 0 0 14px #ff6ea5,
+      0 0 20px #764ba2bb;
+  }
+  /* Template overlay actual effect on photo container */
   #photo-template {
     pointer-events: none;
     position: absolute;
     top: 0; left: 0;
     width: 100%;
     height: 100%;
+    border-radius: 18px;
     mix-blend-mode: screen;
-    background:
-      linear-gradient(135deg, #ff0099 0%, #493240 100%);
-    opacity: 0.3;
-    border-radius: 16px;
-    box-shadow:
-      inset 0 0 30px 2px #ff0099aa,
-      0 0 40px 8px #ff0099aa;
+    opacity: 0.4;
   }
-
+  /* Template 1 style */
+  #photo-template.tmpl1 {
+    background:
+      linear-gradient(135deg, #ff317b 0%, #ff86b0 100%);
+    box-shadow:
+      inset 0 0 40px #ff317b,
+      0 0 60px #ff317bee;
+  }
+  /* Template 2 style */
+  #photo-template.tmpl2 {
+    background:
+      radial-gradient(circle at top left, #a17fe0 40%, transparent 75%), 
+      radial-gradient(circle at bottom right, #764ba2 65%, transparent 90%);
+    box-shadow:
+      inset 0 0 30px #a17fe0,
+      0 0 40px #764ba2cc;
+  }
+  /* Template 3 style */
+  #photo-template.tmpl3 {
+    background:
+      repeating-conic-gradient(#ff6ea5 0deg 30deg, #764ba2 30deg 60deg);
+    box-shadow:
+      inset 0 0 24px #ff6ea5,
+      0 0 30px #764ba2cc;
+  }
   /* Download button styling */
   #downloadButton {
     background: #ff317b;
     box-shadow: 0 6px 20px #ff317bcc;
+    padding: 14px 36px;
   }
-  #downloadButton:hover {
+  #downloadButton:hover:not(:disabled) {
     box-shadow: 0 10px 35px #ff57a4cc;
   }
-
-  /* Responsive tweaks - optional */
+  #downloadButton:disabled {
+    background: #88405a;
+    cursor: default;
+    box-shadow: none;
+  }
+  /* Responsive tweaks */
   @media (max-width: 400px) {
     #app {
       width: 95vw;
@@ -190,13 +325,17 @@
       height: auto;
       aspect-ratio: 4 / 3;
     }
+    .layout-btn {
+      width: 95px;
+      height: 140px;
+    }
   }
 </style>
 </head>
 <body>
-  <div id="app">
+  <div id="app" role="main" aria-live="polite">
     <!-- Page 1: Welcome -->
-    <section id="welcome" class="page active" aria-label="Halaman Selamat Datang">
+    <section id="welcome" class="page active" aria-label="Halaman Selamat Datang ke Photobooth Resa">
       <h1>Selamat Datang Di Photobooth Resa</h1>
       <button id="startButton" aria-label="Mulai photobooth">Mulai</button>
     </section>
@@ -205,9 +344,50 @@
     <section id="layoutSelection" class="page" aria-label="Halaman Pemilihan Layout">
       <h2>Pilih Layout</h2>
       <div class="layout-buttons" role="list" aria-live="polite" aria-label="Pilihan layout photobooth">
-        <button class="layout-btn" data-layout="layout1" role="listitem" aria-pressed="false">Layout 1</button>
-        <button class="layout-btn" data-layout="layout2" role="listitem" aria-pressed="false">Layout 2</button>
-        <button class="layout-btn" data-layout="layout3" role="listitem" aria-pressed="false">Layout 3</button>
+        <button class="layout-btn layout1" data-layout="layout1" role="listitem" aria-pressed="false" aria-label="Layout 1 - 2 foto vertikal">
+          <div class="layout-preview">
+            <div class="slot"></div>
+            <div class="slot"></div>
+          </div>
+          <span>2 Foto Vertikal</span>
+        </button>
+        <button class="layout-btn layout2" data-layout="layout2" role="listitem" aria-pressed="false" aria-label="Layout 2 - 2 baris 3 kolom">
+          <div class="layout-preview">
+            <div class="slot"></div><div class="slot"></div><div class="slot"></div>
+            <div class="slot"></div><div class="slot"></div><div class="slot"></div>
+          </div>
+          <span>2 x 3 Foto</span>
+        </button>
+        <button class="layout-btn layout3" data-layout="layout3" role="listitem" aria-pressed="false" aria-label="Layout 3 - 1 foto besar vertikal">
+          <div class="layout-preview">
+            <div class="slot"></div>
+          </div>
+          <span>1 Foto Besar</span>
+        </button>
+        <button class="layout-btn layout4" data-layout="layout4" role="listitem" aria-pressed="false" aria-label="Layout 4 - 2 kolom 3 baris vertikal">
+          <div class="layout-preview">
+            <div class="slot"></div><div class="slot"></div>
+            <div class="slot"></div><div class="slot"></div>
+            <div class="slot"></div><div class="slot"></div>
+          </div>
+          <span>2 kolom x 3 baris</span>
+        </button>
+        <button class="layout-btn layout5" data-layout="layout5" role="listitem" aria-pressed="false" aria-label="Layout 5 - 4 foto vertikal">
+          <div class="layout-preview">
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+          </div>
+          <span>4 Foto Vertikal</span>
+        </button>
+        <button class="layout-btn layout6" data-layout="layout6" role="listitem" aria-pressed="false" aria-label="Layout 6 - 4 kolom 2 baris">
+          <div class="layout-preview">
+            <div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div>
+            <div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div>
+          </div>
+          <span>4 kolom x 2 baris</span>
+        </button>
       </div>
       <button id="nextButton" aria-label="Lanjut ke kamera" disabled>Selanjutnya</button>
     </section>
@@ -215,7 +395,8 @@
     <!-- Page 3: Camera page -->
     <section id="cameraPage" class="page" aria-label="Halaman Kamera">
       <h2>Ambil Gambar</h2>
-      <video id="video" autoplay playsinline></video>
+      <video id="video" autoplay playsinline aria-label="Tampilan kamera"></video>
+      <div style="margin-top:10px; color:#ccc; font-weight:600;" id="capture-status">Foto 1 dari X</div>
       <button id="captureButton" aria-label="Ambil gambar dari kamera" disabled>Ambil Gambar</button>
       <button id="nextCameraButton" aria-label="Lanjut ke halaman editing" disabled>Selanjutnya</button>
       <canvas id="canvas"></canvas>
@@ -224,11 +405,17 @@
     <!-- Page 4: Editing page -->
     <section id="editingPage" class="page" aria-label="Halaman Editing Foto">
       <h2>Editing Photo</h2>
-      <div id="photo-container" aria-live="polite" aria-label="Foto yang diambil dengan template photobooth">
-        <img id="photo" alt="Foto hasil jepretan photobooth" />
-        <div id="photo-template"></div>
+      <div id="templateSelector" aria-label="Pilih template photobooth">
+        <div class="template-btn tmpl1 selected" title="Template 1" tabindex="0" role="button" aria-pressed="true" aria-label="Pilih template 1"></div>
+        <div class="template-btn tmpl2" title="Template 2" tabindex="0" role="button" aria-pressed="false" aria-label="Pilih template 2"></div>
+        <div class="template-btn tmpl3" title="Template 3" tabindex="0" role="button" aria-pressed="false" aria-label="Pilih template 3"></div>
       </div>
-      <button id="downloadButton" aria-label="Download foto">Download Foto</button>
+      <div id="photo-container" aria-live="polite" aria-label="Foto yang diambil dengan template photobooth">
+        <!-- Dynamic photos inserted here -->
+        <div id="photo-template" class="tmpl1"></div>
+      </div>
+      <button id="downloadButton" aria-label="Download foto" disabled>Download Foto</button>
+      <button id="restartButton" aria-label="Mulai ulang photobooth" style="margin-top:12px;background:#444964;">Mulai Ulang</button>
     </section>
   </div>
 
@@ -246,14 +433,39 @@
   const nextCameraButton = document.getElementById('nextCameraButton');
   const captureButton = document.getElementById('captureButton');
   const downloadButton = document.getElementById('downloadButton');
-
+  const restartButton = document.getElementById('restartButton');
+  const captureStatus = document.getElementById('capture-status');
   const layoutButtons = [...document.querySelectorAll('.layout-btn')];
-  let selectedLayout = null;
-
-  let videoStream = null;
+  const templateButtons = [...document.querySelectorAll('.template-btn')];
+  const photoContainer = document.getElementById('photo-container');
+  const photoTemplate = document.getElementById('photo-template');
   const video = document.getElementById('video');
   const canvas = document.getElementById('canvas');
-  const photo = document.getElementById('photo');
+
+  let selectedLayout = null;
+  let selectedTemplate = 'tmpl1';
+  let videoStream = null;
+  let photos = [];
+  let captureIndex = 0;
+
+  // Layout photo slot counts map
+  const layoutPhotoCounts = {
+    'layout1': 2,
+    'layout2': 6,
+    'layout3': 1,
+    'layout4': 6,
+    'layout5': 4,
+    'layout6': 8
+  };
+  // Layout photo-container grid styles map for JS
+  const layoutGridStyles = {
+    'layout1': '1fr / 1fr',
+    'layout2': 'repeat(2, 1fr) / repeat(3, 1fr)',
+    'layout3': '1fr / 1fr',
+    'layout4': 'repeat(3, 1fr) / repeat(2, 1fr)',
+    'layout5': 'repeat(4, 1fr) / 1fr',
+    'layout6': 'repeat(2, 1fr) / repeat(4, 1fr)'
+  };
 
   // Helper: show/hide pages
   function showPage(name) {
@@ -261,12 +473,39 @@
     pages[name].classList.add('active');
   }
 
-  // Start button click -> go to layout selection
-  startButton.addEventListener('click', () => {
-    showPage('layoutSelection');
-  });
+  // Reset all selection on restart
+  function resetAll() {
+    selectedLayout = null;
+    selectedTemplate = 'tmpl1';
+    photos = [];
+    captureIndex = 0;
+    // Reset buttons
+    nextButton.disabled = true;
+    captureButton.disabled = true;
+    nextCameraButton.disabled = true;
+    downloadButton.disabled = true;
+    captureStatus.textContent = '';
+    // Reset layout button selection
+    layoutButtons.forEach(b => {
+      b.classList.remove('selected');
+      b.setAttribute('aria-pressed', 'false');
+    });
+    // Reset template buttons
+    templateButtons.forEach((btn, i) => {
+      btn.classList.remove('selected');
+      btn.setAttribute('aria-pressed', 'false');
+      if(i === 0) {
+        btn.classList.add('selected');
+        btn.setAttribute('aria-pressed', 'true');
+      }
+    });
+    photoContainer.innerHTML = '';
+    photoContainer.appendChild(photoTemplate);
+    photoTemplate.className = '';
+    photoTemplate.classList.add(selectedTemplate);
+  }
 
-  // Layout selection buttons behavior
+  // Layout selection logic
   function selectLayout(btn) {
     layoutButtons.forEach(b => {
       b.classList.remove('selected');
@@ -278,65 +517,271 @@
     nextButton.disabled = false;
   }
   layoutButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      selectLayout(btn);
+    btn.addEventListener('click', () => selectLayout(btn));
+  });
+
+  // Template selection logic
+  function selectTemplate(btn) {
+    templateButtons.forEach(b => {
+      b.classList.remove('selected');
+      b.setAttribute('aria-pressed', 'false');
+    });
+    btn.classList.add('selected');
+    btn.setAttribute('aria-pressed', 'true');
+    selectedTemplate = [...templateButtons].indexOf(btn) === 0 ? 'tmpl1' :
+                       [...templateButtons].indexOf(btn) === 1 ? 'tmpl2' : 'tmpl3';
+    photoTemplate.className = '';
+    photoTemplate.classList.add(selectedTemplate);
+  }
+  templateButtons.forEach(btn => {
+    btn.addEventListener('click', () => selectTemplate(btn));
+    btn.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        selectTemplate(btn);
+      }
     });
   });
 
-  // Next button after layout selected -> go to camera
-  nextButton.addEventListener('click', () => {
-    showPage('cameraPage');
-    startCamera();
+  // Start button page 1 -> page 2
+  startButton.addEventListener('click', () => {
+    showPage('layoutSelection');
   });
 
-  // Start camera function (no mirror)
+  // Next button page 2 -> page 3 (Camera)
+  nextButton.addEventListener('click', () => {
+    if(!selectedLayout) return;
+    photos = [];
+    captureIndex = 0;
+    showPage('cameraPage');
+    startCamera();
+    updateCaptureStatus();
+    captureButton.disabled = false;
+    nextCameraButton.disabled = true;
+  });
+
+  // Start camera
   async function startCamera() {
     try {
-      videoStream = await navigator.mediaDevices.getUserMedia({video: {facingMode: 'user'}});
+      if(videoStream) {
+        stopCamera();
+      }
+      videoStream = await navigator.mediaDevices.getUserMedia({video: {facingMode: 'user'}, audio:false});
       video.srcObject = videoStream;
-      captureButton.disabled = false;
-      nextCameraButton.disabled = true;
     } catch(e) {
       alert('Gagal mengakses kamera: ' + e.message);
     }
   }
 
-  // Capture button - take photo
-  captureButton.addEventListener('click', () => {
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    const ctx = canvas.getContext('2d');
-    // Draw video frame as is, no mirror flips
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    // Set photo src to the canvas image data
-    photo.src = canvas.toDataURL('image/png');
-    nextCameraButton.disabled = false;
-    captureButton.disabled = true;
-  });
-
-  // Next button from camera page to editing page
-  nextCameraButton.addEventListener('click', () => {
-    showPage('editingPage');
-    stopCamera();
-  });
-
-  // Stop camera function
+  // Stop camera
   function stopCamera() {
     if(videoStream) {
       videoStream.getTracks().forEach(track => track.stop());
       videoStream = null;
+      video.srcObject = null;
     }
   }
 
-  // Download button click
-  downloadButton.addEventListener('click', () => {
-    if(!photo.src) return;
-    const link = document.createElement('a');
-    link.href = photo.src;
-    link.download = `photobooth_${Date.now()}.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  // Update capture status text
+  function updateCaptureStatus() {
+    const total = layoutPhotoCounts[selectedLayout];
+    captureStatus.textContent = `Foto ${captureIndex + 1} dari ${total}`;
+  }
+
+  // Capture photo to array
+  captureButton.addEventListener('click', () => {
+    if(!videoStream) return;
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const dataURL = canvas.toDataURL('image/png');
+    photos[captureIndex] = dataURL;
+    captureIndex++;
+    if(captureIndex >= layoutPhotoCounts[selectedLayout]) {
+      captureButton.disabled = true;
+      nextCameraButton.disabled = false;
+      captureStatus.textContent = `Semua foto telah diambil. Klik Selanjutnya.`;
+    } else {
+      updateCaptureStatus();
+    }
+  });
+
+  // Next button camera page -> editing page
+  nextCameraButton.addEventListener('click', () => {
+    if(captureIndex < layoutPhotoCounts[selectedLayout]) return;
+    showPage('editingPage');
+    stopCamera();
+    displayPhotosAndTemplate();
+    downloadButton.disabled = false;
+  });
+
+  // Display photos in layout container and apply grid
+  function displayPhotosAndTemplate(){
+    // Clear previous photos except template overlay
+    photoContainer.innerHTML = '';
+    // Set grid style according to layout
+    // grid-template-rows / columns switch the axes from CSS above for better fitting
+    if(selectedLayout && layoutGridStyles[selectedLayout]) {
+      const style = layoutGridStyles[selectedLayout];
+      // style in form "rows / cols", need to convert to CSS grid format: grid-template-columns then rows or vice versa
+      // splitting:
+      let [rows, cols] = style.split(' / ');
+      // CSS expects "grid-template-columns: cols; grid-template-rows: rows"
+      photoContainer.style.display = 'grid';
+      photoContainer.style.gridTemplateColumns = cols;
+      photoContainer.style.gridTemplateRows = rows;
+    }
+    // Insert image elements based on number of photos
+    for(let i=0; i<photos.length; i++){
+      const img = document.createElement('img');
+      img.src = photos[i];
+      img.className = 'photo-slot';
+      img.alt = `Foto ke-${i+1} dari layout`;
+      photoContainer.appendChild(img);
+    }
+    // Append template overlay div last
+    photoContainer.appendChild(photoTemplate);
+    // Apply selected template class on overlay
+    photoTemplate.className = '';
+    photoTemplate.classList.add(selectedTemplate);
+  }
+
+  // Download assembled photo as one image
+  downloadButton.addEventListener('click', async () => {
+    if(photos.length === 0) return;
+    // Create offscreen canvas for the full layout sized photo assembly
+    // We'll define a fixed width and height for export for quality (e.g. same as container 1280x1720 or so)
+    const exportWidth = 1280;
+    const exportHeight = 1720;
+    const exportCanvas = document.createElement('canvas');
+    exportCanvas.width = exportWidth;
+    exportCanvas.height = exportHeight;
+    const ctx = exportCanvas.getContext('2d');
+
+    // Clear background black
+    ctx.fillStyle = '#181a29';
+    ctx.fillRect(0, 0, exportWidth, exportHeight);
+
+    // Calculate grid dimensions similarly to the photoContainer grid
+    let rows, cols;
+    switch(selectedLayout){
+      case 'layout1': rows=2; cols=1; break;
+      case 'layout2': rows=2; cols=3; break;
+      case 'layout3': rows=1; cols=1; break;
+      case 'layout4': rows=3; cols=2; break;
+      case 'layout5': rows=4; cols=1; break;
+      case 'layout6': rows=2; cols=4; break;
+      default: rows=1; cols=1;
+    }
+
+    // Calculate size per slot
+    const slotWidth = exportWidth / cols;
+    const slotHeight = exportHeight / rows;
+
+    // Draw each photo scaled to slot
+    await Promise.all(photos.map((photoSrc, idx) => {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          // Aspect fit fill the slot box centered
+          let sx=0, sy=0, sw=img.width, sh=img.height;
+          const imgRatio = img.width / img.height;
+          const slotRatio = slotWidth / slotHeight;
+          // Crop image if needed (cover)
+          if(imgRatio > slotRatio){
+            sw = img.height * slotRatio;
+            sx = (img.width - sw) / 2;
+          } else {
+            sh = img.width / slotRatio;
+            sy = (img.height - sh) / 2;
+          }
+          const dx = (idx % cols) * slotWidth;
+          const dy = Math.floor(idx / cols) * slotHeight;
+          ctx.drawImage(img, sx, sy, sw, sh, dx, dy, slotWidth, slotHeight);
+          resolve();
+        };
+        img.src = photoSrc;
+      });
+    }));
+
+    // Draw template overlay shapes on export canvas with subtle transparent patterns
+    switch(selectedTemplate){
+      case 'tmpl1':
+        {
+          // pink radial glow filter
+          const grad = ctx.createRadialGradient(exportWidth/2, exportHeight/2, exportWidth/8, exportWidth/2, exportHeight/2, exportWidth/1.2);
+          grad.addColorStop(0, '#ff317bcc');
+          grad.addColorStop(1, 'transparent');
+          ctx.fillStyle = grad;
+          ctx.fillRect(0, 0, exportWidth, exportHeight);
+
+          ctx.strokeStyle = '#ff317b88';
+          ctx.lineWidth = 40;
+          ctx.shadowColor = '#ff317b99';
+          ctx.shadowBlur = 30;
+          ctx.strokeRect(20,20,exportWidth-40, exportHeight-40);
+        }
+        break;
+      case 'tmpl2':
+        {
+          // purple wave pattern simplified
+          ctx.fillStyle = 'rgba(161,127,224,0.15)';
+          for(let y=0; y<exportHeight; y+=60) {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            for(let x=0; x<=exportWidth; x+=30){
+              const amp = 12;
+              const dy = amp * Math.sin((x/30 + y/40) * Math.PI*2);
+              ctx.lineTo(x, y+dy);
+            }
+            ctx.lineTo(exportWidth, exportHeight);
+            ctx.lineTo(0, exportHeight);
+            ctx.closePath();
+            ctx.fill();
+          }
+          ctx.strokeStyle = '#764ba299';
+          ctx.lineWidth = 30;
+          ctx.strokeRect(30,30,exportWidth-60, exportHeight-60);
+        }
+        break;
+      case 'tmpl3':
+        {
+          // pink-purple conic stripes simplified with stripes
+          ctx.fillStyle = 'rgba(255,110,165,0.15)';
+          const stripeWidth = 40;
+          for(let x=-exportHeight; x<exportWidth; x+=stripeWidth){
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x + stripeWidth/2, 0);
+            ctx.lineTo(x + exportHeight + stripeWidth/2, exportHeight);
+            ctx.lineTo(x + exportHeight, exportHeight);
+            ctx.closePath();
+            ctx.fill();
+          }
+          ctx.strokeStyle = '#ff6ea599';
+          ctx.lineWidth = 24;
+          ctx.strokeRect(25,25,exportWidth-50, exportHeight-50);
+        }
+        break;
+    }
+
+    // Create a temp link to download the image
+    exportCanvas.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `photobooth_resa_${Date.now()}.png`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }, 'image/png');
+  });
+
+  // Restart photobooth
+  restartButton.addEventListener('click', () => {
+    resetAll();
+    showPage('welcome');
   });
 
   // Accessibility focus management on page transitions
@@ -345,10 +790,11 @@
     if(btn) btn.focus();
   }
 
-  // Initial focus
+  // Initial reset and focus
+  resetAll();
   focusFirstButtonInPage(pages.welcome);
 
-  // After showing page, focus first button
+  // Focus first button on new page
   const observer = new MutationObserver(() => {
     const activePage = document.querySelector('.page.active');
     if(activePage) focusFirstButtonInPage(activePage);
