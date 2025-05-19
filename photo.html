@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photobooth Pro - Editor Manual</title>
+    <title>Photobooth Auto-Fit Template</title>
     <style>
-        /* Reset dan Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -17,24 +16,6 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
         }
 
         .container {
@@ -42,64 +23,26 @@
             margin: 0 auto;
             padding: 2rem;
             text-align: center;
-            animation: fadeIn 0.8s ease-out;
         }
 
         h1 {
-            font-size: 3rem;
+            font-size: 2.5rem;
             margin-bottom: 1.5rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
         }
 
         .btn {
             background: white;
             color: #764ba2;
             border: none;
-            padding: 12px 30px;
-            font-size: 1.1rem;
+            padding: 10px 25px;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-block;
+            margin: 10px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-            animation: pulse 1.5s infinite;
-        }
-
-        .btn:active {
-            transform: translateY(1px);
-        }
-
-        /* Halaman 1 - Welcome */
-        .welcome-page {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .welcome-content {
-            animation: float 4s ease-in-out infinite;
-        }
-
-        /* Halaman 2 - Template Selection */
-        .template-page {
-            display: none;
-        }
-
+        /* Template Selection */
         .template-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -108,193 +51,74 @@
         }
 
         .template-item {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255,255,255,0.1);
             border-radius: 10px;
             padding: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
-            border: 2px solid transparent;
         }
 
-        .template-item:hover {
-            transform: scale(1.03);
-            background: rgba(255, 255, 255, 0.2);
-            border-color: white;
+        .template-item.selected {
+            background: rgba(255,255,255,0.3);
+            border: 2px solid #ffcc00;
         }
 
         .template-item img {
             width: 100%;
             border-radius: 8px;
-            pointer-events: none;
         }
 
-        .template-item.selected {
-            background: rgba(255, 255, 255, 0.3);
-            border-color: #ffcc00;
-            box-shadow: 0 0 20px rgba(255, 204, 0, 0.5);
-        }
-
-        /* Halaman 3 - Camera */
-        .camera-page {
-            display: none;
-        }
-
+        /* Camera */
         .camera-container {
-            position: relative;
             width: 100%;
             max-width: 600px;
             margin: 2rem auto;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         #video {
             width: 100%;
-            display: block;
             background: #333;
         }
 
-        #canvas {
-            display: none;
-        }
-
-        .camera-controls {
-            margin-top: 1.5rem;
-        }
-
-        .flash {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: white;
-            opacity: 0;
-            z-index: 10;
-        }
-
-        .flash-animation {
-            animation: flash 0.5s;
-        }
-
-        @keyframes flash {
-            0% { opacity: 0; }
-            50% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-
-        /* Halaman 4 - Editing */
-        .editing-page {
-            display: none;
-        }
-
-        .editing-container {
+        /* Editor */
+        .editor-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 2rem;
-            justify-content: center;
-            margin: 2rem 0;
+            gap: 20px;
+            margin-top: 2rem;
         }
 
-        .editing-section {
+        .editor-section {
             flex: 1;
             min-width: 300px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255,255,255,0.1);
             border-radius: 10px;
-            padding: 1.5rem;
+            padding: 15px;
         }
 
-        #photo-result {
-            max-width: 100%;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-        }
-
-        #template-preview {
-            max-width: 100%;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-        }
-
-        #final-editor {
+        #final-result {
             position: relative;
             width: 100%;
             height: 400px;
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            margin-bottom: 1rem;
-            overflow: hidden;
         }
 
-        #editable-photo {
+        #photo-overlay {
             position: absolute;
-            cursor: move;
-            border: 2px dashed rgba(255, 255, 255, 0.7);
-            transform-origin: center center;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
-        .resize-handle {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background: white;
-            border-radius: 50%;
-            border: 2px solid #764ba2;
-            z-index: 10;
-        }
-
-        .rotate-handle {
-            position: absolute;
-            width: 24px;
-            height: 24px;
-            background: white;
-            border-radius: 50%;
-            border: 2px solid #764ba2;
-            top: -40px;
-            left: 50%;
-            transform: translateX(-50%);
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23764ba2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M16 16l-4-4-4 4"></path></svg>'), auto;
-        }
-
-        .edit-controls {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 1rem;
-        }
-
-        .control-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .control-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .download-btn {
-            margin-top: 1.5rem;
-            background: #4CAF50;
-            color: white;
-        }
-
-        .download-btn:hover {
-            background: #45a049;
-        }
-
-        /* Navigasi */
         .nav-buttons {
             display: flex;
             justify-content: space-between;
-            width: 100%;
             margin-top: 2rem;
         }
 
@@ -303,138 +127,70 @@
             color: white;
         }
 
-        .back-btn:hover {
-            background: #d32f2f;
-        }
-
-        /* Animasi khusus */
-        @keyframes slideInRight {
-            from { transform: translateX(100px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        @keyframes slideInLeft {
-            from { transform: translateX(-100px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        .slide-in-right {
-            animation: slideInRight 0.6s ease-out;
-        }
-
-        .slide-in-left {
-            animation: slideInLeft 0.6s ease-out;
-        }
-
-        /* Responsif */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.2rem;
-            }
-            
-            .template-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .editing-container {
-                flex-direction: column;
-            }
+        .download-btn {
+            background: #4CAF50;
+            color: white;
         }
     </style>
 </head>
 <body>
-    <!-- Halaman 1: Welcome -->
-    <div class="container welcome-page" id="welcome-page">
-        <div class="welcome-content">
-            <h1>Selamat Datang di Photobooth Pro</h1>
-            <p>Buat momen spesialmu lebih berkesan dengan foto kreatif dan editor manual!</p>
-            <button class="btn" id="start-btn">Mulai Sekarang</button>
-        </div>
-    </div>
-
-    <!-- Halaman 2: Template Selection -->
-    <div class="container template-page" id="template-page">
-        <h1>Pilih Template Foto</h1>
-        <p>Pilih template favoritmu untuk foto yang lebih keren</p>
+    <!-- Halaman 1: Template Selection -->
+    <div class="container" id="template-page">
+        <h1>Pilih Template</h1>
+        <p>Pilih template yang ingin digunakan</p>
         
         <div class="template-grid">
-            
+            <div class="template-item" data-template="template1">
+                <img src="https://via.placeholder.com/300x400/764ba2/ffffff?text=Template+1" alt="Template 1">
+            </div>
             <div class="template-item" data-template="template2">
-                <img src="resa.png" alt="Template 2">
+                <img src="https://via.placeholder.com/300x400/667eea/ffffff?text=Template+2" alt="Template 2">
             </div>
             <div class="template-item" data-template="template3">
-                <img src="manga.jpg" alt="Template 3">
+                <img src="https://via.placeholder.com/300x400/5a67d8/ffffff?text=Template+3" alt="Template 3">
             </div>
             <div class="template-item" data-template="template4">
-                <img src="jepang.png" alt="Template 4">
+                <img src="https://via.placeholder.com/300x400/4c51bf/ffffff?text=Template+4" alt="Template 4">
             </div>
-            
         </div>
         
-        <div class="nav-buttons">
-            <button class="btn back-btn" id="back-to-welcome">Kembali</button>
-            <button class="btn" id="next-to-camera">Selanjutnya</button>
-        </div>
+        <button class="btn" id="next-to-camera">Lanjut</button>
     </div>
 
-    <!-- Halaman 3: Camera -->
-    <div class="container camera-page" id="camera-page">
+    <!-- Halaman 2: Camera -->
+    <div class="container" id="camera-page" style="display:none">
         <h1>Ambil Foto</h1>
-        <p>Posisikan diri Anda dengan baik dan klik tombol ambil foto</p>
+        <p>Posisikan diri Anda dan ambil foto</p>
         
         <div class="camera-container">
             <video id="video" autoplay playsinline></video>
-            <canvas id="canvas"></canvas>
-            <div class="flash" id="flash"></div>
         </div>
         
-        <div class="camera-controls">
-            <button class="btn" id="capture-btn">Ambil Foto</button>
-        </div>
+        <button class="btn" id="capture-btn">Ambil Foto</button>
         
         <div class="nav-buttons">
             <button class="btn back-btn" id="back-to-template">Kembali</button>
-            <button class="btn" id="next-to-editing">Selanjutnya</button>
+            <button class="btn" id="next-to-editor">Lanjut</button>
         </div>
     </div>
 
-    <!-- Halaman 4: Editing -->
-    <div class="container editing-page" id="editing-page">
-        <h1>Editor Foto Manual</h1>
-        <p>Atur posisi, ukuran, dan rotasi foto Anda secara manual pada template</p>
+    <!-- Halaman 3: Editor -->
+    <div class="container" id="editor-page" style="display:none">
+        <h1>Hasil Foto</h1>
+        <p>Foto Anda telah otomatis disesuaikan dengan template</p>
         
-        <div class="editing-container">
-            <div class="editing-section">
-                <h2>Hasil Foto</h2>
-                <img id="photo-result" src="" alt="Hasil Foto">
-            </div>
-            
-            <div class="editing-section">
-                <h2>Template</h2>
-                <img id="template-preview" src="" alt="Template">
-            </div>
-            
-            <div class="editing-section">
-                <h2>Editor Manual</h2>
-                <div id="final-editor">
-                    <!-- Template sebagai background -->
-                    <!-- Foto yang bisa diedit akan dimasukkan di sini -->
+        <div class="editor-container">
+            <div class="editor-section">
+                <h2>Hasil Akhir</h2>
+                <div id="final-result">
+                    <img id="photo-overlay" src="" alt="Foto Anda">
                 </div>
-                
-                <div class="edit-controls">
-                    <button class="control-btn" id="zoom-in-btn">Perbesar (+)</button>
-                    <button class="control-btn" id="zoom-out-btn">Perkecil (-)</button>
-                    <button class="control-btn" id="rotate-left-btn">Putar Kiri (↺)</button>
-                    <button class="control-btn" id="rotate-right-btn">Putar Kanan (↻)</button>
-                    <button class="control-btn" id="reset-btn">Reset Posisi</button>
-                </div>
-                
-                <button class="btn download-btn" id="download-btn">Download Hasil</button>
+                <button class="btn download-btn" id="download-btn">Download</button>
             </div>
         </div>
         
         <div class="nav-buttons">
-            <button class="btn back-btn" id="back-to-camera">Kembali</button>
+            <button class="btn back-btn" id="back-to-camera">Ambil Ulang</button>
         </div>
     </div>
 
@@ -442,82 +198,56 @@
         // Variabel global
         let selectedTemplate = null;
         let photoDataUrl = null;
-        let isDragging = false;
-        let isResizing = false;
-        let isRotating = false;
-        let startX, startY;
-        let initialX, initialY, initialWidth, initialHeight, initialAngle;
-        let currentX = 0, currentY = 0, currentScale = 1, currentRotation = 0;
-        let editablePhoto = null;
-
+        
         // Elemen DOM
-        const welcomePage = document.getElementById('welcome-page');
         const templatePage = document.getElementById('template-page');
         const cameraPage = document.getElementById('camera-page');
-        const editingPage = document.getElementById('editing-page');
+        const editorPage = document.getElementById('editor-page');
         
-        const startBtn = document.getElementById('start-btn');
-        const backToWelcomeBtn = document.getElementById('back-to-welcome');
         const nextToCameraBtn = document.getElementById('next-to-camera');
         const backToTemplateBtn = document.getElementById('back-to-template');
-        const nextToEditingBtn = document.getElementById('next-to-editing');
+        const nextToEditorBtn = document.getElementById('next-to-editor');
         const backToCameraBtn = document.getElementById('back-to-camera');
-        const downloadBtn = document.getElementById('download-btn');
         
         const templateItems = document.querySelectorAll('.template-item');
         const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
         const captureBtn = document.getElementById('capture-btn');
-        const flash = document.getElementById('flash');
-        const photoResult = document.getElementById('photo-result');
-        const templatePreview = document.getElementById('template-preview');
-        const finalEditor = document.getElementById('final-editor');
-        
-        // Tombol editing
-        const zoomInBtn = document.getElementById('zoom-in-btn');
-        const zoomOutBtn = document.getElementById('zoom-out-btn');
-        const rotateLeftBtn = document.getElementById('rotate-left-btn');
-        const rotateRightBtn = document.getElementById('rotate-right-btn');
-        const resetBtn = document.getElementById('reset-btn');
+        const finalResult = document.getElementById('final-result');
+        const photoOverlay = document.getElementById('photo-overlay');
+        const downloadBtn = document.getElementById('download-btn');
 
         // Event Listeners
-        startBtn.addEventListener('click', () => {
-            animateTransition(welcomePage, templatePage, 'slide-in-right');
-        });
-
-        backToWelcomeBtn.addEventListener('click', () => {
-            animateTransition(templatePage, welcomePage, 'slide-in-left');
-        });
-
         nextToCameraBtn.addEventListener('click', () => {
             if (selectedTemplate) {
-                animateTransition(templatePage, cameraPage, 'slide-in-right');
+                templatePage.style.display = 'none';
+                cameraPage.style.display = 'block';
                 startCamera();
             } else {
-                alert('Silakan pilih template terlebih dahulu!');
+                alert('Pilih template terlebih dahulu!');
             }
         });
 
         backToTemplateBtn.addEventListener('click', () => {
+            cameraPage.style.display = 'none';
+            templatePage.style.display = 'block';
             stopCamera();
-            animateTransition(cameraPage, templatePage, 'slide-in-left');
         });
 
-        nextToEditingBtn.addEventListener('click', () => {
+        nextToEditorBtn.addEventListener('click', () => {
             if (photoDataUrl) {
-                animateTransition(cameraPage, editingPage, 'slide-in-right');
-                prepareEditingPage();
+                cameraPage.style.display = 'none';
+                editorPage.style.display = 'block';
+                applyPhotoToTemplate();
             } else {
-                alert('Silakan ambil foto terlebih dahulu!');
+                alert('Ambil foto terlebih dahulu!');
             }
         });
 
         backToCameraBtn.addEventListener('click', () => {
-            animateTransition(editingPage, cameraPage, 'slide-in-left');
+            editorPage.style.display = 'none';
+            cameraPage.style.display = 'block';
             startCamera();
         });
-
-        downloadBtn.addEventListener('click', downloadFinalImage);
 
         // Template selection
         templateItems.forEach(item => {
@@ -526,9 +256,9 @@
                 item.classList.add('selected');
                 selectedTemplate = item.getAttribute('data-template');
                 
-                // Untuk demo, kita gunakan placeholder sebagai template
+                // Simpan URL template yang dipilih
                 const templateImg = item.querySelector('img').src;
-                sessionStorage.setItem('selectedTemplate', templateImg);
+                finalResult.style.backgroundImage = `url(${templateImg})`;
             });
         });
 
@@ -554,297 +284,66 @@
         }
 
         captureBtn.addEventListener('click', () => {
-            // Flash effect
-            flash.classList.add('flash-animation');
-            setTimeout(() => {
-                flash.classList.remove('flash-animation');
-            }, 500);
-
-            // Capture image
+            // Buat canvas untuk capture foto
+            const canvas = document.createElement('canvas');
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
-            const context = canvas.getContext('2d');
+            const ctx = canvas.getContext('2d');
             
-            // Flip image horizontally (non-mirror)
-            context.translate(canvas.width, 0);
-            context.scale(-1, 1);
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            // Flip gambar horizontal (non-mirror)
+            ctx.translate(canvas.width, 0);
+            ctx.scale(-1, 1);
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
             
-            // Reset transformation
-            context.setTransform(1, 0, 0, 1, 0, 0);
-            
+            // Simpan hasil foto
             photoDataUrl = canvas.toDataURL('image/png');
-            sessionStorage.setItem('capturedPhoto', photoDataUrl);
         });
 
-        // Editing page functionality
-        function prepareEditingPage() {
-            // Load captured photo
-            const capturedPhoto = sessionStorage.getItem('capturedPhoto');
-            photoResult.src = capturedPhoto;
+        // Apply photo to template
+        function applyPhotoToTemplate() {
+            photoOverlay.src = photoDataUrl;
             
-            // Load selected template
-            const template = sessionStorage.getItem('selectedTemplate');
-            templatePreview.src = template;
-            
-            // Set template as background
-            finalEditor.style.backgroundImage = `url(${template})`;
-            
-            // Create draggable photo element
-            finalEditor.innerHTML = '';
-            editablePhoto = document.createElement('div');
-            editablePhoto.id = 'editable-photo';
-            
-            const img = document.createElement('img');
-            img.src = capturedPhoto;
-            img.style.width = '100%';
-            img.style.height = '100%';
-            img.draggable = false;
-            
-            editablePhoto.appendChild(img);
-            finalEditor.appendChild(editablePhoto);
-            
-            // Set initial size and position
-            const initialWidth = 200;
-            const initialHeight = (initialWidth * canvas.height) / canvas.width;
-            
-            editablePhoto.style.width = `${initialWidth}px`;
-            editablePhoto.style.height = `${initialHeight}px`;
-            editablePhoto.style.left = '50%';
-            editablePhoto.style.top = '50%';
-            
-            // Reset transform values
-            currentX = 0;
-            currentY = 0;
-            currentScale = 1;
-            currentRotation = 0;
-            updatePhotoTransform();
-            
-            // Add resize and rotate handles
-            addPhotoHandles();
-            
-            // Set up event listeners
-            setupPhotoEvents();
-            setupControlButtons();
-        }
-
-        function addPhotoHandles() {
-            // Resize handle (bottom-right)
-            const resizeHandle = document.createElement('div');
-            resizeHandle.className = 'resize-handle';
-            resizeHandle.style.bottom = '-6px';
-            resizeHandle.style.right = '-6px';
-            resizeHandle.style.cursor = 'se-resize';
-            editablePhoto.appendChild(resizeHandle);
-            
-            // Rotate handle (top-center)
-            const rotateHandle = document.createElement('div');
-            rotateHandle.className = 'rotate-handle';
-            editablePhoto.appendChild(rotateHandle);
-            
-            // Event listeners for handles
-            resizeHandle.addEventListener('mousedown', startResize);
-            rotateHandle.addEventListener('mousedown', startRotate);
-        }
-
-        function setupPhotoEvents() {
-            editablePhoto.addEventListener('mousedown', startDrag);
-            
-            document.addEventListener('mousemove', (e) => {
-                if (isDragging) drag(e);
-                if (isResizing) resize(e);
-                if (isRotating) rotate(e);
-            });
-            
-            document.addEventListener('mouseup', endDrag);
-        }
-
-        function startDrag(e) {
-            if (e.target !== editablePhoto && !e.target.classList.contains('resize-handle') && !e.target.classList.contains('rotate-handle')) {
-                return;
-            }
-            
-            if (e.target === editablePhoto) {
-                isDragging = true;
-                startX = e.clientX;
-                startY = e.clientY;
-                
-                const rect = editablePhoto.getBoundingClientRect();
-                initialX = rect.left - finalEditor.getBoundingClientRect().left;
-                initialY = rect.top - finalEditor.getBoundingClientRect().top;
-            }
-        }
-
-        function drag(e) {
-            const dx = e.clientX - startX;
-            const dy = e.clientY - startY;
-            
-            currentX = initialX + dx;
-            currentY = initialY + dy;
-            
-            updatePhotoTransform();
-        }
-
-        function startResize(e) {
-            isResizing = true;
-            startX = e.clientX;
-            startY = e.clientY;
-            
-            const rect = editablePhoto.getBoundingClientRect();
-            initialWidth = rect.width;
-            initialHeight = rect.height;
-            
-            e.stopPropagation();
-        }
-
-        function resize(e) {
-            const dx = e.clientX - startX;
-            const scale = 1 + dx / initialWidth;
-            
-            currentScale = Math.max(0.2, Math.min(scale, 3)); // Limit scale between 0.2 and 3
-            updatePhotoTransform();
-        }
-
-        function startRotate(e) {
-            isRotating = true;
-            startX = e.clientX;
-            startY = e.clientY;
-            
-            e.stopPropagation();
-        }
-
-        function rotate(e) {
-            const rect = editablePhoto.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-            
-            const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * 180 / Math.PI + 90;
-            currentRotation = angle;
-            updatePhotoTransform();
-        }
-
-        function endDrag() {
-            isDragging = false;
-            isResizing = false;
-            isRotating = false;
-        }
-
-        function updatePhotoTransform() {
-            editablePhoto.style.transform = `
-                translate(${currentX}px, ${currentY}px)
-                scale(${currentScale})
-                rotate(${currentRotation}deg)
-            `;
-        }
-
-        function setupControlButtons() {
-            zoomInBtn.addEventListener('click', () => {
-                currentScale = Math.min(3, currentScale + 0.1);
-                updatePhotoTransform();
-            });
-            
-            zoomOutBtn.addEventListener('click', () => {
-                currentScale = Math.max(0.2, currentScale - 0.1);
-                updatePhotoTransform();
-            });
-            
-            rotateLeftBtn.addEventListener('click', () => {
-                currentRotation -= 15;
-                updatePhotoTransform();
-            });
-            
-            rotateRightBtn.addEventListener('click', () => {
-                currentRotation += 15;
-                updatePhotoTransform();
-            });
-            
-            resetBtn.addEventListener('click', () => {
-                currentX = 0;
-                currentY = 0;
-                currentScale = 1;
-                currentRotation = 0;
-                updatePhotoTransform();
-            });
+            // Otomatis sesuaikan foto dengan template
+            photoOverlay.style.objectFit = 'cover';
+            photoOverlay.style.width = '100%';
+            photoOverlay.style.height = '100%';
         }
 
         // Download functionality
-        function downloadFinalImage() {
-            // Create a canvas with the final composition
+        downloadBtn.addEventListener('click', () => {
+            // Buat canvas untuk hasil akhir
             const canvas = document.createElement('canvas');
-            const containerRect = finalEditor.getBoundingClientRect();
+            const containerRect = finalResult.getBoundingClientRect();
             canvas.width = containerRect.width;
             canvas.height = containerRect.height;
             const ctx = canvas.getContext('2d');
             
-            // Draw template background
+            // Gambar template
             const templateImg = new Image();
-            templateImg.src = templatePreview.src;
+            templateImg.src = finalResult.style.backgroundImage.slice(4, -1).replace(/"/g, "");
             
-            // Draw captured photo
+            // Gambar foto
             const photoImg = new Image();
-            photoImg.src = photoResult.src;
+            photoImg.src = photoDataUrl;
             
-            // Wait for both images to load
+            // Tunggu kedua gambar siap
             Promise.all([
                 new Promise(resolve => { templateImg.onload = resolve; }),
                 new Promise(resolve => { photoImg.onload = resolve; })
             ]).then(() => {
-                // Draw template
+                // Gambar template
                 ctx.drawImage(templateImg, 0, 0, canvas.width, canvas.height);
                 
-                // Save current transform
-                ctx.save();
+                // Gambar foto di atas template
+                ctx.drawImage(photoImg, 0, 0, canvas.width, canvas.height);
                 
-                // Calculate photo dimensions after scaling
-                const photoWidth = photoImg.width * currentScale;
-                const photoHeight = photoImg.height * currentScale;
-                
-                // Calculate position (center of the photo)
-                const centerX = canvas.width / 2 + currentX;
-                const centerY = canvas.height / 2 + currentY;
-                
-                // Move to center and rotate
-                ctx.translate(centerX, centerY);
-                ctx.rotate(currentRotation * Math.PI / 180);
-                
-                // Draw photo centered
-                ctx.drawImage(
-                    photoImg, 
-                    -photoWidth / 2, 
-                    -photoHeight / 2, 
-                    photoWidth, 
-                    photoHeight
-                );
-                
-                // Restore transform
-                ctx.restore();
-                
-                // Create download link
+                // Download
                 const link = document.createElement('a');
                 link.download = 'photobooth-result.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
             });
         }
-
-        // Animation helper
-        function animateTransition(fromPage, toPage, animationClass) {
-            fromPage.style.display = 'none';
-            toPage.style.display = 'block';
-            toPage.classList.add(animationClass);
-            
-            setTimeout(() => {
-                toPage.classList.remove(animationClass);
-            }, 600);
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            // Set all pages except welcome to display: none
-            templatePage.style.display = 'none';
-            cameraPage.style.display = 'none';
-            editingPage.style.display = 'none';
-        });
     </script>
 </body>
 </html>
