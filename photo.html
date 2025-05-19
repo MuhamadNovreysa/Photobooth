@@ -187,6 +187,9 @@
         
         <div class="template-grid">
             <div class="template-item" data-template="template1">
+                <img src="resa.png" alt="Template 1">
+            </div>
+            <div class="template-item" data-template="template1">
                 <img src="jepang.png" alt="Template 1">
             </div>
             <div class="template-item" data-template="template2">
@@ -263,7 +266,7 @@
         const photoOverlay = document.getElementById('photo-overlay');
         const downloadBtn = document.getElementById('download-btn');
 
-        // Event Listeners
+        // Event Listeners untuk navigasi
         nextToCameraBtn.addEventListener('click', () => {
             templatePage.style.display = 'none';
             cameraPage.style.display = 'block';
@@ -290,11 +293,12 @@
 
         // Template selection
         templateItems.forEach(item => {
-            item.addEventListener('click', function() {
-                // Hapus selected dari semua item
+            item.addEventListener('click', function(e) {
+                e.preventDefault(); // Mencegah aksi default
+                // Hapus class selected dari semua item
                 templateItems.forEach(i => i.classList.remove('selected'));
                 
-                // Tambahkan selected ke item yang diklik
+                // Tambahkan class selected ke item yang diklik
                 this.classList.add('selected');
                 
                 // Simpan template yang dipilih
@@ -403,7 +407,7 @@
                 link.href = canvas.toDataURL('image/png');
                 link.click();
             });
-        }
+        });
     </script>
 </body>
 </html>
