@@ -183,16 +183,16 @@
         
         <div class="template-grid">
             <div class="template-item" data-template="template1">
-                <img src="resa.png" alt="Template 1">
-            </div>
-            <div class="template-item" data-template="template1">
-                <img src="jepang.png" alt="Template 1">
+                <img src="manga.jpg" alt="Template 1">
             </div>
             <div class="template-item" data-template="template2">
                 <img src="manga.jpg" alt="Template 2">
             </div>
             <div class="template-item" data-template="template3">
-                <img src="resa.png" alt="Template 3">
+                <img src="manga.jpg" alt="Template 3">
+            </div>
+            <div class="template-item" data-template="template4">
+                <img src="manga.jpg" alt="Template 4">
             </div>
         </div>
         
@@ -264,11 +264,50 @@
 
         // Definisi koordinat dan ukuran bingkai untuk setiap template
         const templateFrames = {
-            'template1': { x: 50, y: 50, width: 200, height: 300 },
-            'template2': { x: 75, y: 75, width: 180, height: 280 },
-            'template3': { x: 60, y: 60, width: 190, height: 290 },
-            'template4': { x: 55, y: 55, width: 195, height: 295 }
+            'template1': { x: 50, y: 50, width: 200, height: 300, imgWidth: 300, imgHeight: 400 },
+            'template2': { x: 75, y: 75, width: 180, height: 280, imgWidth: 300, imgHeight: 400 },
+            'template3': { x: 60, y: 60, width: 190, height: 290, imgWidth: 300, imgHeight: 400 },
+            'template4': { x: 55, y: 55, width: 195, height: 295, imgWidth: 300, imgHeight: 400 }
         };
+
+        // Fungsi untuk mendapatkan posisi dan ukuran yang disesuaikan
+        function getTemplatePositions() {
+            const frame = templateFrames[selectedTemplate];
+            if (!frame) return null;
+            
+            const container = finalResult;
+            const containerWidth = container.clientWidth;
+            const containerHeight = container.clientHeight;
+            
+            const imgWidth = frame.imgWidth;
+            const imgHeight = frame.imgHeight;
+            
+            const ratioW = containerWidth / imgWidth;
+            const ratioH = containerHeight / imgHeight;
+            const scale = Math.min(ratioW, ratioH);
+            
+            const scaledImgWidth = imgWidth * scale;
+            const scaledImgHeight = imgHeight * scale;
+            
+            const leftOffset = (containerWidth - scaledImgWidth) / 2;
+            const topOffset = (containerHeight - scaledImgHeight) / 2;
+            
+            const absLeft = leftOffset + (frame.x * scale);
+            const absTop = topOffset + (frame.y * scale);
+            const absWidth = frame.width * scale;
+            const absHeight = frame.height * scale;
+            
+            return {
+                leftOffset,
+                topOffset,
+                scaledImgWidth,
+                scaledImgHeight,
+                absLeft,
+                absTop,
+                absWidth,
+                absHeight
+            };
+        }
 
         // Event Listeners untuk navigasi
         nextToCameraBtn.addEventListener('click', () => {
@@ -373,14 +412,13 @@
         function applyPhotoToTemplate() {
             photoOverlay.src = photoDataUrl;
             
-            // Dapatkan koordinat dan ukuran bingkai berdasarkan template yang dipilih
-            const frame = templateFrames[selectedTemplate];
-            if (frame) {
-                // Sesuaikan posisi dan ukuran foto overlay ke bingkai
-                photoOverlay.style.left = `${frame.x}px`;
-                photoOverlay.style.top = `${frame.y}px`;
-                photoOverlay.style.width = `${frame.width}px`;
-                photoOverlay.style.height = `${frame.height}px`;
+            const positions = getTemplatePositions();
+            if (positions) {
+                photoOverlay.style.position = 'absolute';
+                photoOverlay.style.left = `${positions.absLeft}px`;
+                photoOverlay.style.top = `${positions.absTop}px`;
+                photoOverlay.style.width = `${positions.absWidth}px`;
+                photoOverlay.style.height = `${positions.absHeight}px`;
                 photoOverlay.style.objectFit = 'cover';
             }
         }
@@ -388,15 +426,16 @@
         // Download functionality
         downloadBtn.addEventListener('click', () => {
             // Buat canvas untuk hasil akhir
-            const canvas = document.createElement('canvas');
+            const canvasDownload = document.createElement('canvas');
             const containerRect = finalResult.getBoundingClientRect();
-            canvas.width = containerRect.width;
-            canvas.height = containerRect.height;
-            const ctx = canvas.getContext('2d');
+            canvasDownload.width = containerRect.width;
+            canvasDownload.height = containerRect.height;
+            const ctx = canvasDownload.getContext('2d');
             
             // Gambar template
+            const templateUrl = finalResult.style.backgroundImage.slice(4, -1).replace(/"/g, "");
             const templateImg = new Image();
-            templateImg.src = finalResult.style.backgroundImage.slice(4, -1).replace(/"/g, "");
+            templateImg.src = templateUrl;
             
             // Gambar foto
             const photoImg = new Image();
@@ -407,19 +446,29 @@
                 new Promise(resolve => { templateImg.onload = resolve; }),
                 new Promise(resolve => { photoImg.onload = resolve; })
             ]).then(() => {
-                // Gambar template
-                ctx.drawImage(templateImg, 0, 0, canvas.width, canvas.height);
-                
-                // Gambar foto di posisi bingkai
-                const frame = templateFrames[selectedTemplate];
-                if (frame) {
-                    ctx.drawImage(photoImg, frame.x, frame.y, frame.width, frame.height);
+                const positions = getTemplatePositions();
+                if (positions) {
+                    // Gambar template
+                    ctx.drawImage(
+                        templateImg,
+                        0, 0, templateImg.naturalWidth, templateImg.naturalHeight,
+                        positions.leftOffset, positions.topOffset,
+                        positions.scaledImgWidth, positions.scaledImgHeight
+                    );
+                    
+                    // Gambar foto di posisi bingkai
+                    ctx.drawImage(
+                        photoImg,
+                        0, 0, photoImg.naturalWidth, photoImg.naturalHeight,
+                        positions.absLeft, positions.absTop,
+                        positions.absWidth, positions.absHeight
+                    );
                 }
                 
                 // Download
                 const link = document.createElement('a');
                 link.download = 'photobooth-result.png';
-                link.href = canvas.toDataURL('image/png');
+                link.href = canvasDownload.toDataURL('image/png');
                 link.click();
             });
         });
