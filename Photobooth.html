@@ -850,146 +850,141 @@
     </div>
 
     <script>
-        // DOM Elements
-        const startBtn = document.getElementById("start-btn");
-        const pages = document.querySelectorAll(".page");
-        const layoutOptions = document.querySelectorAll(".layout-option");
-        const video = document.getElementById("video");
-        const canvas = document.getElementById("canvas");
-        const ctx = canvas.getContext("2d");
-        const countdownEl = document.getElementById("countdown");
-        const filterSelect = document.getElementById("filter");
-        const timerSelect = document.getElementById("timer");
-        const captureBtn = document.getElementById("capture-btn");
-        const deleteBtn = document.getElementById("delete-btn");
-        const continueBtn = document.getElementById("continue-btn");
-        const photosContainer = document.getElementById("photos-container");
-        const frameColors = document.querySelectorAll(".frame-color");
-        const stickers = document.querySelectorAll(".sticker");
-        const borderOptions = document.querySelectorAll(".border-option");
-        const templateOptions = document.querySelectorAll(".template-option");
-        const finalResult = document.getElementById("final-result");
-        const downloadBtn = document.getElementById("download-btn");
-        const notification = document.getElementById("download-notification");
-        const voiceStatus = document.getElementById("voice-status");
-        const customTextInput = document.getElementById("custom-text");
-        const textFontSelect = document.getElementById("text-font");
-        const textColorSelect = document.getElementById("text-color");
-        const applyTextBtn = document.getElementById("apply-text");
+    // DOM Elements
+const startBtn = document.getElementById("start-btn");
+const pages = document.querySelectorAll(".page");
+const layoutOptions = document.querySelectorAll(".layout-option");
+const video = document.getElementById("video");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const countdownEl = document.getElementById("countdown");
+const filterSelect = document.getElementById("filter");
+const timerSelect = document.getElementById("timer");
+const captureBtn = document.getElementById("capture-btn");
+const deleteBtn = document.getElementById("delete-btn");
+const continueBtn = document.getElementById("continue-btn");
+const photosContainer = document.getElementById("photos-container");
+const frameColors = document.querySelectorAll(".frame-color");
+const stickers = document.querySelectorAll(".sticker");
+const borderOptions = document.querySelectorAll(".border-option");
+const templateOptions = document.querySelectorAll(".template-option");
+const finalResult = document.getElementById("final-result");
+const downloadBtn = document.getElementById("download-btn");
+const notification = document.getElementById("download-notification");
+const voiceStatus = document.getElementById("voice-status");
+const customTextInput = document.getElementById("custom-text");
+const textFontSelect = document.getElementById("text-font");
+const textColorSelect = document.getElementById("text-color");
+const applyTextBtn = document.getElementById("apply-text");
 
-        // Variabel Global
-        let currentPage = "page-start";
-        let selectedLayout = null;
-        let totalPoses = 0;
-        let currentPose = 0;
-        let photos = [];
-        let countdownInterval = null;
-        let currentFilter = "none";
-        let selectedFrameColor = "#ff6b6b";
-        let activeSticker = null;
-        let stickerPositions = {};
-        let mediaStream = null;
-        let recognition = null;
-        let isListening = false;
-        let selectedBorderSize = "small";
-        let currentTemplate = null;
-        let customTextSettings = null;
+// Variabel Global
+let currentPage = "page-start";
+let selectedLayout = null;
+let totalPoses = 0;
+let currentPose = 0;
+let photos = [];
+let countdownInterval = null;
+let currentFilter = "none";
+let selectedFrameColor = "#ff6b6b";
+let activeSticker = null;
+let stickerPositions = {};
+let mediaStream = null;
+let recognition = null;
+let isListening = false;
+let selectedBorderSize = "small";
+let currentTemplate = null;
+let customTextSettings = null;
 
-        // Filter Effects
-        const filters = {
-            none: "none",
-            grayscale: "grayscale(100%)",
-            sepia: "sepia(100%)",
-            invert: "invert(100%)",
-            vintage: "sepia(70%) brightness(80%) contrast(120%)",
-            cool: "brightness(90%) contrast(110%) hue-rotate(180deg)",
-            warm: "brightness(110%) contrast(110%) hue-rotate(-20deg)",
-            blackwhite: "grayscale(100%) contrast(120%)",
-            blur: "blur(2px)",
-            "hue-rotate": "hue-rotate(90deg)",
-            contrast: "contrast(200%)",
-            saturate: "saturate(200%)",
-            neon: "brightness(120%) contrast(120%) hue-rotate(45deg)",
-            shadow: "brightness(90%) contrast(120%) drop-shadow(5px 5px 5px #333)",
-            focus: "blur(1px) brightness(110%)",
-        };
+// Filter Effects
+const filters = {
+    none: "none",
+    grayscale: "grayscale(100%)",
+    sepia: "sepia(100%)",
+    invert: "invert(100%)",
+    vintage: "sepia(70%) brightness(80%) contrast(120%)",
+    cool: "brightness(90%) contrast(110%) hue-rotate(180deg)",
+    warm: "brightness(110%) contrast(110%) hue-rotate(-20deg)",
+    blackwhite: "grayscale(100%) contrast(120%)",
+    blur: "blur(2px)",
+    "hue-rotate": "hue-rotate(90deg)",
+    contrast: "contrast(200%)",
+    saturate: "saturate(200%)",
+    neon: "brightness(120%) contrast(120%) hue-rotate(45deg)",
+    shadow: "brightness(90%) contrast(120%) drop-shadow(5px 5px 5px #333)",
+    focus: "blur(1px) brightness(110%)",
+};
 
-        // Color names for voice commands
-        const colorNames = {
-            "#000000": "hitam",
-            "#FFFFFF": "putih",
-            "#ff6b6b": "merah muda",
-            "#667eea": "biru",
-            "#4caf50": "hijau",
-            "#ffc107": "kuning",
-            "#9c27b0": "ungu",
-            "#607d8b": "abu-abu",
-            "#e91e63": "merah",
-            "#3f51b5": "biru tua",
-            "#00bcd4": "biru muda",
-            "#8bc34a": "hijau muda",
-        };
+// Color names for voice commands
+const colorNames = {
+    "#000000": "hitam",
+    "#FFFFFF": "putih",
+    "#ff6b6b": "merah muda",
+    "#667eea": "biru",
+    "#4caf50": "hijau",
+    "#ffc107": "kuning",
+    "#9c27b0": "ungu",
+    "#607d8b": "abu-abu",
+    "#e91e63": "merah",
+    "#3f51b5": "biru tua",
+    "#00bcd4": "biru muda",
+    "#8bc34a": "hijau muda",
+};
 
-        // Sticker names for voice commands
-        const stickerNames = {
-            heart: "hati",
-            star: "bintang",
-            smile: "senyum",
-            crown: "mahkota",
-            music: "musik",
-            camera: "kamera",
-            flower: "bunga",
-            balloon: "balon",
-            gift: "hadiah",
-            fire: "api",
-        };
+// Sticker names for voice commands
+const stickerNames = {
+    heart: "hati",
+    star: "bintang",
+    smile: "senyum",
+    crown: "mahkota",
+    music: "musik",
+    camera: "kamera",
+    flower: "bunga",
+    balloon: "balon",
+    gift: "hadiah",
+    fire: "api",
+};
 
-        // Template configurations
-        const templates = {
-            null: {
-                apply: function(container) {
-                    // Hanya hapus icon dan text yang ada
-                    const icons = container.querySelectorAll(".border-icon, .geometric-pattern, .festival-element, .animated-element");
-                    icons.forEach(icon => icon.remove());
-                    
-                    const texts = container.querySelectorAll(".template-text, .custom-text");
-                    texts.forEach(text => text.remove());
-                    
-                    const img = container.querySelector("img");
-                    img.style.border = "10px solid " + selectedFrameColor;
-                    img.style.borderBottomWidth = "40px";
-                    img.style.animation = "none";
-                    img.classList.remove("premium-template");
-                    
-                    if (selectedBorderSize === "large") {
-                        img.style.borderWidth = "30px";
-                        img.style.borderBottomWidth = "80px";
-                    }
-                },
-                applyToCanvas: function(ctx, canvas, photoIndex) {
-                    // Apply basic frame color
-                    ctx.fillStyle = selectedFrameColor;
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-                    
-                    // Draw the photo
-                    if (selectedBorderSize === "large") {
-                        ctx.drawImage(photos[photoIndex], 30, 30, canvas.width - 60, canvas.height - 110);
-                    } else {
-                        ctx.drawImage(photos[photoIndex], 10, 10, canvas.width - 20, canvas.height - 50);
-                    }
-                }
-            },
-            geometric: {
-                apply: function(container) {
-                    const img = container.querySelector("img");
-                    img.style.borderColor = selectedFrameColor;
-                    
-                    // Tambahkan elemen geometris
-                    addGeometricPattern(container, "10%", "10%", "triangle");
-                    addGeometricPattern(container, "90%", "10%", "circle");
-                    addGeometricPattern(container, "10%", "90%", "square");
-                   
-                    addGeometricPattern(container, "90%", "90%", "hexagon");
+// Template configurations
+const templates = {
+    null: {
+        apply: function(container) {
+            const icons = container.querySelectorAll(".border-icon, .geometric-pattern, .festival-element, .animated-element");
+            icons.forEach(icon => icon.remove());
+            
+            const texts = container.querySelectorAll(".template-text, .custom-text");
+            texts.forEach(text => text.remove());
+            
+            const img = container.querySelector("img");
+            img.style.border = "10px solid " + selectedFrameColor;
+            img.style.borderBottomWidth = "40px";
+            img.style.animation = "none";
+            img.classList.remove("premium-template");
+            
+            if (selectedBorderSize === "large") {
+                img.style.borderWidth = "30px";
+                img.style.borderBottomWidth = "80px";
+            }
+        },
+        applyToCanvas: function(ctx, canvas, photoIndex) {
+            ctx.fillStyle = selectedFrameColor;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            if (selectedBorderSize === "large") {
+                ctx.drawImage(photos[photoIndex], 30, 30, canvas.width - 60, canvas.height - 110);
+            } else {
+                ctx.drawImage(photos[photoIndex], 10, 10, canvas.width - 20, canvas.height - 50);
+            }
+        }
+    },
+    geometric: {
+        apply: function(container) {
+            const img = container.querySelector("img");
+            img.style.borderColor = selectedFrameColor;
+            
+            addGeometricPattern(container, "10%", "10%", "triangle");
+            addGeometricPattern(container, "90%", "10%", "circle");
+            addGeometricPattern(container, "10%", "90%", "square");
+            addGeometricPattern(container, "90%", "90%", "hexagon");
             
             addTemplateText(container, "Modern Art");
         },
@@ -997,7 +992,6 @@
             ctx.fillStyle = selectedFrameColor;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            // Draw photo
             const photoWidth = selectedBorderSize === "large" ? canvas.width - 60 : canvas.width - 20;
             const photoHeight = selectedBorderSize === "large" ? canvas.height - 110 : canvas.height - 50;
             const photoX = selectedBorderSize === "large" ? 30 : 10;
@@ -1005,13 +999,11 @@
             
             ctx.drawImage(photos[photoIndex], photoX, photoY, photoWidth, photoHeight);
             
-            // Draw geometric shapes
             drawGeometricShape(ctx, canvas.width * 0.1, canvas.height * 0.1, 30, "triangle", "#ff6b6b");
             drawGeometricShape(ctx, canvas.width * 0.9, canvas.height * 0.1, 30, "circle", "#667eea");
             drawGeometricShape(ctx, canvas.width * 0.1, canvas.height * 0.9, 30, "square", "#4caf50");
             drawGeometricShape(ctx, canvas.width * 0.9, canvas.height * 0.9, 30, "hexagon", "#ffc107");
             
-            // Add text
             ctx.font = selectedBorderSize === "large" ? "32px Arial" : "24px Arial";
             ctx.fillStyle = "#ffffff";
             ctx.textAlign = "center";
@@ -1030,7 +1022,6 @@
             const img = container.querySelector("img");
             img.style.borderColor = selectedFrameColor;
             
-            // Tambahkan elemen festival
             addFestivalElement(container, "20%", "10%", "confetti");
             addFestivalElement(container, "80%", "10%", "sparkle");
             addFestivalElement(container, "50%", "5%", "banner");
@@ -1048,13 +1039,11 @@
             
             ctx.drawImage(photos[photoIndex], photoX, photoY, photoWidth, photoHeight);
             
-            // Draw festival elements (simplified)
             ctx.fillStyle = "#ffc107";
             drawConfetti(ctx, canvas.width * 0.2, canvas.height * 0.1, 30);
             drawSparkle(ctx, canvas.width * 0.8, canvas.height * 0.1, 20);
             drawBanner(ctx, canvas.width * 0.5, canvas.height * 0.05, 100, 30, "Happy Festival");
             
-            // Add text
             ctx.font = selectedBorderSize === "large" ? "32px Arial" : "24px Arial";
             ctx.fillStyle = "#ffffff";
             ctx.textAlign = "center";
@@ -1090,11 +1079,9 @@
             
             ctx.drawImage(photos[photoIndex], photoX, photoY, photoWidth, photoHeight);
             
-            // Draw animated elements (static representation)
             drawFloatingElement(ctx, canvas.width * 0.5, canvas.height * 0.1, 30);
             drawSpinningElement(ctx, canvas.width * 0.3, canvas.height * 0.8, 25);
             
-            // Add text
             ctx.font = selectedBorderSize === "large" ? "32px Arial" : "24px Arial";
             ctx.fillStyle = "#ffffff";
             ctx.textAlign = "center";
@@ -1111,7 +1098,7 @@
     premium: {
         apply: function(container) {
             const img = container.querySelector("img");
-            img.style.borderColor = "#ffd700"; // Gold color for premium
+            img.style.borderColor = "#ffd700";
             img.classList.add("premium-template");
             
             addBorderIcon(container, "10%", "10%", "crown");
@@ -1122,7 +1109,6 @@
             addTemplateText(container, "Premium Edition");
         },
         applyToCanvas: function(ctx, canvas, photoIndex) {
-            // Gold gradient for premium frame
             const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
             gradient.addColorStop(0, "#ffd700");
             gradient.addColorStop(0.5, "#ffec80");
@@ -1130,7 +1116,6 @@
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            // Draw photo
             const photoWidth = selectedBorderSize === "large" ? canvas.width - 60 : canvas.width - 20;
             const photoHeight = selectedBorderSize === "large" ? canvas.height - 110 : canvas.height - 50;
             const photoX = selectedBorderSize === "large" ? 30 : 10;
@@ -1138,16 +1123,12 @@
             
             ctx.drawImage(photos[photoIndex], photoX, photoY, photoWidth, photoHeight);
             
-            // Draw crown elements
-            ctx.fillStyle = "#ffffff";
             const crownSize = 30;
-            
             drawCrown(ctx, canvas.width * 0.1, canvas.height * 0.1, crownSize);
             drawCrown(ctx, canvas.width * 0.9, canvas.height * 0.1, crownSize);
             drawCrown(ctx, canvas.width * 0.1, canvas.height * 0.9, crownSize);
             drawCrown(ctx, canvas.width * 0.9, canvas.height * 0.9, crownSize);
             
-            // Add text
             ctx.font = selectedBorderSize === "large" ? "32px Arial" : "24px Arial";
             ctx.fillStyle = "#ffffff";
             ctx.textAlign = "center";
@@ -1257,7 +1238,6 @@ function drawSparkle(ctx, x, y, size) {
     ctx.save();
     ctx.fillStyle = "#ffffff";
     
-    // Draw star
     let rot = Math.PI/2*3;
     let spikes = 5;
     let step = Math.PI/spikes;
@@ -1288,7 +1268,6 @@ function drawSparkle(ctx, x, y, size) {
 function drawBanner(ctx, x, y, width, height, text) {
     ctx.save();
     
-    // Draw banner shape
     ctx.fillStyle = "#e91e63";
     ctx.beginPath();
     ctx.moveTo(x - width/2, y);
@@ -1298,7 +1277,6 @@ function drawBanner(ctx, x, y, width, height, text) {
     ctx.closePath();
     ctx.fill();
     
-    // Draw banner text
     ctx.fillStyle = "#ffffff";
     ctx.font = "bold 14px Arial";
     ctx.textAlign = "center";
@@ -1313,7 +1291,6 @@ function drawFloatingElement(ctx, x, y, size) {
     ctx.save();
     ctx.fillStyle = "#00bcd4";
     
-    // Draw cloud shape
     ctx.beginPath();
     ctx.arc(x, y, size/2, 0, Math.PI * 2);
     ctx.arc(x + size/2, y - size/4, size/3, 0, Math.PI * 2);
@@ -1329,7 +1306,6 @@ function drawSpinningElement(ctx, x, y, size) {
     ctx.save();
     ctx.fillStyle = "#9c27b0";
     
-    // Draw spiral shape
     ctx.beginPath();
     ctx.moveTo(x, y);
     for (let i = 0; i < 2 * Math.PI; i += 0.1) {
@@ -1344,9 +1320,8 @@ function drawSpinningElement(ctx, x, y, size) {
 // Fungsi untuk menggambar mahkota
 function drawCrown(ctx, x, y, size) {
     ctx.save();
-    ctx.fillStyle = "#ffc107"; // Gold color
+    ctx.fillStyle = "#ffc107";
     
-    // Draw crown base
     ctx.beginPath();
     ctx.moveTo(x - size, y + size/2);
     ctx.lineTo(x - size, y - size/2);
@@ -1358,7 +1333,6 @@ function drawCrown(ctx, x, y, size) {
     ctx.closePath();
     ctx.fill();
     
-    // Draw jewels
     ctx.fillStyle = "#ff6b6b";
     ctx.beginPath();
     ctx.arc(x - size/2, y - size/4, size/4, 0, Math.PI * 2);
@@ -1377,7 +1351,7 @@ function drawCrown(ctx, x, y, size) {
     ctx.restore();
 }
 
-// Fungsi untuk menambahkan icon di border dengan posisi persentase
+// Fungsi untuk menambahkan icon di border
 function addBorderIcon(container, left, top, iconType) {
     const icon = document.createElement("i");
     icon.className = `border-icon fas fa-${iconType} icon-${iconType}`;
@@ -1392,6 +1366,250 @@ function addTemplateText(container, text) {
     textEl.className = "template-text";
     textEl.textContent = text;
     container.appendChild(textEl);
+}
+
+// Fungsi Navigasi Halaman
+function showPage(pageId) {
+    if (currentPage === "page-photo" && pageId !== "page-photo") {
+        stopCamera();
+    }
+
+    pages.forEach((page) => {
+        page.classList.remove("active");
+    });
+    document.getElementById(pageId).classList.add("active");
+    currentPage = pageId;
+
+    if (pageId === "page-photo") {
+        initCamera();
+        if (!isListening) {
+            startListening();
+        }
+    } else if (pageId === "page-start") {
+        stopListening();
+    } else {
+        startListening();
+    }
+}
+
+// Inisialisasi Kamera
+async function initCamera() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+                width: { ideal: 1280 },
+                height: { ideal: 720 },
+                facingMode: "user",
+            },
+        });
+
+        mediaStream = stream;
+        video.srcObject = stream;
+        video.style.transform = "scaleX(1)";
+        await video.play();
+    } catch (err) {
+        console.error("Error kamera:", err);
+        alert("Tidak bisa mengakses kamera. Mohon izinkan akses kamera.");
+    }
+}
+
+// Hentikan Kamera
+function stopCamera() {
+    if (mediaStream) {
+        mediaStream.getTracks().forEach((track) => track.stop());
+        video.srcObject = null;
+    }
+}
+
+// Mulai Countdown
+function startCountdown() {
+    if (photos.length >= totalPoses) {
+        return;
+    }
+    let timeLeft = parseInt(timerSelect.value);
+    countdownEl.textContent = timeLeft;
+    countdownEl.style.display = "flex";
+
+    captureBtn.disabled = true;
+    deleteBtn.disabled = true;
+
+    countdownInterval = setInterval(() => {
+        timeLeft--;
+        countdownEl.textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+            clearInterval(countdownInterval);
+            countdownEl.style.display = "none";
+            takePhoto();
+
+            if (photos.length < totalPoses) {
+                setTimeout(() => {
+                    startCountdown();
+                }, 1000);
+            } else {
+                captureBtn.disabled = false;
+                deleteBtn.disabled = photos.length === 0;
+                document.getElementById("photo-preview").style.display = "block";
+            }
+        }
+    }, 1000);
+}
+
+// Ambil Foto
+function takePhoto() {
+    const targetWidth = 600;
+    const targetHeight = 900;
+
+    canvas.width = targetWidth;
+    canvas.height = targetHeight;
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.filter = filters[currentFilter];
+
+    const videoAspect = video.videoWidth / video.videoHeight;
+    const canvasAspect = targetWidth / targetHeight;
+
+    let renderWidth, renderHeight, offsetX, offsetY;
+
+    if (videoAspect > canvasAspect) {
+        renderHeight = targetHeight;
+        renderWidth = video.videoWidth * (targetHeight / video.videoHeight);
+        offsetX = (targetWidth - renderWidth) / 2;
+        offsetY = 0;
+    } else {
+        renderWidth = targetWidth;
+        renderHeight = video.videoHeight * (targetWidth / video.videoWidth);
+        offsetX = 0;
+        offsetY = (targetHeight - renderHeight) / 2;
+    }
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(video, offsetX, offsetY, renderWidth, renderHeight);
+
+    const photoData = canvas.toDataURL("image/png");
+    photos.push(photoData);
+    currentPose = photos.length;
+
+    updatePhotoPreview();
+}
+
+// Update Preview Foto
+function updatePhotoPreview() {
+    photosContainer.innerHTML = "";
+    photos.forEach((photo, index) => {
+        const container = document.createElement("div");
+        container.className = "photo-with-sticker";
+        container.dataset.photoIndex = index;
+
+        const img = document.createElement("img");
+        img.src = photo;
+        img.className = "final-photo";
+        if (selectedBorderSize === "large") {
+            img.classList.add("large-frame");
+        }
+        img.style.borderColor = selectedFrameColor;
+
+        container.appendChild(img);
+        photosContainer.appendChild(container);
+    });
+}
+
+// Render Foto untuk Editing
+function renderFinalPhotos() {
+    finalResult.innerHTML = "";
+
+    if (photos.length === 0) {
+        finalResult.innerHTML =
+            "<p>Tidak ada foto untuk ditampilkan. Silakan ambil foto terlebih dahulu.</p>";
+        return;
+    }
+
+    photos.forEach((photo, photoIndex) => {
+        const container = document.createElement("div");
+        container.className = "photo-with-sticker";
+        container.dataset.photoIndex = photoIndex;
+
+        const img = document.createElement("img");
+        img.src = photo;
+        img.className = "final-photo";
+        img.style.display = "block";
+        img.style.maxWidth = "100%";
+        img.style.height = "auto";
+
+        if (selectedBorderSize === "large") {
+            img.classList.add("large-frame");
+        }
+
+        container.appendChild(img);
+
+        if (currentTemplate && templates[currentTemplate]) {
+            templates[currentTemplate].apply(container);
+        } else {
+            templates["null"].apply(container);
+        }
+
+        if (customTextSettings) {
+            const textEl = document.createElement("div");
+            textEl.className = "custom-text";
+            textEl.textContent = customTextSettings.text;
+            textEl.style.fontFamily = customTextSettings.font;
+            textEl.style.color = customTextSettings.color;
+            textEl.style.position = "absolute";
+            textEl.style.bottom = selectedBorderSize === "large" ? "30px" : "20px";
+            textEl.style.left = "0";
+            textEl.style.right = "0";
+            textEl.style.textAlign = "center";
+            textEl.style.fontSize = selectedBorderSize === "large" ? "32px" : "24px";
+            textEl.style.textShadow = "2px 2px 4px rgba(0,0,0,0.5)";
+            
+            container.appendChild(textEl);
+        }
+
+        if (stickerPositions[photoIndex]) {
+            stickerPositions[photoIndex].forEach((sticker, idx) => {
+                const stickerEl = document.createElement("div");
+                stickerEl.className = "sticker-preview";
+                stickerEl.style.backgroundImage = sticker.backgroundImage;
+                stickerEl.style.left = `${sticker.x}px`;
+                stickerEl.style.top = `${sticker.y}px`;
+                stickerEl.dataset.stickerIndex = idx;
+                container.appendChild(stickerEl);
+            });
+        }
+
+        finalResult.appendChild(container);
+    });
+
+    document.querySelectorAll(".photo-with-sticker").forEach((container) => {
+        container.addEventListener("click", (e) => {
+            if (
+                activeSticker &&
+                (e.target === container || e.target === container.querySelector("img"))
+            ) {
+                const img = container.querySelector("img");
+                const rect = img.getBoundingClientRect();
+
+                const x = e.clientX - rect.left - 40;
+                const y = e.clientY - rect.top - 40;
+
+                const boundedX = Math.max(0, Math.min(x, rect.width - 80));
+                const boundedY = Math.max(0, Math.min(y, rect.height - 80));
+
+                const photoIndex = parseInt(container.dataset.photoIndex);
+                if (!stickerPositions[photoIndex]) {
+                    stickerPositions[photoIndex] = [];
+                }
+
+                stickerPositions[photoIndex].push({
+                    backgroundImage: activeSticker.style.backgroundImage,
+                    x: boundedX,
+                    y: boundedY,
+                });
+
+                renderFinalPhotos();
+            }
+        });
+    });
 }
 
 // Initialize voice recognition
@@ -1485,7 +1703,6 @@ function handleVoiceCommand(command) {
             break;
 
         case "page-photo":
-            // Perubahan untuk filter - dipisah menjadi 2 tahap
             if (command === "filter") {
                 filterSelect.focus();
                 if ("speechSynthesis" in window) {
@@ -1496,7 +1713,6 @@ function handleVoiceCommand(command) {
                 }
             } 
             else if (filterSelect === document.activeElement) {
-                // Jika dropdown filter sedang aktif/focus
                 if (command.includes("grayscale") || command.includes("abu-abu")) {
                     filterSelect.value = "grayscale";
                 } else if (command.includes("sepia")) {
@@ -1530,7 +1746,6 @@ function handleVoiceCommand(command) {
                 }
                 filterSelect.dispatchEvent(new Event("change"));
             }
-            // Perubahan untuk hitung mundur - dipisah menjadi 2 tahap
             else if (command === "hitung mundur") {
                 timerSelect.focus();
                 if ("speechSynthesis" in window) {
@@ -1541,7 +1756,6 @@ function handleVoiceCommand(command) {
                 }
             }
             else if (timerSelect === document.activeElement) {
-                // Jika dropdown timer sedang aktif/focus
                 if (command.includes("3") || command.includes("3 detik") || command.includes("3s")) {
                     timerSelect.value = "3";
                 } else if (command.includes("5") || command.includes("5 detik") || command.includes("5s")) {
@@ -1551,7 +1765,8 @@ function handleVoiceCommand(command) {
                 }
                 timerSelect.dispatchEvent(new Event("change"));
             }
-            else if (command.includes("cekrek") || command.includes("ambil foto") || command.includes("capture")) {
+
+                    else if (command.includes("cekrek") || command.includes("ambil foto") || command.includes("capture")) {
                 captureBtn.click();
             } else if (command.includes("hapus") || command.includes("delete")) {
                 deleteBtn.click();
@@ -1589,7 +1804,6 @@ function handleVoiceCommand(command) {
                     }
                 }
             }
-            // Perubahan untuk ukuran bingkai
             else if (command.includes("ukuran bingkai") || command.includes("border size")) {
                 if (command.includes("kecil") || command.includes("small")) {
                     document.querySelector('.border-option[data-border-size="small"]').click();
@@ -1597,7 +1811,6 @@ function handleVoiceCommand(command) {
                     document.querySelector('.border-option[data-border-size="large"]').click();
                 }
             }
-            // Perubahan untuk template border
             else if (command.includes("template") || command.includes("bingkai")) {
                 if (command.includes("geometric") || command.includes("geometris")) {
                     document.querySelector('.template-option[data-template="geometric"]').click();
@@ -1609,7 +1822,6 @@ function handleVoiceCommand(command) {
                     document.querySelector('.template-option[data-template="premium"]').click();
                 }
             }
-            // Perubahan untuk custom text
             else if (command.includes("teks") || command.includes("text") || command.includes("tulisan")) {
                 if (command.includes("tambah") || command.includes("add")) {
                     const textMatch = command.match(/tulis(kan)?\s+(.+)/);
@@ -1626,280 +1838,8 @@ function handleVoiceCommand(command) {
     }
 }
 
-// Fungsi Navigasi Halaman
-function showPage(pageId) {
-    if (currentPage === "page-photo" && pageId !== "page-photo") {
-        stopCamera();
-    }
-
-    pages.forEach((page) => {
-        page.classList.remove("active");
-    });
-    document.getElementById(pageId).classList.add("active");
-    currentPage = pageId;
-
-    if (pageId === "page-photo") {
-        initCamera();
-        if (!isListening) {
-            startListening();
-        }
-    } else if (pageId === "page-start") {
-        stopListening();
-    } else {
-        startListening();
-    }
-}
-
-// Inisialisasi Kamera (Versi Baru - Non Mirror)
-async function initCamera() {
-    try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-                width: { ideal: 1280 },
-                height: { ideal: 720 },
-                facingMode: "user",
-            },
-        });
-
-        mediaStream = stream;
-        video.srcObject = stream;
-        
-        // Nonaktifkan mirror effect di preview kamera
-        video.style.transform = "scaleX(1)"; // Tidak dibalik (normal)
-        await video.play();
-    } catch (err) {
-        console.error("Error kamera:", err);
-        alert("Tidak bisa mengakses kamera. Mohon izinkan akses kamera.");
-    }
-}
-
-// Hentikan Kamera (Tetap Sama)
-function stopCamera() {
-    if (mediaStream) {
-        mediaStream.getTracks().forEach((track) => track.stop());
-        video.srcObject = null;
-    }
-}
-
-// Mulai Countdown
-function startCountdown() {
-    if (photos.length >= totalPoses) {
-        // Prevent capturing more photos than totalPoses
-        return;
-    }
-    let timeLeft = parseInt(timerSelect.value);
-    countdownEl.textContent = timeLeft;
-    countdownEl.style.display = "flex";
-
-    captureBtn.disabled = true;
-    deleteBtn.disabled = true;
-
-    countdownInterval = setInterval(() => {
-        timeLeft--;
-        countdownEl.textContent = timeLeft;
-
-        if (timeLeft <= 0) {
-            clearInterval(countdownInterval);
-            countdownEl.style.display = "none";
-            takePhoto();
-
-            if (photos.length < totalPoses) {
-                setTimeout(() => {
-                    startCountdown();
-                }, 1000);
-            } else {
-                captureBtn.disabled = false;
-                deleteBtn.disabled = photos.length === 0;
-                document.getElementById("photo-preview").style.display = "block";
-            }
-        }
-    }, 1000);
-}
-
-// Ambil Foto
-function takePhoto() {
-    const targetWidth = 600;
-    const targetHeight = 900;
-
-    canvas.width = targetWidth;
-    canvas.height = targetHeight;
-
-    // Pastikan gambar tidak dibalik (non-mirror)
-    ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset transformasi
-    ctx.filter = filters[currentFilter];
-
-    // Hitung posisi gambar (tanpa mirror)
-    const videoAspect = video.videoWidth / video.videoHeight;
-    const canvasAspect = targetWidth / targetHeight;
-
-    let renderWidth, renderHeight, offsetX, offsetY;
-
-    if (videoAspect > canvasAspect) {
-        renderHeight = targetHeight;
-        renderWidth = video.videoWidth * (targetHeight / video.videoHeight);
-        offsetX = (targetWidth - renderWidth) / 2;
-        offsetY = 0;
-    } else {
-        renderWidth = targetWidth;
-        renderHeight = video.videoHeight * (targetWidth / video.videoWidth);
-        offsetX = 0;
-        offsetY = (targetHeight - renderHeight) / 2;
-    }
-
-    // Gambar langsung ke canvas tanpa mirror
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(video, offsetX, offsetY, renderWidth, renderHeight);
-
-    const photoData = canvas.toDataURL("image/png");
-    photos.push(photoData);
-    currentPose = photos.length;
-
-    updatePhotoPreview();
-}
-
-// Update Preview Foto
-function updatePhotoPreview() {
-    photosContainer.innerHTML = "";
-    photos.forEach((photo, index) => {
-        const container = document.createElement("div");
-        container.className = "photo-with-sticker";
-        container.dataset.photoIndex = index;
-
-        const img = document.createElement("img");
-        img.src = photo;
-        img.className = "final-photo";
-        if (selectedBorderSize === "large") {
-            img.classList.add("large-frame");
-        }
-        img.style.borderColor = selectedFrameColor;
-
-        container.appendChild(img);
-        photosContainer.appendChild(container);
-    });
-}
-
-// Render Foto untuk Editing
-function renderFinalPhotos() {
-    finalResult.innerHTML = "";
-
-    if (photos.length === 0) {
-        finalResult.innerHTML =
-            "<p>Tidak ada foto untuk ditampilkan. Silakan ambil foto terlebih dahulu.</p>";
-        return;
-    }
-
-    photos.forEach((photo, photoIndex) => {
-        const container = document.createElement("div");
-        container.className = "photo-with-sticker";
-        container.dataset.photoIndex = photoIndex;
-
-        const img = document.createElement("img");
-        img.src = photo;
-        img.className = "final-photo";
-        img.style.display = "block";
-        img.style.maxWidth = "100%";
-        img.style.height = "auto";
-
-        if (selectedBorderSize === "large") {
-            img.classList.add("large-frame");
-        }
-
-        container.appendChild(img);
-
-        // Apply template - ensure correct application on container
-        if (currentTemplate && templates[currentTemplate]) {
-            templates[currentTemplate].apply(container);
-        } else {
-            templates["null"].apply(container);
-        }
-
-        // Add custom text if any
-        if (customTextSettings) {
-            const textEl = document.createElement("div");
-            textEl.className = "custom-text";
-            textEl.textContent = customTextSettings.text;
-            textEl.style.fontFamily = customTextSettings.font;
-            textEl.style.color = customTextSettings.color;
-            textEl.style.position = "absolute";
-            textEl.style.bottom = "20px";
-            textEl.style.left = "0";
-            textEl.style.right = "0";
-            textEl.style.textAlign = "center";
-            textEl.style.fontSize = "24px";
-            textEl.style.textShadow = "2px 2px 4px rgba(0,0,0,0.5)";
-            
-            if (selectedBorderSize === "large") {
-                textEl.style.bottom = "30px";
-                textEl.style.fontSize = "32px";
-            }
-            
-            container.appendChild(textEl);
-        }
-
-        // Add stickers if any
-        if (stickerPositions[photoIndex]) {
-            stickerPositions[photoIndex].forEach((sticker, idx) => {
-                const stickerEl = document.createElement("div");
-                stickerEl.className = "sticker-preview";
-                stickerEl.style.backgroundImage = sticker.backgroundImage;
-                stickerEl.style.left = `${sticker.x}px`;
-                stickerEl.style.top = `${sticker.y}px`;
-                stickerEl.dataset.stickerIndex = idx;
-                container.appendChild(stickerEl);
-            });
-        }
-
-        finalResult.appendChild(container);
-    });
-
-    // Add click listeners for stickers (to add more)
-    document.querySelectorAll(".photo-with-sticker").forEach((container) => {
-        container.addEventListener("click", (e) => {
-            if (
-                activeSticker &&
-                (e.target === container || e.target === container.querySelector("img"))
-            ) {
-                const img = container.querySelector("img");
-                const rect = img.getBoundingClientRect();
-
-                const x = e.clientX - rect.left - 40;
-                const y = e.clientY - rect.top - 40;
-
-                const boundedX = Math.max(0, Math.min(x, rect.width - 80));
-                const boundedY = Math.max(0, Math.min(y, rect.height - 80));
-
-                const photoIndex = parseInt(container.dataset.photoIndex);
-                if (!stickerPositions[photoIndex]) {
-                    stickerPositions[photoIndex] = [];
-                }
-
-                stickerPositions[photoIndex].push({
-                    backgroundImage: activeSticker.style.backgroundImage,
-                    x: boundedX,
-                    y: boundedY,
-                });
-
-                renderFinalPhotos();
-            }
-        });
-    });
-}
-
-// Fungsi untuk memuat gambar (dipakai saat download)
-function loadImage(src) {
-    return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.crossOrigin = "Anonymous";
-        img.src = src;
-        img.onload = () => resolve(img);
-        img.onerror = (err) => reject(err);
-    });
-}
-
 // Event Listeners
-if (startBtn) {
-    startBtn.addEventListener("click", () => showPage("page-layout"));
-}
+startBtn.addEventListener("click", () => showPage("page-layout"));
 
 layoutOptions.forEach((option) => {
     option.addEventListener("click", () => {
@@ -1908,275 +1848,252 @@ layoutOptions.forEach((option) => {
         currentPose = 0;
         photos = [];
         stickerPositions = {};
-        showPage("page-phpage-ph");
-            });
+        showPage("page-photo");
+    });
+});
+
+filterSelect.addEventListener("change", () => {
+    currentFilter = filterSelect.value;
+    video.style.filter = filters[currentFilter];
+});
+
+captureBtn.addEventListener("click", startCountdown);
+
+deleteBtn.addEventListener("click", () => {
+    if (photos.length > 0) {
+        photos.pop();
+        delete stickerPositions[photos.length];
+        updatePhotoPreview();
+        currentPose = photos.length;
+
+        if (photos.length === 0) {
+            document.getElementById("photo-preview").style.display = "none";
+        }
+    }
+});
+
+continueBtn.addEventListener("click", () => {
+    showPage("page-edit");
+    renderFinalPhotos();
+});
+
+frameColors.forEach((color) => {
+    color.addEventListener("click", () => {
+        selectedFrameColor = color.dataset.color;
+        renderFinalPhotos();
+    });
+});
+
+borderOptions.forEach((option) => {
+    option.addEventListener("click", function () {
+        borderOptions.forEach((opt) => {
+            opt.classList.remove("active");
         });
 
-        if (filterSelect) {
-            filterSelect.addEventListener("change", () => {
-                currentFilter = filterSelect.value;
-                video.style.filter = filters[currentFilter];
+        this.classList.add("active");
+        selectedBorderSize = this.dataset.borderSize;
+        renderFinalPhotos();
+    });
+});
+
+stickers.forEach((sticker) => {
+    sticker.addEventListener("click", (e) => {
+        stickers.forEach((s) => s.classList.remove("sticker-active"));
+        e.target.classList.add("sticker-active");
+        activeSticker = e.target;
+    });
+});
+
+templateOptions.forEach((option) => {
+    option.addEventListener("click", function () {
+        templateOptions.forEach((opt) => {
+            opt.classList.remove("active");
+        });
+
+        this.classList.add("active");
+        currentTemplate = this.dataset.template;
+        renderFinalPhotos();
+    });
+});
+
+applyTextBtn.addEventListener("click", function() {
+    const text = customTextInput.value.trim();
+    if (text) {
+        customTextSettings = {
+            text: text,
+            font: textFontSelect.value,
+            color: textColorSelect.value
+        };
+        renderFinalPhotos();
+    }
+});
+
+downloadBtn.addEventListener("click", async function() {
+    if (photos.length === 0) {
+        alert("Belum ada foto yang diambil!");
+        return;
+    }
+
+    const originalText = downloadBtn.textContent;
+    downloadBtn.disabled = true;
+    downloadBtn.textContent = "Memproses...";
+
+    try {
+        const container = document.createElement("div");
+        container.style.display = "none";
+        document.body.appendChild(container);
+
+        const { default: html2canvas } = await import("https://esm.sh/html2canvas@1.4.1");
+        const canvases = await Promise.all(photos.map(async (photo, index) => {
+            const photoContainer = document.createElement("div");
+            photoContainer.className = "photo-with-sticker";
+            
+            const img = document.createElement("img");
+            img.src = photo;
+            img.className = "final-photo";
+            if (selectedBorderSize === "large") {
+                img.classList.add("large-frame");
+            }
+            img.style.borderColor = selectedFrameColor;
+            
+            photoContainer.appendChild(img);
+            container.appendChild(photoContainer);
+
+            if (currentTemplate && templates[currentTemplate]) {
+                templates[currentTemplate].apply(photoContainer);
+            }
+
+            if (customTextSettings) {
+                const textEl = document.createElement("div");
+                textEl.className = "custom-text";
+                textEl.textContent = customTextSettings.text;
+                textEl.style.fontFamily = customTextSettings.font;
+                textEl.style.color = customTextSettings.color;
+                textEl.style.position = "absolute";
+                textEl.style.bottom = selectedBorderSize === "large" ? "30px" : "20px";
+                textEl.style.left = "0";
+                textEl.style.right = "0";
+                textEl.style.textAlign = "center";
+                textEl.style.fontSize = selectedBorderSize === "large" ? "32px" : "24px";
+                textEl.style.textShadow = "2px 2px 4px rgba(0,0,0,0.5)";
+                
+                photoContainer.appendChild(textEl);
+            }
+
+            if (stickerPositions[index]) {
+                stickerPositions[index].forEach((sticker) => {
+                    const stickerEl = document.createElement("div");
+                    stickerEl.className = "sticker-preview";
+                    stickerEl.style.backgroundImage = sticker.backgroundImage;
+                    stickerEl.style.left = `${sticker.x}px`;
+                    stickerEl.style.top = `${sticker.y}px`;
+                    photoContainer.appendChild(stickerEl);
+                });
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 100));
+
+            const canvas = await html2canvas(photoContainer, {
+                scale: 1,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: null
             });
-        }
 
-        if (captureBtn) {
-            captureBtn.addEventListener("click", startCountdown);
-        }
+            return canvas;
+        }));
 
-        if (deleteBtn) {
-            deleteBtn.addEventListener("click", () => {
-                if (photos.length > 0) {
-                    photos.pop();
-                    delete stickerPositions[photos.length];
-                    updatePhotoPreview();
-                    currentPose = photos.length;
-
-                    if (photos.length === 0) {
-                        document.getElementById("photo-preview").style.display = "none";
-                    }
+        let finalCanvas;
+        if (selectedLayout === "D") { // 2x3 layout
+            finalCanvas = document.createElement("canvas");
+            finalCanvas.width = 1200;
+            finalCanvas.height = 1800;
+            const ctx = finalCanvas.getContext("2d");
+            
+            for (let i = 0; i < 6; i++) {
+                if (canvases[i]) {
+                    const row = Math.floor(i / 3);
+                    const col = i % 3;
+                    const x = col * 600;
+                    const y = row * 600;
+                    ctx.drawImage(canvases[i], x, y, 600, 600);
+                }
+            }
+        } else if (selectedLayout === "E") { // 2x2 layout
+            finalCanvas = document.createElement("canvas");
+            finalCanvas.width = 1200;
+            finalCanvas.height = 1200;
+            const ctx = finalCanvas.getContext("2d");
+            
+            for (let i = 0; i < 4; i++) {
+                if (canvases[i]) {
+                    const row = Math.floor(i / 2);
+                    const col = i % 2;
+                    const x = col * 600;
+                    const y = row * 600;
+                    ctx.drawImage(canvases[i], x, y, 600, 600);
+                }
+            }
+        } else { // Single column layouts
+            finalCanvas = document.createElement("canvas");
+            const isLarge = selectedBorderSize === "large";
+            const width = isLarge ? 1200 : 800;
+            const height = isLarge ? 1800 : 1200;
+            
+            finalCanvas.width = width;
+            finalCanvas.height = height * photos.length;
+            const ctx = finalCanvas.getContext("2d");
+            
+            photos.forEach((_, index) => {
+                if (canvases[index]) {
+                    ctx.drawImage(canvases[index], 0, height * index, width, height);
                 }
             });
         }
 
-        if (continueBtn) {
-            continueBtn.addEventListener("click", () => {
-                showPage("page-edit");
-                renderFinalPhotos();
-            });
+        document.body.removeChild(container);
+
+        finalCanvas.toBlob(blob => {
+            const link = document.createElement("a");
+            link.download = `photobooth-${new Date().getTime()}.png`;
+            link.href = URL.createObjectURL(blob);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            notification.style.display = "block";
+            setTimeout(() => notification.style.display = "none", 3000);
+        }, "image/png", 1);
+
+    } catch (error) {
+        console.error("Download Error:", error);
+        alert("Error saat memproses foto. Coba lagi.");
+    } finally {
+        downloadBtn.disabled = false;
+        downloadBtn.textContent = originalText;
+    }
+});
+
+// Initialize voice recognition when the page loads
+window.addEventListener("DOMContentLoaded", () => {
+    initVoiceRecognition();
+
+    setTimeout(() => {
+        if ("speechSynthesis" in window) {
+            const speech = new SpeechSynthesisUtterance();
+            speech.text =
+                "Selamat datang di Photobooth Bisnis Digital. Anda dapat menggunakan perintah suara. Katakan 'Mulai' untuk memulai.";
+            speech.lang = "id-ID";
+            window.speechSynthesis.speak(speech);
         }
+    }, 1000);
+});
 
-        frameColors.forEach((color) => {
-            color.addEventListener("click", () => {
-                selectedFrameColor = color.dataset.color;
-                renderFinalPhotos();
-            });
-        });
-
-        borderOptions.forEach((option) => {
-            option.addEventListener("click", function () {
-                borderOptions.forEach((opt) => {
-                    opt.classList.remove("active");
-                });
-
-                this.classList.add("active");
-                selectedBorderSize = this.dataset.borderSize;
-                renderFinalPhotos();
-            });
-        });
-
-        stickers.forEach((sticker) => {
-            sticker.addEventListener("click", (e) => {
-                stickers.forEach((s) => s.classList.remove("sticker-active"));
-                e.target.classList.add("sticker-active");
-                activeSticker = e.target;
-            });
-        });
-
-        templateOptions.forEach((option) => {
-            option.addEventListener("click", function () {
-                templateOptions.forEach((opt) => {
-                    opt.classList.remove("active");
-                });
-
-                this.classList.add("active");
-                currentTemplate = this.dataset.template;
-                renderFinalPhotos();
-            });
-        });
-
-        // Apply custom text
-        applyTextBtn.addEventListener("click", function() {
-            const text = customTextInput.value.trim();
-            if (text) {
-                customTextSettings = {
-                    text: text,
-                    font: textFontSelect.value,
-                    color: textColorSelect.value
-                };
-                renderFinalPhotos();
-            }
-        });
-
-        // Download button handler
-        downloadBtn.addEventListener("click", async function() {
-            if (photos.length === 0) {
-                alert("Belum ada foto yang diambil!");
-                return;
-            }
-
-            const originalText = downloadBtn.textContent;
-            downloadBtn.disabled = true;
-            downloadBtn.textContent = "Memproses...";
-
-            try {
-                // Create a container for all photos
-                const container = document.createElement("div");
-                container.style.display = "none";
-                document.body.appendChild(container);
-
-                // Create canvas for each photo with template applied
-                const canvases = await Promise.all(photos.map(async (photo, index) => {
-                    const photoContainer = document.createElement("div");
-                    photoContainer.className = "photo-with-sticker";
-                    
-                    const img = document.createElement("img");
-                    img.src = photo;
-                    img.className = "final-photo";
-                    if (selectedBorderSize === "large") {
-                        img.classList.add("large-frame");
-                    }
-                    img.style.borderColor = selectedFrameColor;
-                    
-                    photoContainer.appendChild(img);
-                    container.appendChild(photoContainer);
-
-                    // Apply template
-                    if (currentTemplate && templates[currentTemplate]) {
-                        templates[currentTemplate].apply(photoContainer);
-                    }
-
-                    // Add custom text if any
-                    if (customTextSettings) {
-                        const textEl = document.createElement("div");
-                        textEl.className = "custom-text";
-                        textEl.textContent = customTextSettings.text;
-                        textEl.style.fontFamily = customTextSettings.font;
-                        textEl.style.color = customTextSettings.color;
-                        textEl.style.position = "absolute";
-                        textEl.style.bottom = selectedBorderSize === "large" ? "30px" : "20px";
-                        textEl.style.left = "0";
-                        textEl.style.right = "0";
-                        textEl.style.textAlign = "center";
-                        textEl.style.fontSize = selectedBorderSize === "large" ? "32px" : "24px";
-                        textEl.style.textShadow = "2px 2px 4px rgba(0,0,0,0.5)";
-                        
-                        photoContainer.appendChild(textEl);
-                    }
-
-                    // Add stickers if any
-                    if (stickerPositions[index]) {
-                        stickerPositions[index].forEach((sticker) => {
-                            const stickerEl = document.createElement("div");
-                            stickerEl.className = "sticker-preview";
-                            stickerEl.style.backgroundImage = sticker.backgroundImage;
-                            stickerEl.style.left = `${sticker.x}px`;
-                            stickerEl.style.top = `${sticker.y}px`;
-                            photoContainer.appendChild(stickerEl);
-                        });
-                    }
-
-                    // Wait for elements to render
-                    await new Promise(resolve => setTimeout(resolve, 100));
-
-                    // Convert to canvas
-                    const { default: html2canvas } = await import("https://esm.sh/html2canvas@1.4.1");
-                    const canvas = await html2canvas(photoContainer, {
-                        scale: 1,
-                        useCORS: true,
-                        allowTaint: true,
-                        backgroundColor: null
-                    });
-
-                    return canvas;
-                });
-
-                // Combine canvases based on layout
-                let finalCanvas;
-                if (selectedLayout === "D") { // 2x3 layout
-                    finalCanvas = document.createElement("canvas");
-                    finalCanvas.width = 1200;
-                    finalCanvas.height = 1800;
-                    const ctx = finalCanvas.getContext("2d");
-                    
-                    // Draw each photo in grid
-                    for (let i = 0; i < 6; i++) {
-                        if (canvases[i]) {
-                            const row = Math.floor(i / 3);
-                            const col = i % 3;
-                            const x = col * 600;
-                            const y = row * 600;
-                            ctx.drawImage(canvases[i], x, y, 600, 600);
-                        }
-                    }
-                } else if (selectedLayout === "E") { // 2x2 layout
-                    finalCanvas = document.createElement("canvas");
-                    finalCanvas.width = 1200;
-                    finalCanvas.height = 1200;
-                    const ctx = finalCanvas.getContext("2d");
-                    
-                    for (let i = 0; i < 4; i++) {
-                        if (canvases[i]) {
-                            const row = Math.floor(i / 2);
-                            const col = i % 2;
-                            const x = col * 600;
-                            const y = row * 600;
-                            ctx.drawImage(canvases[i], x, y, 600, 600);
-                        }
-                    }
-                } else { // Single column layouts
-                    finalCanvas = document.createElement("canvas");
-                    const isLarge = selectedBorderSize === "large";
-                    const width = isLarge ? 1200 : 800;
-                    const height = isLarge ? 1800 : 1200;
-                    
-                    finalCanvas.width = width;
-                    finalCanvas.height = height * photos.length;
-                    const ctx = finalCanvas.getContext("2d");
-                    
-                    photos.forEach((_, index) => {
-                        if (canvases[index]) {
-                            ctx.drawImage(canvases[index], 0, height * index, width, height);
-                        }
-                    });
-                }
-
-                // Clean up
-                document.body.removeChild(container);
-
-                // Download
-                finalCanvas.toBlob(blob => {
-                    const link = document.createElement("a");
-                    link.download = `photobooth-${new Date().getTime()}.png`;
-                    link.href = URL.createObjectURL(blob);
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    
-                    notification.style.display = "block";
-                    setTimeout(() => notification.style.display = "none", 3000);
-                }, "image/png", 1);
-
-            } catch (error) {
-                console.error("Download Error:", error);
-                alert("Error saat memproses foto. Coba lagi.");
-            } finally {
-                downloadBtn.disabled = false;
-                downloadBtn.textContent = originalText;
-            }
-        });
-
-        // Initialize voice recognition when the page loads
-        window.addEventListener("DOMContentLoaded", () => {
-            initVoiceRecognition();
-
-            setTimeout(() => {
-                if ("speechSynthesis" in window) {
-                    const speech = new SpeechSynthesisUtterance();
-                    speech.text =
-                        "Selamat datang di Photobooth Bisnis Digital. Anda dapat menggunakan perintah suara. Katakan 'Mulai' untuk memulai.";
-                    speech.lang = "id-ID";
-                    window.speechSynthesis.speak(speech);
-                }
-            }, 1000);
-        });
-
-        // Cleanup
-        window.addEventListener("beforeunload", () => {
-            stopCamera();
-            stopListening();
-        });
-    </script>
+// Cleanup
+window.addEventListener("beforeunload", () => {
+    stopCamera();
+    stopListening();
+});
+</script>
 </body>
 </html>
-
-
